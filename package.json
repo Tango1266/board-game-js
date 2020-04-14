@@ -1,0 +1,16 @@
+{
+  "name": "jsgame",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "parcel": "^1.12.4",
+    "pascal": "0.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "parcel -p  8000 watch index.html"
+  },
+  "author": "",
+  "license": "ISC"
+}
