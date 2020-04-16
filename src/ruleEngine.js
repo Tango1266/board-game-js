@@ -1,24 +1,29 @@
+import { TYPES } from "./building";
+
 export default class BuildingRules {
 
     constructor(game, slot, building) {
         this.game = game;
         this.slot = slot;
         this.building = building;
+        this.building.buildingT
     }
 
     onlyOneBuildingPerSlot() {
+        if(this.building.type.name === TYPES.town.name
+            && !this.slot.isEmpty()
+            &&  this.slot.currBuilding.type.name !== TYPES.town.name) {
+            return true;
+        }
         return this.slot.isEmpty();
     }
 
     onlyBuildingsAtCornors() {
-        if ((this.building.type === "village" || this.building.type === "city")
+        if (this.slot.type === "street" || this.building.type.category === this.slot.type 
             && this.slot.type === "building") {
             return true;
         }
-        if ((this.building.type === "street")
-            && this.slot.type === "street") {
-            return true;
-        }
+
         console.log("onlyBuildingsAtCornors");
         return false;
     }
@@ -129,15 +134,29 @@ export default class BuildingRules {
                 break;
             }
         }
-
+        console.log("twoStreetsBetweenBuildings");
         return !hasBuildingDirectNeighbour && hasStreetDirectNeigbour;
+    }
+
+    citiesBuildOnlyOnTowns() {
+        if (this.building.type.name !== TYPES.town.name) {
+            return true;
+        }
+
+        if (this.slot.type === "building" 
+            && this.building.type.category === this.slot.type
+            && this.game.buildingState[this.slot.mods.row][this.slot.mods.col] >= 1) {
+            return true;
+        }
+        console.log("citiesBuildOnlyOnTowns");
+        return false;
     }
 
     allowed() {
         let ignoreBuildingOnStreet = this.game.currentPhase === this.game.GAME_PHASES.POPULATE;
         
         return this.onlyOneBuildingPerSlot() && this.onlyBuildingsAtCornors()
-            && this.onlyStreetsWithBuildings() && this.twoStreetsBetweenBuildings(ignoreBuildingOnStreet);
+            && this.onlyStreetsWithBuildings() && this.twoStreetsBetweenBuildings(ignoreBuildingOnStreet) && this.citiesBuildOnlyOnTowns();
     }
 
     // rule - buildings are only placeable at a corner

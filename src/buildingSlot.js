@@ -1,4 +1,4 @@
-import { draggingBuilding } from "./building";
+import { draggingBuilding, TYPES } from "./building";
 import {addClass, changeClass, removeClass} from "./domUtils";
 import BuildingRules from "./ruleEngine";
 
@@ -18,10 +18,10 @@ export default class BuildingSlot {
         this.game = game;
         this.board = board;
         this.position = position;
-
         this.gameHeight = game.div.clientHeight;
         this.gameWidth = game.div.clientWidth;
         this.mods = mods;
+        this.currBuilding = null;
 
         game.buildingState[mods.row][mods.col] = -1;
       
@@ -40,6 +40,7 @@ export default class BuildingSlot {
     }
 
     addBuilding(building) {
+        this.currBuilding = building
         this.div.append(draggingBuilding.div)
         this.game.buildingState[this.mods.row][this.mods.col] = 1;
     }
@@ -62,21 +63,10 @@ export default class BuildingSlot {
     }
 
     dragStart() {
-        console.log("slot start")
-        
-        
-        if (this.isEmpty()
-            && draggingBuilding.type === "village"
-            && this.type === "building") {
-                // this.addClass("empty");
-            addClass(this, "empty");
+        let buildingRules = new BuildingRules(this.game, this, draggingBuilding);
 
-        }
-
-        // streets
-        if (this.isEmpty()
-            && draggingBuilding.type === this.type) {
-            // this.addClass("empty");
+        if (this.isEmpty() && draggingBuilding.type.category === this.type 
+            && buildingRules.allowed()) {
             addClass(this, "empty");
         }
     }
@@ -105,17 +95,25 @@ export default class BuildingSlot {
             console.log("not allowed")
             return;
         }
-       
+        
+        if(draggingBuilding.type.name == TYPES.town.name) 
+        {
+            const playerArea = document.getElementById("player-area-" + draggingBuilding.owner);
+            let lastBuilding = this.currBuilding;
+            playerArea.append(lastBuilding.div);
+            lastBuilding.setUnplayed();
+        }
+
         // reset highlighting and add
         changeClass(this, this.classNameDefault)
         this.addBuilding(draggingBuilding);
 
         // restyle dragged gameobject - delay needed setTimeout
         if (this.mods.streetMod !== "") {
-            console.log(this.type + "-" + this.mods.streetMod)
             setTimeout(() => addClass(draggingBuilding, this.type + "-" + this.mods.streetMod), 0)
         }
-        setTimeout(() => addClass(draggingBuilding, "played-" + draggingBuilding.type), 0)
+
+        draggingBuilding.setPlayed();
     }
 
     dragEnd() {

@@ -95,9 +95,9 @@
 
        
         .street {
-             filter:unset;
+            filter:unset;
             height: 30px;
-            width: auto;
+            width: 25px;
         }
         .street-left-upper {
            transform:rotate(55deg)
@@ -107,9 +107,20 @@
         }
       
         .village {
-             filter:sepia(13%) saturate(3207%) hue-rotate(130deg) brightness(95%) contrast(80%);
-           height: 30px;
+            height: 30px;
             width: auto;
+        }
+
+        .town {
+            height: 45px;
+            width: 40px;
+        }
+
+        .played-town {
+             position: relative;
+            z-index: 200;
+            margin-left: -15px;
+            margin-top: -15px;
         }
 
         .played-street {
@@ -117,7 +128,6 @@
             margin-left: -10px;
             margin-top: -15px;
             z-index: -1;
-            
         }
 
         .played-village {
@@ -228,6 +238,7 @@
     <img id="img_brick" src="assets/images/brick.png" />
     <img id="img_street" src="assets/images/street.png" />
     <img id="img_village" src="assets/images/village.png" />
+    <img id="img_town" src="assets/images/town.png" />
     <div id="game" class="centered">
         <select name="change-state"></select>
         <div class="board-container flex-container centered">

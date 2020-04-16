@@ -40,6 +40,7 @@ export default class Game {
         let allGameObjects = {};
         this.players.forEach((p) => {
             allGameObjects = {
+                towns: bf.createTowns(this, p, 4),
                 villages: bf.createVillages(this, p, 5),
                 streets: bf.createStreets(this, p, 15),
             }

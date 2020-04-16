@@ -94,8 +94,6 @@ export default class Board {
         // propobably could have fix it by getting the dimensions and positioning of the hexagon streight
         let adjustingFactor = 25.5;
         let streetMod = "";
-        // let skipEverySecondOddRow = 0;
-        // let skipEverySecondEvenCol = 0;
         let isStreetLeft = true;
 
         for (var row = 0; row < boardBuildSlotTemplate.length; row++) {
@@ -103,14 +101,14 @@ export default class Board {
                 // adjust pos each fourth row in relation to row
                 let posX = 0;
                 let posY = 0;
-                let buildingSlotType = "";
+                let buildingCategory = "";
                 if (count == 4) {
                     count = 0;
                     adjustYPosBuilding = adjustingFactor * row / 3;
                 }
 
                 if (boardBuildSlotTemplate[row][col] == 0) {
-                    buildingSlotType = "building";
+                    buildingCategory = "building";
                     posX = (col * resourceWidth / 4 - 25) ;
                     posY = (adjustYPosBuilding + row * (height / 8)) ;
                 }
@@ -119,10 +117,10 @@ export default class Board {
                     let adjustYPosStreet = (adjustingFactor * (row - 1) / 3);
                     posX = (col * resourceWidth / 4 - 25) ;
                     posY = (adjustYPosStreet +  row * (height / 8)) ;
-                    buildingSlotType = "street";
+                    buildingCategory = "street";
                 }
 
-                if(!buildingSlotType) {
+                if(!buildingCategory) {
                     continue;
                 }
 
@@ -145,40 +143,17 @@ export default class Board {
                     isStreetLeft = !isStreetLeft;
                 }
 
-                // if (row % 2 != 0 && skipEverySecondOddRow < 2 
-                //     && col != 0 && col % 2 == 0 && skipEverySecondEvenCol < 2) {
-                    
-                //     if(isStreetLeft ) {
-                //         streetMod = "left-upper";
-                //     }
-                //     else if (!isStreetLeft) {
-                //         streetMod = "right-upper"
-                //     } 
-                  
-                //     // set or reset
-                //     skipEverySecondEvenCol = skipEverySecondEvenCol + 1 < 2 ? skipEverySecondEvenCol + 1: 0;
-                //     isStreetLeft = !isStreetLeft;
-                // }
-
-                this.buildingSlots.push(new BuildingSlot(this.game, this, position, buildingSlotType, {streetMod: streetMod, row:row, col:col}))
+                this.buildingSlots.push(new BuildingSlot(this.game, this, position, buildingCategory, {streetMod: streetMod, row:row, col:col}))
                 streetMod="";
             }
 
-            // if (row % 2 != 0) {
-            //     skipEverySecondOddRow = skipEverySecondOddRow + 1 < 2 ? skipEverySecondOddRow + 1 : 0;
-            // }
+          
             count++;
         };
     }
 
-    // makeGameObjects() {
-    //     this.gameObjects.push(new Building(game, { player: 1, type: "village", imgSource: "/street.f81d0e7a.png", 
-    //     ownerArea: this.game.getElementsByClassName("player-area-1")[0]}))
-    // }
-
     draw() {
         this.resourceSlots.forEach((res) => res.draw());
         this.buildingSlots.forEach((bs) => bs.draw());
-        // this.gameObjects.forEach((go) => go.draw())
     }
 } 
