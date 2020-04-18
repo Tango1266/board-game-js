@@ -1,4 +1,5 @@
 import { TYPES } from "./building";
+import { buildingTypes, slotTypes } from "./types";
 
 export default class BuildingRules {
 
@@ -10,17 +11,17 @@ export default class BuildingRules {
     }
 
     onlyOneBuildingPerSlot() {
-        if(this.building.type.name === TYPES.town.name
+        if (this.building.type.isEqual(buildingTypes.town) 
             && !this.slot.isEmpty()
-            &&  this.slot.currBuilding.type.name !== TYPES.town.name) {
+            && !this.slot.currBuilding.type.isEqual(buildingTypes.town)) {
             return true;
         }
         return this.slot.isEmpty();
     }
 
     onlyBuildingsAtCornors() {
-        if (this.slot.type === "street" || this.building.type.category === this.slot.type 
-            && this.slot.type === "building") {
+        if (this.slot.type.isEqual(slotTypes.street) || this.building.type.slotType.isEqual(this.slot.type)
+            && this.slot.type.isEqual(slotTypes.building)) {
             return true;
         }
 
@@ -29,7 +30,7 @@ export default class BuildingRules {
     }
 
     onlyStreetsWithBuildings() {
-        if (this.slot.type !== "street") {
+        if (!this.slot.type.isEqual(slotTypes.street)) {
             return true;
         }
         let stateY = this.slot.mods.row;
@@ -71,7 +72,7 @@ export default class BuildingRules {
     }
 
     twoStreetsBetweenBuildings(ignoreBuildingOnStreet) {
-        if (this.slot.type !== "building") {
+        if (!this.slot.type.isEqual(slotTypes.building)) {
             return true;
         }
         let stateY = this.slot.mods.row;
@@ -139,12 +140,12 @@ export default class BuildingRules {
     }
 
     citiesBuildOnlyOnTowns() {
-        if (this.building.type.name !== TYPES.town.name) {
+        if (!this.building.type.isEqual(buildingTypes.town)) {
             return true;
         }
 
-        if (this.slot.type === "building" 
-            && this.building.type.category === this.slot.type
+        if (this.slot.type.isEqual(slotTypes.building)
+            && this.building.type.slotType.isEqual(this.slot.type) 
             && this.game.buildingState[this.slot.mods.row][this.slot.mods.col] >= 1) {
             return true;
         }

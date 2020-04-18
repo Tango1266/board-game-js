@@ -5,9 +5,9 @@ let idCounter = 0;
 export let draggingBuilding;
 
 export let TYPES = {
-    "town": { name: "town", category: "building"},
-    "street": {name:"street", category: "street"},
-    "village": { name: "village", category: "building"}
+    "town": { name: "town", slotType: "building"},
+    "street": {name:"street", slotType: "street"},
+    "village": { name: "village", slotType: "building"}
 }
 
 export default class Building {
@@ -23,7 +23,7 @@ export default class Building {
         this.div.className = this.classNameDefault;
        
         this.div.draggable = true;
-    
+        
         addCSSRule(document.styleSheets[0], "." +this.type.name ,"filter: " + details.color )
         this.div.src = details.imgSource;
     }
@@ -39,7 +39,8 @@ export default class Building {
 
     setPlayed() {
         this.div.draggable = false;
-        setTimeout(() => addClass(this, "played-" + this.type.name), 100)
+        draggingBuilding = null;
+        setTimeout(() => addClass(this, "played-" + this.type.name), 50)
     }
 
     setUnplayed() {
@@ -57,7 +58,7 @@ export default class Building {
         draggingBuilding = this;
         
         let draggingEvent = new Event("dragging");
-        this.game.dispatchEvent(draggingEvent)
+        this.game.div.dispatchEvent(draggingEvent)
 
         setTimeout(() => (this.div.className = "invisible"), 0)
     }
@@ -65,8 +66,8 @@ export default class Building {
     dragEnd() {
 
         let draggingEvent = new Event("draggingend");
-        this.game.dispatchEvent(draggingEvent)
-
+        this.game.div.dispatchEvent(draggingEvent)
+        
         this.div.className = this.classNameDefault;
     }
 }

@@ -1,6 +1,15 @@
 import BuildingSlot from "./buildingSlot";
-import Resource from "./resource";
-import Building from "./building";
+import ResourceSlot from "./resourceSlot";
+import { slotTypes, SlotType } from "./types";
+
+
+function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
 
 /**
  * 0: building slot for villages
@@ -72,13 +81,13 @@ export default class Board {
 
                 let posY = resourceHeigt + row * resourceHeigt * 0.85 - resourceHeigt;
                 let position = {
-                    x: posX, 
+                    x: posX,
                     y: posY,
                     xOffSet: this.offSetBoardLeft / 2,
                     yOffSet: this.offSetBoardTop / 2
                 };
                 this.resourceSlots.push(
-                    new Resource(this.game.div, this, position)
+                    new ResourceSlot(this.game, this, position)
                 )
             }
         }
@@ -94,33 +103,33 @@ export default class Board {
         // propobably could have fix it by getting the dimensions and positioning of the hexagon streight
         let adjustingFactor = 25.5;
         let streetMod = "";
-        let isStreetLeft = true;
+        let isStreetLeftUpper = true;
 
         for (var row = 0; row < boardBuildSlotTemplate.length; row++) {
             for (var col = 0; col < boardBuildSlotTemplate[row].length; col++) {
                 // adjust pos each fourth row in relation to row
                 let posX = 0;
                 let posY = 0;
-                let buildingCategory = "";
+                let slotType = null;
                 if (count == 4) {
                     count = 0;
                     adjustYPosBuilding = adjustingFactor * row / 3;
                 }
 
                 if (boardBuildSlotTemplate[row][col] == 0) {
-                    buildingCategory = "building";
-                    posX = (col * resourceWidth / 4 - 25) ;
-                    posY = (adjustYPosBuilding + row * (height / 8)) ;
+                    slotType = new SlotType(slotTypes.building.name);
+                    posX = (col * resourceWidth / 4 - 25);
+                    posY = (adjustYPosBuilding + row * (height / 8));
                 }
 
                 if (boardBuildSlotTemplate[row][col] == 2) {
+                    slotType = new SlotType(slotTypes.street.name);
                     let adjustYPosStreet = (adjustingFactor * (row - 1) / 3);
-                    posX = (col * resourceWidth / 4 - 25) ;
-                    posY = (adjustYPosStreet +  row * (height / 8)) ;
-                    buildingCategory = "street";
+                    posX = (col * resourceWidth / 4 - 25);
+                    posY = (adjustYPosStreet + row * (height / 8));
                 }
 
-                if(!buildingCategory) {
+                if (!slotType) {
                     continue;
                 }
 
@@ -130,30 +139,41 @@ export default class Board {
                     xOffSet: this.offSetBoardLeft / 2,
                     yOffSet: this.offSetBoardTop / 2
                 };
-                if (row % 4 == 1 && col != 0 && col % 2 == 0 ) {
-
-                    if(isStreetLeft ) {
-                        streetMod = "left-upper";
+                if (row % 4 == 1 && col != 0 && col % 2 == 0) {
+                    if (isStreetLeftUpper) {
+                        slotType.isLeftUpper = true;
                     }
-                    else if (!isStreetLeft) {
-                        streetMod = "right-upper"
-                    } 
-
-                    // set or reset
-                    isStreetLeft = !isStreetLeft;
+                    else {
+                        slotType.isRightUpper = true;
+                    }
+                    // every second even col is right
+                    isStreetLeftUpper = !isStreetLeftUpper;
                 }
 
-                this.buildingSlots.push(new BuildingSlot(this.game, this, position, buildingCategory, {streetMod: streetMod, row:row, col:col}))
-                streetMod="";
+                this.buildingSlots.push(new BuildingSlot(this.game, this, position, slotType, { row: row, col: col }))
+                streetMod = "";
             }
 
-          
+            // first street is always left upper
+            isStreetLeftUpper = true;
             count++;
         };
     }
 
-    draw() {
-        this.resourceSlots.forEach((res) => res.draw());
-        this.buildingSlots.forEach((bs) => bs.draw());
+    allocateResources(resources) {
+        var ressourcesArr = Object.keys(resources).reduce(function (r, k) {
+            return r.concat(resources[k]);
+        }, []);
+        shuffle(ressourcesArr);
+        let countSlot = 0;
+        for (var res of ressourcesArr) {
+            this.resourceSlots[countSlot++].addResource(res);
+        }
     }
-} 
+
+
+draw() {
+    this.resourceSlots.forEach((res) => res.draw());
+    this.buildingSlots.forEach((bs) => bs.draw());
+}
+}

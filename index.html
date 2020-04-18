@@ -30,8 +30,25 @@
             width: 90%;
         }
 
-
-
+        .resource-area{
+            position: relative;
+            top:42%;
+            width: 150px;
+            height: 150px;
+            z-index: 2;
+            background-color: grey;
+            border: 3px solid dimgray
+        }
+        .resource {
+                position: absolute;
+                display: block;
+                cursor: pointer;
+         }
+         .played-resource {
+             z-index: 2 !important;
+             margin-top: -21%;
+            margin-left: 2%;
+         }
         .board-container {
             width: 580px;
             height: 500px;
@@ -61,7 +78,7 @@
         .player-area {
             position: absolute;
             width: 300px;
-            height: 140px;
+            height: 130px;
             background-color: grey;
             border: 3px solid dimgray
         }
@@ -139,7 +156,7 @@
 
         .circle {
             border-radius: 50%;
-            z-index: 1;
+            z-index: 2;
             width: 12px;
             height: 12px;
             background: white;
@@ -239,8 +256,16 @@
     <img id="img_street" src="assets/images/street.png" />
     <img id="img_village" src="assets/images/village.png" />
     <img id="img_town" src="assets/images/town.png" />
+    <img id="img_corn" src="assets/images/corn.png" />
+    <img id="img_ore" src="assets/images/ore.png" />
+    <img id="img_wood" src="assets/images/wood.png" />
+    <img id="img_stone" src="assets/images/stone.png" />
+    <img id="img_wool" src="assets/images/wool.png" />
+    <img id="img_dessert" src="assets/images/dessert.png" />
+    <select name="change-state"></select>
+    <div id="resource-area" class="resource-area"></div>
     <div id="game" class="centered">
-        <select name="change-state"></select>
+        
         <div class="board-container flex-container centered">
             <div id="board" class="flex-item"></div>
         </div>

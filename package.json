@@ -5,9 +5,13 @@
   "main": "index.js",
   "dependencies": {
     "parcel": "^1.12.4",
-    "pascal": "0.0.0"
+    "pascal": "0.0.0",
+    "regenerator-runtime": "^0.13.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0"
+  },
   "scripts": {
     "start": "parcel -p  8000 watch index.html"
   },

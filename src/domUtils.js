@@ -10,9 +10,6 @@ export function addCSSRule(sheet, selector, rules, index) {
 
             var ruleParts = rules.split(':');
             rule.style[ruleParts[0]] = ruleParts[1];
-            if (rule.style.hasOwnProperty(ruleParts[0])){
-                console.log('test :', test);
-            }
             return;
         }
     }

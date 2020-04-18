@@ -1,6 +1,7 @@
 import { draggingBuilding, TYPES } from "./building";
 import {addClass, changeClass, removeClass} from "./domUtils";
 import BuildingRules from "./ruleEngine";
+import { SlotType } from "./types";
 
 let idCounter = 0;
 
@@ -12,14 +13,13 @@ export default class BuildingSlot {
         this.lastClassname = this.classNameDefault;
         this.div.className = this.classNameDefault;
 
-        this.div.id = type + "_slot" + idCounter++;
+        this.div.id = type.name + "_slot" + idCounter++;
 
         this.type = type;
         this.game = game;
         this.board = board;
         this.position = position;
-        this.gameHeight = game.div.clientHeight;
-        this.gameWidth = game.div.clientWidth;
+     
         this.mods = mods;
         this.currBuilding = null;
 
@@ -63,26 +63,28 @@ export default class BuildingSlot {
     }
 
     dragStart() {
+        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
         let buildingRules = new BuildingRules(this.game, this, draggingBuilding);
-
-        if (this.isEmpty() && draggingBuilding.type.category === this.type 
+        if (this.isEmpty() && draggingBuilding.type.slotType.name === this.type.name 
             && buildingRules.allowed()) {
             addClass(this, "empty");
         }
     }
 
     dragOver(e) {
+        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
         e.preventDefault();
     }
 
     dragEnter(e) {
+        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
         e.preventDefault();
         // this.addClass("hovered");
         addClass(draggingBuilding, "hovered");
-
     }
 
     dragLeave() {
+        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
         // this.changeClass(this.lastClassname);
         changeClass(this, this.lastClassname)
 
@@ -90,6 +92,8 @@ export default class BuildingSlot {
 
     dragDrop(e) {
         e.preventDefault();
+        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot ) return;
+
         let buildingRules = new BuildingRules(this.game, this, draggingBuilding);
         if (!buildingRules.allowed()) {
             console.log("not allowed")
@@ -109,14 +113,18 @@ export default class BuildingSlot {
         this.addBuilding(draggingBuilding);
 
         // restyle dragged gameobject - delay needed setTimeout
-        if (this.mods.streetMod !== "") {
-            setTimeout(() => addClass(draggingBuilding, this.type + "-" + this.mods.streetMod), 0)
+        if (this.type.isLeftUpper || this.type.isRightUpper) {
+            let classSuffix = this.type.isLeftUpper ? "left-upper": "right-upper";
+            setTimeout(() => addClass(draggingBuilding, this.type.name + "-" + classSuffix), 0)
+            console.log(this.type)
+            
         }
 
-        draggingBuilding.setPlayed();
+        setTimeout(() => draggingBuilding.setPlayed(), 0);
     }
 
     dragEnd() {
-        this.div.className = this.classNameDefault;
+        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
+            this.div.className = this.classNameDefault;
     }
 }

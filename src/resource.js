@@ -1,36 +1,71 @@
+import { addCSSRule, addClass, changeClass } from "./domUtils";
+import ResourceSlot from "./resourceSlot";
+
 let idCounter = 0;
 
+export let draggingResource;
+
+export let TYPES = {
+    "wool": { name: "wool"},
+    "ore": { name: "ore"},
+    "stone": { name: "stone"},
+    "corn": { name: "corn" },
+    "wood": { name: "wood" },
+    "dessert": { name: "dessert"},
+}
+
 export default class Resource {
-
-    constructor(game, board, position) {
-        this.div = document.createElement("div");
-        this.div.className = "hexagon";
-        this.div.id = "hexagon_" + idCounter++;
-
+    constructor(game, details) {
         this.game = game;
-        this.board = board;
-        this.position = position;
+        this.type = details.type;
 
-        this.offSetBoardLeft = this.board.offSetBoardLeft;
-        this.offSetBoardTop = this.board.offSetBoardTop;
+        this.classNameDefault = "resource " + this.type.name;
+        this.div = document.createElement("img");
+        this.div.id = this.type.name + "" + idCounter++;
+        this.div.className = this.classNameDefault;
+        this.div.style.marginLeft = (idCounter -1) * 10  + "px";
+        this.div.draggable = true;
+
+        this.div.src = details.imgSource;
+    }
+
+    initEventListener() {
+        this.div.ondragstart = this.dragStart.bind(this);
+        this.div.ondragend = this.dragEnd.bind(this);
+    }
+
+    isPlayed() {
+        return !this.div.draggable;
+    }
+
+    setPlayed() {
+        this.div.draggable = false;
+        this.div.style.marginLeft = null;
+        setTimeout(() => addClass(this, "played-" + this.type.slotType.name), 50)
     }
 
     draw() {
-        this.placeDiv(this.position.x, this.position.y)
-      
-        this.board.div.appendChild(this.div);
+        let container = document.getElementById("resource-area");
+        container.appendChild(this.div);
+        this.initEventListener();
     }
 
-    placeDiv(x_pos, y_pos) {
-        var d = this.div;
-        d.style.position = "absolute";
-        if (typeof x_pos === "number") {
-            d.style.left = x_pos + 'px';
-            d.style.top = y_pos + 'px';
-        }
-        else if (typeof x_pos === "string") {
-            d.style.left = x_pos;
-            d.style.top = y_pos;
-        }
+    dragStart() {
+
+        this.div.className += " hold";
+        draggingResource = this;
+
+        let draggingEvent = new Event("dragging");
+        this.game.div.dispatchEvent(draggingEvent)
+
+        setTimeout(() => (this.div.className = "invisible"), 0)
+    }
+
+
+    dragEnd() {
+        let draggingEvent = new Event("draggingend");
+        this.game.div.dispatchEvent(draggingEvent)
+        draggingResource = null;
+        this.div.className = this.classNameDefault;
     }
 }

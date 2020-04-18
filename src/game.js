@@ -1,6 +1,7 @@
 
 import Board from "./board";
 import BuildingFactory from "./buildingFactory";
+import ResourceFactory from "./resourceFactory";
 
 const GAME_PHASES = {
     NOTINITALISED: 0,
@@ -17,6 +18,7 @@ export default class Game {
 
         this.GAME_PHASES = GAME_PHASES;
         this.currentPhase = GAME_PHASES.NOTINITALISED;
+        this.resources = null;
     }
 
     createBuildingState() {
@@ -31,7 +33,7 @@ export default class Game {
         this.buildingState = this.createBuildingState()
         this.board.init();
         this.initPlayerArea();
-
+        this.initResourceArea();
         this.currentPhase = GAME_PHASES.POPULATE;
     }
 
@@ -52,7 +54,29 @@ export default class Game {
             }
         }
     }
+
+    initResourceArea() {
+        let rf = new ResourceFactory();
+        this.resources = {
+            ore: rf.createOre(this, 3),
+            corn: rf.createCorn(this, 4),
+            stone: rf.createStone(this, 3),
+            wool: rf.createWool(this, 4),
+            wood: rf.createWood(this, 4),
+            dessert: rf.createDessert(this, 1),
+
+        };
+
+        for (var resKey in this.resources) {
+            for (var resource of this.resources[resKey]) {
+                resource.draw();
+            }
+        }
+    }
+
     draw() {
         this.board.draw();
+
+        // this.board.allocateResources(this.resources);
     }
 }
