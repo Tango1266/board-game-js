@@ -1,31 +1,23 @@
-import { addCSSRule, addClass, changeClass } from "./domUtils";
+import MyHtmlElement from "./htmlElement";
 
 let idCounter = 0;
 
 export let draggingBuilding;
 
-export let TYPES = {
-    "town": { name: "town", slotType: "building"},
-    "street": {name:"street", slotType: "street"},
-    "village": { name: "village", slotType: "building"}
-}
-
-export default class Building {
+export default class Building extends MyHtmlElement {
     constructor(game, details) {
+        super({
+            id: "player" + details.owner + "-" + details.type.name + "" + idCounter++,
+            className: "game-object " + details.type.name,
+            div: document.createElement("img"),
+            draggable: true,
+            src: details.imgSource
+        })
         this.game = game;
         this.type = details.type;
-        this.owner = details.player;
-        this.divOwnerArea = details.ownerArea;
-
-        this.classNameDefault = "game-object " + this.type.name;
-        this.div = document.createElement("img");
-        this.div.id = "player" +this.owner + "-" + this.type.name + "" +idCounter++; 
-        this.div.className = this.classNameDefault;
-       
-        this.div.draggable = true;
-        
-        addCSSRule(document.styleSheets[0], "." +this.type.name ,"filter: " + details.color )
-        this.div.src = details.imgSource;
+        this.owner = details.owner;
+        this.playerArea = new MyHtmlElement({ div: details.ownerArea })
+        this.div.style.filter = details.color;
     }
 
     initEventListener() {
@@ -40,34 +32,30 @@ export default class Building {
     setPlayed() {
         this.div.draggable = false;
         draggingBuilding = null;
-        setTimeout(() => addClass(this, "played-" + this.type.name), 50)
+        setTimeout(() => this.addClass("played-" + this.type.name), 50)
     }
 
     setUnplayed() {
         this.div.draggable = true;
-        setTimeout(() => changeClass(this, this.classNameDefault), 0)
+        setTimeout(() => this.changeClass(this.classNameDefault), 0)
     }
 
     draw() {
-        this.divOwnerArea.appendChild(this.div);
+        this.playerArea.add(this);
         this.initEventListener();
     }
 
     dragStart() {
-        this.div.className += " hold";
+        this.addClass("hold");
         draggingBuilding = this;
-        
         let draggingEvent = new Event("dragging");
         this.game.div.dispatchEvent(draggingEvent)
-
-        setTimeout(() => (this.div.className = "invisible"), 0)
+        setTimeout(() => (this.changeClass("invisible")), 0)
     }
 
     dragEnd() {
-
         let draggingEvent = new Event("draggingend");
         this.game.div.dispatchEvent(draggingEvent)
-        
-        this.div.className = this.classNameDefault;
+        this.changeClass(this.classNameDefault);
     }
 }

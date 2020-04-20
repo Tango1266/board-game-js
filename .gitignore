@@ -3,3 +3,6 @@ dist
 npm-debug.log
 .env
 .cache
+src/.test.js
+.vscode/launch.json
+.babelrc

@@ -1,19 +1,20 @@
-import { TYPES } from "./building";
 import { buildingTypes, slotTypes } from "./types";
 
 export default class BuildingRules {
 
-    constructor(game, slot, building) {
+    constructor(game, slot, building, logResult) {
         this.game = game;
         this.slot = slot;
         this.building = building;
-        this.building.buildingT
+
+        this.logResult = logResult || true;
+        this.lastResult = "";
     }
 
     onlyOneBuildingPerSlot() {
         if (this.building.type.isEqual(buildingTypes.town) 
             && !this.slot.isEmpty()
-            && !this.slot.currBuilding.type.isEqual(buildingTypes.town)) {
+            && !this.slot.getChild().type.isEqual(buildingTypes.town)) {
             return true;
         }
         return this.slot.isEmpty();
@@ -25,7 +26,7 @@ export default class BuildingRules {
             return true;
         }
 
-        console.log("onlyBuildingsAtCornors");
+        if(this.logResult) this.lastResult = "onlyBuildingsAtCornors";
         return false;
     }
 
@@ -33,8 +34,8 @@ export default class BuildingRules {
         if (!this.slot.type.isEqual(slotTypes.street)) {
             return true;
         }
-        let stateY = this.slot.mods.row;
-        let stateX = this.slot.mods.col;
+        let stateY = this.slot.position.boardRow;
+        let stateX = this.slot.position.boardCol;
         let state = this.game.buildingState;
         let neigbours = [
             // direct neighbours - are always building or nothing because of #onlyBuildingsAtCornors
@@ -67,7 +68,8 @@ export default class BuildingRules {
                 return true;
             }
         }
-        console.log("onlyStreetsWithBuildings");
+
+        if (this.logResult) this.lastResult = "onlyStreetsWithBuildings";
         return false;
     }
 
@@ -75,8 +77,8 @@ export default class BuildingRules {
         if (!this.slot.type.isEqual(slotTypes.building)) {
             return true;
         }
-        let stateY = this.slot.mods.row;
-        let stateX = this.slot.mods.col;
+        let stateY = this.slot.position.boardRow;
+        let stateX = this.slot.position.boardCol;
         let state = this.game.buildingState;
         let hasBuildingDirectNeighbour = false; 
         let hasStreetDirectNeigbour = false;
@@ -135,7 +137,7 @@ export default class BuildingRules {
                 break;
             }
         }
-        console.log("twoStreetsBetweenBuildings");
+        if (this.logResult) this.lastResult = "twoStreetsBetweenBuildings"; 
         return !hasBuildingDirectNeighbour && hasStreetDirectNeigbour;
     }
 
@@ -146,10 +148,10 @@ export default class BuildingRules {
 
         if (this.slot.type.isEqual(slotTypes.building)
             && this.building.type.slotType.isEqual(this.slot.type) 
-            && this.game.buildingState[this.slot.mods.row][this.slot.mods.col] >= 1) {
+            && this.game.buildingState[this.slot.position.boardRow][this.slot.position.boardCol] >= 1) {
             return true;
         }
-        console.log("citiesBuildOnlyOnTowns");
+        if (this.logResult) this.lastResult = "citiesBuildOnlyOnTowns";
         return false;
     }
 
@@ -159,8 +161,5 @@ export default class BuildingRules {
         return this.onlyOneBuildingPerSlot() && this.onlyBuildingsAtCornors()
             && this.onlyStreetsWithBuildings() && this.twoStreetsBetweenBuildings(ignoreBuildingOnStreet) && this.citiesBuildOnlyOnTowns();
     }
-
-    // rule - buildings are only placeable at a corner
-
 
 }

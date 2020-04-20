@@ -1,32 +1,27 @@
-import { addCSSRule, addClass, changeClass } from "./domUtils";
-import ResourceSlot from "./resourceSlot";
+import MyHtmlElement from "./htmlElement";
 
 let idCounter = 0;
 
 export let draggingResource;
 
-export let TYPES = {
-    "wool": { name: "wool"},
-    "ore": { name: "ore"},
-    "stone": { name: "stone"},
-    "corn": { name: "corn" },
-    "wood": { name: "wood" },
-    "dessert": { name: "dessert"},
-}
-
-export default class Resource {
+export default class Resource extends MyHtmlElement {
     constructor(game, details) {
+        let id = idCounter++;
+        super({
+            id: details.type.name + "" + id,
+            className: "resource " + details.type.name,
+            div: document.createElement("img")
+        })
+        this.idCounter = id;
         this.game = game;
         this.type = details.type;
 
-        this.classNameDefault = "resource " + this.type.name;
-        this.div = document.createElement("img");
-        this.div.id = this.type.name + "" + idCounter++;
-        this.div.className = this.classNameDefault;
-        this.div.style.marginLeft = (idCounter -1) * 10  + "px";
         this.div.draggable = true;
-
         this.div.src = details.imgSource;
+    }
+
+    add(child) {
+        super.add(child, () => child.setPlayed());
     }
 
     initEventListener() {
@@ -40,15 +35,16 @@ export default class Resource {
 
     setPlayed() {
         this.div.draggable = false;
-        this.div.style.marginLeft = null;
-        setTimeout(() => addClass(this, "played-" + this.type.slotType.name), 50)
+        this.div.style.margin = null;
+        setTimeout(() => this.addClass("played-" + this.type.slotType.name), 50)
     }
 
+
     draw() {
-        let container = document.getElementById("resource-area");
-        container.appendChild(this.div);
+        this.parent.add(this);
         this.initEventListener();
     }
+
 
     dragStart() {
 

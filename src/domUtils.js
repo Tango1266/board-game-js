@@ -2,7 +2,7 @@
 
 export function addCSSRule(sheet, selector, rules, index) {
     //document.stylesheet[0].cssRules[selector][rules]
-    var sheet = document.styleSheets[0];
+    var sheet = sheet ? sheet : document.styleSheets[0];
     var cssRules = sheet.cssRules || sheet.rules;
 
     for (var rule of cssRules) {
@@ -37,11 +37,27 @@ export function addClass(instance, className) {
     changeClass(instance, newClass);
 }
 
-export function removeClass(instance,classname) {
+export function removeClass(instance, classname) {
     if (!instance.div.className.includes(className)) {
         return;
     }
 
     let newClass = instance.div.className.replace(" " + classname, "");
     changeClass(newClass);
+}
+
+
+export function setPosition(instance, xPos, yPos) {
+    instance.div.style.position = "absolute";
+
+    switch (typeof xPos) {
+        case "number":
+            instance.div.style.left = xPos + 'px';
+            instance.div.style.top = yPos + 'px';
+            break;
+        case "string":
+            instance.div.style.left = xPos;
+            instance.div.style.top = yPos;
+            break;
+    }
 }

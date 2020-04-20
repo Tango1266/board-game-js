@@ -56,9 +56,5 @@ export class ResourceType extends TypeObject {
         super(type.name, args);
         this.slotType = new SlotType(type.slotType.name);
     }
-
-    isEqual(object) {
-        return object ? this.name === object.name : false;
-    }
 }
 

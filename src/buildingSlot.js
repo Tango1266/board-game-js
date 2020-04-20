@@ -1,55 +1,35 @@
-import { draggingBuilding, TYPES } from "./building";
-import {addClass, changeClass, removeClass} from "./domUtils";
+import { draggingBuilding} from "./building";
 import BuildingRules from "./ruleEngine";
-import { SlotType } from "./types";
+import MyHtmlElement from "./htmlElement";
+import { buildingTypes } from "./types";
 
 let idCounter = 0;
 
-export default class BuildingSlot {
+export default class BuildingSlot extends MyHtmlElement {
 
-    constructor(game, board, position, type, mods) {
-        this.div = document.createElement("div");
-        this.classNameDefault = "circle";
-        this.lastClassname = this.classNameDefault;
-        this.div.className = this.classNameDefault;
-
-        this.div.id = type.name + "_slot" + idCounter++;
+    constructor(game, board, position, type) {
+        super({
+            id: type.name + "_slot" + idCounter++,
+            className: "circle",
+            div: document.createElement("div"),
+            parent: board
+        })
 
         this.type = type;
         this.game = game;
-        this.board = board;
         this.position = position;
-     
-        this.mods = mods;
-        this.currBuilding = null;
 
-        game.buildingState[mods.row][mods.col] = -1;
-      
+        game.buildingState[position.boardRow][position.boardCol] = -1;
     }
-
-    isEmpty() {
-        return this.div.children.length <= 0;
+    add(child) {
+        super.add(child,
+            () => this.game.buildingState[this.position.boardRow][this.position.boardCol] = 1)
     }
-
-
     draw() {
-        this.placeDiv(this.position.x, this.position.y)
-        this.board.div.appendChild(this.div);
+        this.setPos(this.position.x, this.position.y)
+        this.parent.add(this);
 
         this.initEventListener();
-    }
-
-    addBuilding(building) {
-        this.currBuilding = building
-        this.div.append(draggingBuilding.div)
-        this.game.buildingState[this.mods.row][this.mods.col] = 1;
-    }
-
-    placeDiv(x_pos, y_pos) {
-        var d = this.div;
-        d.style.position = "absolute";
-        d.style.left = x_pos + 'px';
-        d.style.top = y_pos + 'px';
     }
 
     initEventListener() {
@@ -64,10 +44,10 @@ export default class BuildingSlot {
 
     dragStart() {
         if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
-        let buildingRules = new BuildingRules(this.game, this, draggingBuilding);
-        if (this.isEmpty() && draggingBuilding.type.slotType.name === this.type.name 
+        let buildingRules = new BuildingRules(this.game, this, draggingBuilding, false);
+        if (this.isEmpty() && draggingBuilding.type.slotType.isEqual(this.type)
             && buildingRules.allowed()) {
-            addClass(this, "empty");
+            this.addClass("empty");
         }
     }
 
@@ -79,45 +59,38 @@ export default class BuildingSlot {
     dragEnter(e) {
         if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
         e.preventDefault();
-        // this.addClass("hovered");
-        addClass(draggingBuilding, "hovered");
+        // draggingBuilding.addClass("hovered");
     }
 
     dragLeave() {
         if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
-        // this.changeClass(this.lastClassname);
-        changeClass(this, this.lastClassname)
-
+        // this.changeClass(this.lastClassname)
     }
 
     dragDrop(e) {
         e.preventDefault();
-        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot ) return;
+        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
 
         let buildingRules = new BuildingRules(this.game, this, draggingBuilding);
         if (!buildingRules.allowed()) {
-            console.log("not allowed")
+            console.log("not allowed: ", buildingRules.lastResult)
             return;
         }
-        
-        if(draggingBuilding.type.name == TYPES.town.name) 
-        {
-            const playerArea = document.getElementById("player-area-" + draggingBuilding.owner);
-            let lastBuilding = this.currBuilding;
-            playerArea.append(lastBuilding.div);
+
+        if (draggingBuilding.type.isEqual(buildingTypes.town)) {
+            let lastBuilding = this.getChild();
+            lastBuilding.playerArea.add(lastBuilding.div);
             lastBuilding.setUnplayed();
         }
 
         // reset highlighting and add
-        changeClass(this, this.classNameDefault)
-        this.addBuilding(draggingBuilding);
+        this.changeClass(this.classNameDefault)
+        this.add(draggingBuilding)
 
         // restyle dragged gameobject - delay needed setTimeout
         if (this.type.isLeftUpper || this.type.isRightUpper) {
-            let classSuffix = this.type.isLeftUpper ? "left-upper": "right-upper";
-            setTimeout(() => addClass(draggingBuilding, this.type.name + "-" + classSuffix), 0)
-            console.log(this.type)
-            
+            let classSuffix = this.type.isLeftUpper ? "left-upper" : "right-upper";
+            setTimeout(() => draggingBuilding.addClass(this.type.name + "-" + classSuffix), 0)
         }
 
         setTimeout(() => draggingBuilding.setPlayed(), 0);
@@ -125,6 +98,6 @@ export default class BuildingSlot {
 
     dragEnd() {
         if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
-            this.div.className = this.classNameDefault;
+        this.changeClass(this.classNameDefault);
     }
 }

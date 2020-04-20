@@ -1,15 +1,8 @@
 import BuildingSlot from "./buildingSlot";
 import ResourceSlot from "./resourceSlot";
 import { slotTypes, SlotType } from "./types";
+import MyHtmlElement from "./htmlElement";
 
-
-function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-}
 
 /**
  * 0: building slot for villages
@@ -41,22 +34,20 @@ let boardBuildSlotTemplate = [
     [-1, -1, -1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1, -1, -1],
 ]
 
-export default class Board {
+export default class Board extends MyHtmlElement {
 
     constructor(game) {
+        super({
+            div: document.getElementById("board")
+        })
         this.game = game;
-        this.div = document.getElementById("board");
         this.buildingSlots = [];
         this.resourceSlots = [];
-        // this.gameObjects = [];
-        this.offSetBoardLeft = this.div.offsetLeft;
-        this.offSetBoardTop = this.div.offsetTop;
     }
 
     init() {
         this.makeRessourceSlots();
         this.makeBuildingSlots();
-        // this.makeGameObjects();
     };
 
     makeRessourceSlots() {
@@ -83,8 +74,8 @@ export default class Board {
                 let position = {
                     x: posX,
                     y: posY,
-                    xOffSet: this.offSetBoardLeft / 2,
-                    yOffSet: this.offSetBoardTop / 2
+                    boardRow: row,
+                    boadCol: col
                 };
                 this.resourceSlots.push(
                     new ResourceSlot(this.game, this, position)
@@ -102,7 +93,6 @@ export default class Board {
         // cards do not ally proportional, 
         // propobably could have fix it by getting the dimensions and positioning of the hexagon streight
         let adjustingFactor = 25.5;
-        let streetMod = "";
         let isStreetLeftUpper = true;
 
         for (var row = 0; row < boardBuildSlotTemplate.length; row++) {
@@ -136,8 +126,8 @@ export default class Board {
                 let position = {
                     x: Math.round(posX),
                     y: Math.round(posY),
-                    xOffSet: this.offSetBoardLeft / 2,
-                    yOffSet: this.offSetBoardTop / 2
+                    boardRow: row,
+                    boardCol: col
                 };
                 if (row % 4 == 1 && col != 0 && col % 2 == 0) {
                     if (isStreetLeftUpper) {
@@ -151,7 +141,6 @@ export default class Board {
                 }
 
                 this.buildingSlots.push(new BuildingSlot(this.game, this, position, slotType, { row: row, col: col }))
-                streetMod = "";
             }
 
             // first street is always left upper
@@ -160,20 +149,8 @@ export default class Board {
         };
     }
 
-    allocateResources(resources) {
-        var ressourcesArr = Object.keys(resources).reduce(function (r, k) {
-            return r.concat(resources[k]);
-        }, []);
-        shuffle(ressourcesArr);
-        let countSlot = 0;
-        for (var res of ressourcesArr) {
-            this.resourceSlots[countSlot++].addResource(res);
-        }
+    draw() {
+        this.resourceSlots.forEach((res) => res.draw());
+        this.buildingSlots.forEach((bs) => bs.draw());
     }
-
-
-draw() {
-    this.resourceSlots.forEach((res) => res.draw());
-    this.buildingSlots.forEach((bs) => bs.draw());
-}
 }

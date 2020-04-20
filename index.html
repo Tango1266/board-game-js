@@ -14,14 +14,16 @@
             margin: 0;
             padding: 0;
             background-color: #9e814c;
-            margin: 20px;
-
+            min-width: 700;
+           
         }
-
+        #body{
+            overflow: scroll;
+        }
         #game {
             width: 780px;
             height: 800px;
-            background-color: #9e814c;
+            margin-top: 80px;
         }
 
         #board {
@@ -29,26 +31,31 @@
             height: 90%;
             width: 90%;
         }
-
-        .resource-area{
+        .resource-area-container {
             position: relative;
-            top:42%;
+            top: 42%;
             width: 150px;
             height: 150px;
             z-index: 2;
             background-color: grey;
             border: 3px solid dimgray
         }
+        .resource-area {
+            position: absolute;
+        }
+
         .resource {
-                position: absolute;
-                display: block;
-                cursor: pointer;
-         }
-         .played-resource {
-             z-index: 2 !important;
-             margin-top: -21%;
+            z-index: 2;
+            position: absolute;
+            display: block;
+            cursor: pointer;
+        }
+
+        .played-resource {
+            margin-top: -21%;
             margin-left: 2%;
-         }
+        }
+
         .board-container {
             width: 580px;
             height: 500px;
@@ -110,19 +117,21 @@
             cursor: pointer;
         }
 
-       
+
         .street {
-            filter:unset;
+            filter: unset;
             height: 30px;
             width: 25px;
         }
+
         .street-left-upper {
-           transform:rotate(55deg)
+            transform: rotate(55deg)
         }
+
         .street-right-upper {
-           transform:rotate(-55deg)
+            transform: rotate(-55deg)
         }
-      
+
         .village {
             height: 30px;
             width: auto;
@@ -134,7 +143,7 @@
         }
 
         .played-town {
-             position: relative;
+            position: relative;
             z-index: 200;
             margin-left: -15px;
             margin-top: -15px;
@@ -148,7 +157,7 @@
         }
 
         .played-village {
-             position: relative;
+            position: relative;
             z-index: 200;
             margin-left: -15px;
             margin-top: -15px;
@@ -246,6 +255,21 @@
         .invisible {
             display: none;
         }
+
+        .header {
+            display: flex;
+            height: 50px;
+            width: 100%;
+            background-color: grey;
+            margin-top: 0px;
+            z-index: 4;
+            padding: 10px;
+        }
+
+        .sticky {
+            position: fixed;
+
+        }
     </style>
 
 </head>
@@ -262,10 +286,18 @@
     <img id="img_stone" src="assets/images/stone.png" />
     <img id="img_wool" src="assets/images/wool.png" />
     <img id="img_dessert" src="assets/images/dessert.png" />
-    <select name="change-state"></select>
-    <div id="resource-area" class="resource-area"></div>
+    <div id= "header" class="header">
+        <select name="change-state"></select>
+    </div>
+    <div id="resource-area-container" class="resource-area-container">
+        <div id="resource-are-controls">
+            <button id="shufle-resources">Mischen</button>
+            <button id="allocate-resource">Verteilen</button>
+        </div>
+        <div id="resource-area" class="resource-area"></div>
+    </div>
     <div id="game" class="centered">
-        
+
         <div class="board-container flex-container centered">
             <div id="board" class="flex-item"></div>
         </div>
