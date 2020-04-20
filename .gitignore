@@ -6,3 +6,4 @@ npm-debug.log
 src/.test.js
 .vscode/launch.json
 .babelrc
+docs
