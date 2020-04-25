@@ -84,11 +84,26 @@ export default class ResourceArea extends MyHtmlElement {
                 resource.draw();
             }
         }
+
+        this.initEventListener();
     }
 
+    initEventListener(){
+        this.div.addEventListener("DOMNodeRemoved", this.makeDelayCallback(this.onDomNodeRemoved))
+    }
 
-    shufleDiv(div) {
-        shuffleDivChildren(div);
+    onDomNodeRemoved(e){
+        if(this.isEmpty()){
+            this.parent.addClass("invisible");
+        }
+
+    }
+
+    shufle(div) {
+        let times = Math.floor(Math.random() * 20);
+        while(times-- > 0){
+            shuffleDivChildren(div);
+        } 
     }
 
     allocateResources(resources) {

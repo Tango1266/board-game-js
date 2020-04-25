@@ -1,6 +1,5 @@
 import { addCSSRule, changeClass, addClass, setPosition } from "./domUtils";
 
-let baseUrl = process.env.BASE_URL;
 let instanceMap = new Map();
 
 export default class MyHtmlElement {
@@ -11,7 +10,7 @@ export default class MyHtmlElement {
         this.classNameDefault = this.div.className;
         this.lastClassName = this.div.className;
         this.div.dragable = dragable,
-        this.div.src = baseUrl + src;
+        this.div.src = src;
         this.parent = parent || MyHtmlElement.getElementById(this.div.id);
 
         if (!instanceMap.has(id))
@@ -59,5 +58,9 @@ export default class MyHtmlElement {
 
     addCSSRule(sheet, selector, rules, index) {
         addCSSRule(sheet, selector, rules, index);
+    }
+
+    makeDelayCallback(func, delay) {
+        return (args) => setTimeout(func.bind(this), 0, args);
     }
 }

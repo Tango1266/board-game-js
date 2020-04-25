@@ -22,7 +22,6 @@ game.draw();
 
 select.options[game.currentPhase].selected = true;
 select.onchange = function(e){
-    console.log(e.target.value);
     this.currentPhase = this.GAME_PHASES[e.target.value];
 }.bind(game);
 
@@ -49,6 +48,6 @@ allocateRes.onclick = () => {
 
 let shufle = document.getElementById("shufle-resources");
 shufle.onclick = () => {
-    game.resourceArea.shufleDiv(resdivs);
+    game.resourceArea.shufle(resdivs);
 
 };
