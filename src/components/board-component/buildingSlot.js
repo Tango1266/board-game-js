@@ -1,7 +1,7 @@
-import { draggingBuilding} from "./building";
-import BuildingRules from "./ruleEngine";
-import MyHtmlElement from "./htmlElement";
-import { buildingTypes } from "./types";
+import { draggingBuilding} from "../gameobjects/building-component/building";
+import BuildingRules from "../../ruleEngine";
+import MyHtmlElement from "../htmlElement";
+import { buildingTypes } from "../../types";
 
 let idCounter = 0;
 
@@ -18,14 +18,15 @@ export default class BuildingSlot extends MyHtmlElement {
         this.type = type;
         this.game = game;
         this.position = position;
-
-        game.buildingState[position.boardRow][position.boardCol] = -1;
+        this.game.state.removeBuilding(this);
     }
+
     add(child) {
         super.add(child,
-            () => this.game.buildingState[this.position.boardRow][this.position.boardCol] = 1)
+            () => this.game.state.addBuilding(this));
     }
-    draw() {
+    
+    init() {
         this.setPos(this.position.x, this.position.y)
         this.parent.add(this);
 
@@ -45,7 +46,7 @@ export default class BuildingSlot extends MyHtmlElement {
     dragStart() {
         if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
         let buildingRules = new BuildingRules(this.game, this, draggingBuilding, false);
-        if (this.isEmpty() && draggingBuilding.type.slotType.isEqual(this.type)
+        if (this.isEmpty && draggingBuilding.type.slotType.isEqual(this.type)
             && buildingRules.allowed()) {
             this.addClass("empty");
         }
@@ -79,7 +80,7 @@ export default class BuildingSlot extends MyHtmlElement {
 
         if (draggingBuilding.type.isEqual(buildingTypes.town)) {
             let lastBuilding = this.getChild();
-            lastBuilding.playerArea.add(lastBuilding.div);
+            lastBuilding.owner.area.add(lastBuilding.div);
             lastBuilding.setUnplayed();
         }
 

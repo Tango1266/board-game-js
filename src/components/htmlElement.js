@@ -1,8 +1,10 @@
-import { addCSSRule, changeClass, addClass, setPosition } from "./domUtils";
+import { addCSSRule, changeClass, addClass, setPosition } from "../utils/domUtils";
 
-let instanceMap = new Map();
+const instanceMap = new Map();
+const eventObservers = new Map();
 
 export default class MyHtmlElement {
+
     constructor({ id = null, className = null, div = null, dragable = false, src = null, parent = null } = {}) {
         this.div = div || document.createElement("div");
         this.div.id = id || div.id;
@@ -21,7 +23,7 @@ export default class MyHtmlElement {
         return instanceMap.get(id);
     }
 
-    isEmpty() {
+    get isEmpty() {
         return this.div.children.length <= 0;
     }
 

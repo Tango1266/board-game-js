@@ -13,11 +13,11 @@ export default class BuildingRules {
 
     onlyOneBuildingPerSlot() {
         if (this.building.type.isEqual(buildingTypes.town) 
-            && !this.slot.isEmpty()
+            && !this.slot.isEmpty
             && !this.slot.getChild().type.isEqual(buildingTypes.town)) {
             return true;
         }
-        return this.slot.isEmpty();
+        return this.slot.isEmpty;
     }
 
     onlyBuildingsAtCornors() {

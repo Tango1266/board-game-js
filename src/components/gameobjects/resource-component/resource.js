@@ -1,4 +1,4 @@
-import MyHtmlElement from "./htmlElement";
+import MyHtmlElement from "../../htmlElement";
 
 let idCounter = 0;
 
@@ -20,6 +20,11 @@ export default class Resource extends MyHtmlElement {
         this.div.src = details.imgSource;
     }
 
+    init() {
+        this.parent.add(this);
+        this.initEventListener();
+    }
+
     add(child) {
         super.add(child, () => child.setPlayed());
     }
@@ -38,13 +43,6 @@ export default class Resource extends MyHtmlElement {
         this.div.style.margin = null;
         setTimeout(() => this.addClass("played-" + this.type.slotType.name), 50)
     }
-
-
-    draw() {
-        this.parent.add(this);
-        this.initEventListener();
-    }
-
 
     dragStart() {
 

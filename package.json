@@ -14,8 +14,8 @@
     "@babel/plugin-transform-runtime": "^7.9.0"
   },
   "scripts": {
-    "start": "parcel -p  8000 watch index.html",
-    "build": "parcel build index.html --out-dir docs --public-url /jsboardgamedemo --no-source-maps"
+    "start": "parcel -p  8000 watch src/index.html",
+    "build": "parcel build src/index.html --out-dir docs --public-url /jsboardgamedemo --no-source-maps"
   },
   "author": "",
   "license": "ISC"

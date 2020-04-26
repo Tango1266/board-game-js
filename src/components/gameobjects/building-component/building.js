@@ -1,4 +1,4 @@
-import MyHtmlElement from "./htmlElement";
+import MyHtmlElement from "../../htmlElement";
 
 let idCounter = 0;
 
@@ -7,7 +7,7 @@ export let draggingBuilding;
 export default class Building extends MyHtmlElement {
     constructor(game, details) {
         super({
-            id: "player" + details.owner + "-" + details.type.name + "" + idCounter++,
+            id: "player" + details.owner.id + "-" + details.type.name + "" + idCounter++,
             className: "game-object " + details.type.name,
             div: document.createElement("img"),
             draggable: true,
@@ -16,7 +16,6 @@ export default class Building extends MyHtmlElement {
         this.game = game;
         this.type = details.type;
         this.owner = details.owner;
-        this.playerArea = new MyHtmlElement({ div: details.ownerArea })
         this.div.style.filter = details.color;
     }
 
@@ -40,8 +39,8 @@ export default class Building extends MyHtmlElement {
         setTimeout(() => this.changeClass(this.classNameDefault), 0)
     }
 
-    draw() {
-        this.playerArea.add(this);
+    init() {
+        this.owner.area.add(this);
         this.initEventListener();
     }
 
