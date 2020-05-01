@@ -1,5 +1,5 @@
-import Board from "../board-component/board";
-import MyHtmlElement from "../htmlElement";
+import MyHtmlElement from "../../htmlElement";
+import Board from "../../board/board-component/board";
 
 const GAME_PHASES = {
     NOTINITALISED: 0,
@@ -7,10 +7,11 @@ const GAME_PHASES = {
     START: 2
 }
 
-export default class Game extends MyHtmlElement {
+export default class Table extends MyHtmlElement {
+
     constructor({players = [], state = {}} = {}) {
         super({
-            div: document.getElementById("game"),
+            div: document.getElementById("table"),
         })
         this.players = players;
         this.state = state;

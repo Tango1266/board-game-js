@@ -1,0 +1,19 @@
+.card {
+    position: absolute;
+    display: none;
+}
+
+.resource-card {
+    display: block;
+}
+
+.rotate {
+    transform: rotate(-90deg);
+}
+
+.flip {
+    transform: rotateZ(-90deg) rotateY(70deg);
+    transition: transform .73s linear;
+}
+
+.played-resource-card {}

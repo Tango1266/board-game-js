@@ -1,5 +1,4 @@
-import MyHtmlElement from "../htmlElement";
-import ResourceFactory from "../../assembling/resourceFactory";
+import MyHtmlElement from "../../htmlElement";
 
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -25,7 +24,6 @@ export default class ResourceArea extends MyHtmlElement {
             parent: new MyHtmlElement({ div: document.getElementById("resource-area-container") }),
             div: document.getElementById("resource-area")
         })
-
         this.game = game;
         this.resources = resources;
     }

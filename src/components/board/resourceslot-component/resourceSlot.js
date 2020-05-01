@@ -1,6 +1,6 @@
-import { draggingResource } from "../gameobjects/resource-component/resource";
-import { addClass, changeClass, removeClass } from "../../utils/domUtils";
-import MyHtmlElement from "../htmlElement";
+import { draggingResource } from "../../gameobjects/resource-component/resource";
+import { addClass, changeClass, removeClass } from "../../../utils/domUtils";
+import MyHtmlElement from "../../htmlElement";
 
 let idCounter = 0;
 

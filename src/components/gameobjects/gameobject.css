@@ -1,0 +1,8 @@
+ .hold {
+            border: solid #ccc 4px;
+        }
+
+           .game-object {
+            display: inline;
+            cursor: pointer;
+        }

@@ -1,7 +1,7 @@
-import { draggingBuilding} from "../gameobjects/building-component/building";
-import BuildingRules from "../../ruleEngine";
-import MyHtmlElement from "../htmlElement";
-import { buildingTypes } from "../../types";
+import { draggingBuilding} from "../../gameobjects/building-component/building";
+import BuildingRules from "../../../ruleEngine";
+import MyHtmlElement from "../../htmlElement";
+import { buildingTypes } from "../../../types";
 
 let idCounter = 0;
 

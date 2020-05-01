@@ -1,12 +1,14 @@
 import State from "../state";
 import Player from "../player";
-import Board from "../components/board-component/board";
-import Game from "../components/game-component/game";
-import ResourceArea from "../components/resourcearea-component/resourceArea";
+import Board from "../components/board/board-component/board";
+import Game from "../components/table/table-component/table";
+import ResourceArea from "../components/table/resourcearea-component/resourceArea";
 import SlotFactory from "./slotFactory";
 import BuildingFactory from "./buildingFactory";
 import ResourceFactory from "./resourceFactory";
 import 'regenerator-runtime/runtime'
+import CardFactory from "./cardFactory";
+import CardArea from "../components/table/cardarea-component/cardArea";
 
 export function assemble(playerData) {
     let game = new Game({ state: new State() }).init();
@@ -14,6 +16,7 @@ export function assemble(playerData) {
     game.board = assembleBoard(game);
 
     let resourceArea = assembleResourceArea(game);
+    let cardArea = assembleCardArea(game);
 
     // debug: select
     let select = document.getElementsByName("change-state")[0];
@@ -69,6 +72,26 @@ function assemblePlayers(game, playerData) {
     }
 
     return players;
+}
+function assembleCardArea(game){
+    let cf = new CardFactory(game);
+    let cards = {
+        ore: cf.createOreCard(1),
+        corn: cf.createCornCard(19),
+        stone: cf.createStoneCard(19),
+        wool: cf.createWoolCard(19),
+        wood: cf.createWoodCard(19),
+    }
+    
+    for (var cardKey in cards) {
+        let cardArea = new CardArea();
+
+        for (var card of cards[cardKey]) {
+            card.parent = cardArea;
+            card.init();
+        }
+        cardArea.init();
+    }
 }
 
 function assembleResourceArea(game) {

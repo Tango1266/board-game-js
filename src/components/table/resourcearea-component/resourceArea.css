@@ -1,0 +1,14 @@
+ .resource-area-container {
+            position: relative;
+            top: 42%;
+            width: 150px;
+            height: 150px;
+            z-index: 2;
+            background-color: grey;
+            border: 3px solid dimgray
+        }
+        .resource-area {
+            position: absolute;
+        }
+
+       

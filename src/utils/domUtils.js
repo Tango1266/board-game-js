@@ -38,12 +38,12 @@ export function addClass(instance, className) {
 }
 
 export function removeClass(instance, classname) {
-    if (!instance.div.className.includes(className)) {
+    if (!instance.div.className.includes(classname)) {
         return;
     }
 
     let newClass = instance.div.className.replace(" " + classname, "");
-    changeClass(newClass);
+    changeClass(instance, newClass);
 }
 
 

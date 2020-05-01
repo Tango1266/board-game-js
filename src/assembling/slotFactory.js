@@ -1,6 +1,5 @@
-
-import BuildingSlot from "../components/board-component/buildingSlot";
-import ResourceSlot from "../components/board-component/resourceSlot";
+import BuildingSlot from "../components/board/buildingslot-component/buildingSlot";
+import ResourceSlot from "../components/board/resourceslot-component/resourceSlot";
 import { SlotType, slotTypes } from "../types";
 
 /**
@@ -8,29 +7,29 @@ import { SlotType, slotTypes } from "../types";
  * 2: building solot for streets 
  */
 const boardBuildSlotTemplate = [
-    [null, null, null, null, null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, 2,	 null, 2,	 null, 2,	 null, 2,	 , 2,	 null, 2,	 null, null, null, null, null, null],
-    [null, null, null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, null, null],
-    [null, null, null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, null, null],
-    [null, null, null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, null, null],
-    [null, null, null, null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, null, null, null],
-    [null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null],
-    [null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null],
-    [null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null],
-    [null, null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, null],
-    [null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null],
-    [null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null],
-    [null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null],
-    [null, null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, null],
-    [null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null],
-    [null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null],
-    [null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null],
-    [null, null, null, null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, 2,	 null, null, null, null],
-    [null, null, null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, null, null],
-    [null, null, null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, 2,	 null, null, null, null, null],
-    [null, null, null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, null, null],
-    [null, null, null, null, null, null, 2,	 null, 2,	 , 2,	 null, 2,	 , 2,	 null, 2,	 null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, 0,	 null, null, null, 0,	 null, null, null, 0,	 null, null, null, null, null, null, null],
+    [-1, -1, -1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, 2, -1, 2, -1, 2, -1, 2, , 2, -1, 2, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, -1, -1, -1],
+    [-1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1],
+    [-1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1],
+    [-1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1],
+    [-1, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, -1],
+    [-1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1],
+    [-1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1],
+    [-1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1],
+    [-1, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, -1],
+    [-1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1],
+    [-1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1],
+    [-1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1],
+    [-1, -1, -1, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, 2, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, 2, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, 2, -1, 2, , 2, -1, 2, , 2, -1, 2, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1, -1, -1],
 ]
 
 const resourceSlottemplate = [
@@ -136,8 +135,8 @@ export default class SlotFactory {
                 buildingSlots.push(new BuildingSlot(this.game, this.game.board, position, slotType, { row: row, col: col }))
             }
 
-            // first street is always left upper
-            isStreetLeftUpper = true;
+            // first street is always left upper until the mid row then always right
+            isStreetLeftUpper = boardBuildSlotTemplate.length / 2 <= row ? false : true;
             count++;
         }
         return buildingSlots;

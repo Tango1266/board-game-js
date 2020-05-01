@@ -31,13 +31,18 @@ export default class BuildingFactory {
         }
         return gameObjects;
     }
+
     getPlayerColor(player) {
         let color = ((player) => {
             switch (player.id) {
-                case 1: return "sepia(13%) saturate(3207%) hue-rotate(130deg) brightness(95%) contrast(80%)";
-                case 2: break;
-                case 3: break;
-                case 4: break;
+                // case 1: return "sepia(13%) saturate(3207%) hue-rotate(50deg) brightness(95%) contrast(80%)";
+                // case 2: return "sepia(13%) saturate(3207%) hue-rotate(150deg) brightness(95%) contrast(800%)";
+                // case 3: return "sepia(13%) saturate(3207%) hue-rotate(200deg) brightness(95%) contrast(80%)";
+                // case 4: return "sepia(13%) saturate(3207%) hue-rotate(250deg) brightness(95%) contrast(80%)";
+                case 1: return "hue-rotate(0deg) contrast(200%)";
+                case 2: return "hue-rotate(100deg)";
+                case 3: return "hue-rotate(150deg)";
+                case 4: return "hue-rotate(200deg)";
             }
         }
         )(player)

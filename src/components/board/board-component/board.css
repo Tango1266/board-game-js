@@ -1,0 +1,22 @@
+  #board {
+      position: relative;
+      height: 90%;
+      width: 90%;
+  }
+  
+  .board-container {
+      width: 580px;
+      height: 500px;
+      background-color: #3f6eee;
+  }
+  
+  .flex-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  
+  .flex-item {
+      display: flex;
+      align-self: center;
+  }

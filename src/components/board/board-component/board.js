@@ -1,4 +1,4 @@
-import MyHtmlElement from "../htmlElement";
+import MyHtmlElement from "../../htmlElement";
 
 
 export default class Board extends MyHtmlElement {
