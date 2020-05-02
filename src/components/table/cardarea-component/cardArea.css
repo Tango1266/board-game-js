@@ -1,24 +1,21 @@
-  .card-area-container{
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        width: 124px;
-        height: 350px;
-        background-color: gray;
-        margin-left: -125%;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .card-area{
-            display: flex;
-
-    width: 80%;
-    height: 20%;
-    background-color: darkgrey;
-    margin-top: 2.5%;
-    margin-bottom: 2.5%;
-    align-items: center;
-
-justify-content: center;
-}
+  .card-area-container {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      width: 124px;
+      height: 350px;
+      background-color: gray;
+      margin-left: -125%;
+      align-items: center;
+      justify-content: center;
+  }
+  
+  .card-area {
+      display: flex;
+      background-color: darkgrey;
+      margin-top: 2.5%;
+      margin-bottom: 2.5%;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 0;
+  }

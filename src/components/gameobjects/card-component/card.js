@@ -7,17 +7,35 @@ export let draggingCard;
 
 export default class Card extends MyHtmlElement {
     constructor(game, details) {
+        let id = idCounter++;
         super({
-            id: details.type.name + "-" + idCounter++,
+            id: details.type.name + "-" + id,
             className: "game-object " + "card",
-            div: document.createElement("img"),
+            div: document.createElement("div"),
             draggable: true,
             parent: details.parent,
-            src: details.imgSource
+            // src: details.imgSource
         })
+
         this.game = game;
         this.type = details.type;
         this.backside = details.backside;
+        this.isPlayed = false;
+
+        this.imgCard = new MyHtmlElement({
+            id: "img-card-" + details.type.name + "-" + id,
+            className: "img-card img-card-" + details.type.slotType.name + "-" + id,
+            div: document.createElement("img"),
+            parent: this,
+            src: details.imgSource
+        })
+    }
+
+    init() {
+        this.parent.add(this);
+        this.add(this.imgCard);
+        this.setUnplayed();
+        this.initEventListener();
     }
 
     initEventListener() {
@@ -26,19 +44,22 @@ export default class Card extends MyHtmlElement {
     }
 
     isPlayed() {
-        return this.div.draggable;
+        return this.div.classList.contains("played-" + this.type.slotType.name);
     }
 
     setPlayed() {
-        this.div.draggable = false;
         draggingCard = null;
-        setTimeout(() => this.addClass("played-" + this.type.slotType.name), 50)
+        this.isPlayed = true;
+        setTimeout(() => this.flipCard()
+            .changeClass(this.classNameDefault)
+            .addClass(this.type.slotType.name)
+            .addClass("played-" + this.type.slotType.name), 50)
     }
 
     flipCard() {
         let backsideImg = this.backside.div.src;
-        this.backside.div.src = this.div.src;
-        this.div.src = backsideImg;
+        this.backside.div.src = this.imgCard.div.src;
+        this.imgCard.div.src = backsideImg;
 
         return this;
     }
@@ -52,13 +73,10 @@ export default class Card extends MyHtmlElement {
                 .addClass(this.type.slotType.name)
                 .addClass("rotate");
         }), 0);
+        return this;
     }
 
-    init() {
-        this.parent.add(this);
-        this.setUnplayed();
-        this.initEventListener();
-    }
+
 
     dragStart(e) {
         draggingCard = this;
@@ -70,6 +88,8 @@ export default class Card extends MyHtmlElement {
     }
 
     dragEnd() {
+        if (this.isPlayed) return;
+
         this.flipCard();
         let draggingEvent = new Event("draggingend");
         this.game.div.dispatchEvent(draggingEvent);

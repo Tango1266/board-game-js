@@ -3,9 +3,20 @@
     display: none;
 }
 
+.img-card {
+    display: block;
+    width: 100%;
+}
+
 .resource-card {
     display: block;
 }
+
+
+/* .resource-card:last-child,
+.resource-card:hover {
+    overflow: visible;
+} */
 
 .rotate {
     transform: rotate(-90deg);
@@ -16,4 +27,20 @@
     transition: transform .73s linear;
 }
 
-.played-resource-card {}
+.played-resource-card {
+    display: flex;
+    position: absolute;
+    /*make relative to use as flex-items*/
+    z-index: 0;
+    width: 60%;
+    /* height: 100%; */
+    transform-origin: bottom left;
+    /* width: max-content; */
+    flex-grow: 0.5;
+    flex-shrink: 0.3;
+    flex-basis: 0;
+    flex: 0 0 50px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
