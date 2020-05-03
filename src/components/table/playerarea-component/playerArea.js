@@ -1,14 +1,15 @@
 import MyHtmlElement from "../../htmlElement";
 
-export default class PlayerArea extends MyHtmlElement{
+export default class PlayerArea extends MyHtmlElement {
     constructor(owner) {
         let id = "player-area-" + owner.id;
         super({
             id: id,
-            className: "player-area " + id,
+            className: "player-area " + id + " dragscroll",
             parent: owner.game
         })
         this.owner = owner;
+        this.div.style.gridArea = "playerArea" + owner.id;
     }
 
     init() {
@@ -19,5 +20,5 @@ export default class PlayerArea extends MyHtmlElement{
             }
         }
     }
-    
+
 }

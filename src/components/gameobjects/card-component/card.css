@@ -12,12 +12,6 @@
     display: block;
 }
 
-
-/* .resource-card:last-child,
-.resource-card:hover {
-    overflow: visible;
-} */
-
 .rotate {
     transform: rotate(-90deg);
 }

@@ -11,7 +11,7 @@ import CardFactory from "./cardFactory";
 import CardArea from "../components/table/cardarea-component/cardArea";
 
 export function assemble(playerData) {
-    let game = new Game({ state: new State() }).init();
+    let game = new Game({ state: new State() });
     game.players = assemblePlayers(game, playerData);
     game.board = assembleBoard(game);
 

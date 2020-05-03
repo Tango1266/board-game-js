@@ -1,10 +1,15 @@
-   #table{
-            width: 780px;
-            height: 800px;
-            margin-top: 80px;
-            left: 200px;
-            right: 200px;
-        }
-
-
- 
+   #table {
+       /* width: 780px;
+       height: 800px;
+       margin-top: 80px;
+       left: 200px;
+       right: 200px; */
+       grid-area: table;
+       display: grid;
+       grid-template-columns: 10% 35% 45% 5%;
+       grid-template-rows: 20% 60% 20%;
+       grid-template-areas: 
+       "playerArea2 playerArea2 playerArea3 playerArea3" 
+       "cardArea board board . " 
+       "playerArea1 playerArea1 playerArea4 playerArea4"
+   }

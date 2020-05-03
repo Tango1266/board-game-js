@@ -8,9 +8,10 @@ export default class CardArea extends MyHtmlElement {
         super({
             id: id,
             className: "card-area",
-            parent: new MyHtmlElement({div:document.getElementById("card-area-container")})
+            parent: new MyHtmlElement({ div: document.getElementById("card-area-container") })
         })
         this.cards = [];
+        this.parent.div.style.gridArea = "cardArea"
     }
 
     init() {

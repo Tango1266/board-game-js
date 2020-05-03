@@ -26,52 +26,24 @@ export default class ResourceArea extends MyHtmlElement {
         })
         this.game = game;
         this.resources = resources;
+
+        this.parent.div.style.gridArea = "resourceArea";
     }
 
     init() {
         this.parent.add(this);
-
-        // for (var resKey in this.resources) {
-        //     for (var resource of this.resources[resKey]) {
-        //         resource.parent = this;
-
-        //         let previousEl = this.div.children[resource.idCounter - 1];
-        //         if (previousEl) {
-
-        //             let marginnext = margin.next().value;
-        //             switch (marginnext) {
-        //                 case "marginLeft":
-        //                     resource.div.style.marginLeft = previousEl.offsetLeft + 10 + "px";
-        //                     break;
-        //                 case "marginTop":
-        //                     resource.div.style.marginTop = previousEl.offsetTop + 10 + "px";
-        //                     resource.div.style.marginLeft = previousEl.offsetLeft + "px";
-        //                     break;
-        //                 case "marginRight":
-        //                     resource.div.style.marginTop = previousEl.offsetTop + "px";
-        //                     resource.div.style.marginLeft = previousEl.offsetLeft - 10 + "px";
-        //                     break;
-        //                 case "marginBottom":
-        //                     resource.div.style.marginTop = previousEl.offsetTop - 10 + "px";
-        //                     resource.div.style.marginLeft = previousEl.offsetLeft + "px";
-        //                     break;
-        //             }
-        //         }
-        //         resource.init();
-        //     }
-        // }
-
+        this.addClass("dragscroll")
         this.initEventListener();
     }
 
-    initEventListener(){
+    initEventListener() {
         let observer = new MutationObserver(this.makeDelayCallback(this.onDomNodeRemoved));
-        observer.observe(this.div, {childList:true});
+        observer.observe(this.div, { childList: true });
         // this.div.addEventListener("DOMNodeRemoved", this.makeDelayCallback(this.onDomNodeRemoved))
     }
 
-    onDomNodeRemoved(e){
-        if(this.isEmpty){
+    onDomNodeRemoved(e) {
+        if (this.isEmpty) {
             this.parent.addClass("invisible");
         }
 
@@ -79,9 +51,9 @@ export default class ResourceArea extends MyHtmlElement {
 
     shufle(div) {
         let times = Math.floor(Math.random() * 20);
-        while(times-- > 0){
+        while (times-- > 0) {
             shuffleDivChildren(div);
-        } 
+        }
     }
 
     allocateResources(resources) {

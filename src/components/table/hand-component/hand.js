@@ -22,6 +22,7 @@ export default class Hand extends MyHtmlElement {
             div: document.createElement("div"),
             parent: this
         })
+        this.div.style.gridArea = "hand" + player.id;
     }
 
     addCard(card) {
