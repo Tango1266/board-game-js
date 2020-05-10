@@ -9,26 +9,17 @@
  }
 
  .holding-cards {/*cards*/
-    position: absolute;
+    position: sticky;
+    margin: auto;
     width: 50%;
     height: 50%;
-    margin:auto;
+    /*top:20%;
+    left:2% */
 }
- 
- /*backup*/
- .holding-cards-flex {/*cards*/
-     position: relative;
-     display: flex;
-     width: 100%;
-     height: 100%;
-     max-width: 100%;
-     justify-content: center;
-     flex-direction: row;
- }
  
  .img-hand,
  .img-thumb {
-     display: block;
+     display: inline-block;
      position: absolute;
      /* position: absolute; */
      width: 60%;

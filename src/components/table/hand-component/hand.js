@@ -26,35 +26,33 @@ export default class Hand extends MyHtmlElement {
     }
 
     addCard(card) {
-
+        idCounter++;
 
         let prevCardDiv = this.holdingCards.div.children[this.holdingCards.div.children.length - 1];
-        let rotationValue = 0;
-        console.log(this.div.clientWidth, this.div.clientHeight)
-        console.log(this.div.offsetLeft, this.div.offsetHeight)
+        let rotationValue = -40;
+
+
         if (prevCardDiv) {
+            console.log(card.div)
+            console.log(prevCardDiv)
             let prevRotationValue = parseInt(prevCardDiv.style.transform.replace(/[^\d\+\-]/g, ""));
             let prevOffsetLeft = prevCardDiv.offsetLeft;
-            let prevOffsetButtom = prevCardDiv.offsetHeight;
-
-            console.log(prevOffsetLeft, prevOffsetButtom)
+            // let prevOffsetButtom = Math.round((1 - ((prevCardDiv.scrollHeight - prevCardDiv.offsetTop) / this.div.scrollHeight)) * 100)
+            const prevOffsetButtom = parseInt(prevCardDiv.style.bottom);
+            let offsetBottom = prevOffsetButtom;
+            console.log(prevOffsetButtom)
             rotationValue = prevRotationValue + 15;
 
-            let offsetLeft = 0.07 + (prevOffsetLeft / this.div.clientWidth)
+            let offsetLeft = 0.07 + (prevOffsetLeft / this.div.offsetWidth)
             card.div.style.left =  Math.round(offsetLeft * 100) + "%";
-            
-
-            // card.div.style.bottom =  Math.round(offsetButtom * 100) + "%";
         }
-            // card.div.style.left = idCounter++ * -10 + "%";
-        else { //(((card.clientWidt/2 + this.div.clientWidth / 2) / this.div.clientWidth )* 100 )
-            card.div.style.left =  10 + "%";
+        else {
+            // card.div.style.bottom =  20 + "%";
         }
+        card.div.style.bottom =  20 + "%";
         card.div.style.transform = "rotate(" + rotationValue + "deg)";
-        console.log(card.isOverflown)
 
         this.holdingCards.add(card);
-
         return this;
     }
 
@@ -94,18 +92,18 @@ export default class Hand extends MyHtmlElement {
     }
 
     dragStart() {
-        console.log("start")
+        // console.log("start")
     }
 
     dragOver(e) {
         e.preventDefault();
-        console.log("over")
+        // console.log("over")
 
     }
 
     dragEnter(e) {
         e.preventDefault();
-        console.log("enter")
+        // console.log("enter")
     }
 
 
@@ -118,6 +116,6 @@ export default class Hand extends MyHtmlElement {
     }
 
     dragEnd() {
-        console.log("end")
+        // console.log("end")
     }
 }
