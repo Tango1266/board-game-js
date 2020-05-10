@@ -143,6 +143,7 @@ function assembleResourceArea(game) {
                         resource.div.style.marginLeft = previousEl.offsetLeft + "px";
                         break;
                 }
+                
             }
             resource.init();
         }

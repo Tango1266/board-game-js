@@ -30,6 +30,12 @@ export default class MyHtmlElement {
         return instanceMap.get(id);
     }
 
+    static getAll() {
+        return  Array.from(instanceMap).reduce((k,v) => {
+            return k.concat(v[1]);
+        }, []);
+    }
+
     get isEmpty() {
         return this.div.children.length <= 0;
     }
@@ -81,7 +87,25 @@ export default class MyHtmlElement {
     hide() {
         setTimeout(() => this.addClass("fade"), 1);
         setTimeout(() => this.addClass("invisible"), 0);
-        // this.addClass("invisible");
         return this;
+    }
+
+    show() {
+        setTimeout(() => this.removeClass("invisible"), 0);
+        return this;
+    }
+
+    adjustDimensionsToContent() {
+        let maxWidth = 0, maxHeight = 0;
+        Array.prototype.forEach.call(this.div.children, (child) => {
+            maxWidth = Math.max(maxWidth, child.offsetLeft + child.clientWidth);
+            maxHeight = Math.max(maxHeight, child.offsetTop + child.clientHeight);
+        });
+        this.div.style.width = maxWidth + "px";
+        this.div.style.height = maxHeight + "px";
+    }
+
+    get isOverflown(){
+        return this.div.scrollWidth > this.div.clientWidth ||  this.div.scrollHeight > this.div.clientHeight;
     }
 }

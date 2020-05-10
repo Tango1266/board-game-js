@@ -23,8 +23,8 @@ export default class Card extends MyHtmlElement {
         this.isPlayed = false;
 
         this.imgCard = new MyHtmlElement({
-            id: "img-card-" + details.type.name + "-" + id,
-            className: "img-card img-card-" + details.type.slotType.name + "-" + id,
+            id: "img-" + details.type.name + "-" + id,
+            className: "img-card img-"+ details.type.slotType.name,
             div: document.createElement("img"),
             parent: this,
             src: details.imgSource
@@ -53,7 +53,7 @@ export default class Card extends MyHtmlElement {
         setTimeout(() => this.flipCard()
             .changeClass(this.classNameDefault)
             .addClass(this.type.slotType.name)
-            .addClass("played-" + this.type.slotType.name), 50)
+            .addClass("played-" + this.type.slotType.name).imgCard.addClass("played-img-" + this.type.slotType.name), 50)
     }
 
     flipCard() {

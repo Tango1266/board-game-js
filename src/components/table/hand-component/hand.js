@@ -26,9 +26,12 @@ export default class Hand extends MyHtmlElement {
     }
 
     addCard(card) {
-        let prevCardDiv = this.holdingCards.div.children[this.holdingCards.div.children.length - 1];
-        let rotationValue = -20;
 
+
+        let prevCardDiv = this.holdingCards.div.children[this.holdingCards.div.children.length - 1];
+        let rotationValue = 0;
+        console.log(this.div.clientWidth, this.div.clientHeight)
+        console.log(this.div.offsetLeft, this.div.offsetHeight)
         if (prevCardDiv) {
             let prevRotationValue = parseInt(prevCardDiv.style.transform.replace(/[^\d\+\-]/g, ""));
             let prevOffsetLeft = prevCardDiv.offsetLeft;
@@ -36,13 +39,20 @@ export default class Hand extends MyHtmlElement {
 
             console.log(prevOffsetLeft, prevOffsetButtom)
             rotationValue = prevRotationValue + 15;
-            console.log(this.div.clientWidth, this.div.clientHeight)
 
             let offsetLeft = 0.07 + (prevOffsetLeft / this.div.clientWidth)
-            card.div.style.left = Math.round(offsetLeft * 100) + "%";
-            // card.div.style.bottom = "65%";
+            card.div.style.left =  Math.round(offsetLeft * 100) + "%";
+            
+
+            // card.div.style.bottom =  Math.round(offsetButtom * 100) + "%";
+        }
+            // card.div.style.left = idCounter++ * -10 + "%";
+        else { //(((card.clientWidt/2 + this.div.clientWidth / 2) / this.div.clientWidth )* 100 )
+            card.div.style.left =  10 + "%";
         }
         card.div.style.transform = "rotate(" + rotationValue + "deg)";
+        console.log(card.isOverflown)
+
         this.holdingCards.add(card);
 
         return this;

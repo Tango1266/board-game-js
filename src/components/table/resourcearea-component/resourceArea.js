@@ -16,8 +16,6 @@ function shuffleDivChildren(div) {
     return div;
 }
 
-
-
 export default class ResourceArea extends MyHtmlElement {
     constructor(game, resources) {
         super({
@@ -31,15 +29,18 @@ export default class ResourceArea extends MyHtmlElement {
     }
 
     init() {
+        
         this.parent.add(this);
         this.addClass("dragscroll")
         this.initEventListener();
+        setTimeout(() => {
+            this.adjustDimensionsToContent();
+        }, 0)
     }
 
     initEventListener() {
         let observer = new MutationObserver(this.makeDelayCallback(this.onDomNodeRemoved));
         observer.observe(this.div, { childList: true });
-        // this.div.addEventListener("DOMNodeRemoved", this.makeDelayCallback(this.onDomNodeRemoved))
     }
 
     onDomNodeRemoved(e) {

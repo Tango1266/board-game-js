@@ -7,16 +7,23 @@
      height: 100%;
      overflow: visible;
  }
+
+ .holding-cards {/*cards*/
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    margin:auto;
+}
  
- .holding-cards {
+ /*backup*/
+ .holding-cards-flex {/*cards*/
      position: relative;
      display: flex;
-     align-items: center;
+     width: 100%;
+     height: 100%;
+     max-width: 100%;
      justify-content: center;
-     width: auto;
-     height: auto;
      flex-direction: row;
-     max-width: 300px;
  }
  
  .img-hand,
@@ -24,9 +31,10 @@
      display: block;
      position: absolute;
      /* position: absolute; */
-     width: 100%;
-     height: 100%;
+     width: 60%;
+     height: 60%;
      overflow: hidden;
+     align-self: flex-end;
  }
  
  .img-hand {
@@ -39,9 +47,7 @@
  }
  
  .hand-1 {
-     /* bottom: 0; */
-     /* margin-left: -10px;
-     margin-bottom: -10px; */
+
  }
  
  .hand-2 {
