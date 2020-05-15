@@ -24,10 +24,10 @@ export default class Hand extends MyHtmlElement {
         })
         this.div.style.gridArea = "hand" + player.id;
     }
-
+    
+    //todo: still work to do
     addCard(card) {
-        idCounter++;
-
+        
         let prevCardDiv = this.holdingCards.div.children[this.holdingCards.div.children.length - 1];
         let rotationValue = -40;
 
@@ -49,7 +49,7 @@ export default class Hand extends MyHtmlElement {
         else {
             // card.div.style.bottom =  20 + "%";
         }
-        card.div.style.bottom =  20 + "%";
+        card.div.style.bottom =  0 + "%";
         card.div.style.transform = "rotate(" + rotationValue + "deg)";
 
         this.holdingCards.add(card);
