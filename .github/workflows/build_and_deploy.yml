@@ -20,13 +20,13 @@ jobs:
       run: |
         cd ./docs
         ls
+        git init
         git config --global user.email ${{secrets.GH_EMAIL}}
         git config --global user.name ${{secrets.GH_USERNAME}}
-        git remote set-url origin https://${{secrets.GH_ACCESS_TOKEN}}@github.com/${{secrets.GH_USERNAME}}/jsboardgamedemo.git
-        git checkout --track origin/master
+        git remote add pages https://${{secrets.GH_ACCESS_TOKEN}}@github.com/${{secrets.GH_USERNAME}}/jsboardgamedemo.git
+        git fetch pages
+        git checkout -f --track pages/master
         git status
-        git fetch
-        git pull
     - name: Build and Pack
       run: npm run build
     - name: Deploy to GH Pages
@@ -34,4 +34,4 @@ jobs:
         git add .
         git commit -m "deploy pages"
         git status
-        git push
+        git push pages master -f
