@@ -49,7 +49,7 @@ export default class Building extends MyHtmlElement {
         draggingBuilding = this;
         let draggingEvent = new Event("dragging");
         this.game.div.dispatchEvent(draggingEvent)
-        setTimeout(() => (this.changeClass("invisible")), 0)
+        setTimeout(() => (this.hide()), 0)
     }
 
     dragEnd() {

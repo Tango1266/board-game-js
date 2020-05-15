@@ -1,0 +1,44 @@
+.card {
+    position: absolute;
+    display: none;
+}
+
+.img-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.resource-card {
+    display: block;
+}
+
+.rotate {
+    transform: rotate(-90deg);
+}
+
+.flip {
+    transform: rotateZ(-90deg) rotateY(70deg);
+    transition: transform .73s linear;
+}
+
+.played-resource-card { 
+    position: absolute;
+    overflow: visible;
+    transform-origin: bottom left;
+    padding-top: 57.47%;
+}
+
+.played-resource-card:hover{
+    z-index: 10;
+}
+.played-img-resource-card {
+   width: 50%;
+    z-index: 10;
+}
+
+
+.played-resource-card:last-child, .played-resource-card:hover {
+    overflow: visible;
+}

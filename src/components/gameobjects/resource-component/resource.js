@@ -52,7 +52,7 @@ export default class Resource extends MyHtmlElement {
         let draggingEvent = new Event("dragging");
         this.game.div.dispatchEvent(draggingEvent)
 
-        setTimeout(() => (this.div.className = "invisible"), 0)
+        setTimeout(() => (this.hide()), 0)
     }
 
 

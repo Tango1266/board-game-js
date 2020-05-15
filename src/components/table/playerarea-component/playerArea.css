@@ -1,0 +1,25 @@
+ .player-area {
+     position: relative;
+     background-color: grey;
+     border: 3px solid dimgray;
+     width: 100%;
+     height: 100%;
+ }
+ 
+ .player-area-1 {
+     grid-area: playerArea1;
+ }
+ 
+ .player-area-2 {
+     grid-area: playerArea2;
+
+ }
+ 
+ .player-area-3 {
+     grid-area: playerArea3;
+
+ }
+ 
+ .player-area-4 {
+     grid-area: playerArea4;
+ }

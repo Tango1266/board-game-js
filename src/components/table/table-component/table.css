@@ -1,0 +1,15 @@
+   #table {
+       margin: 0px;
+       position: relative;
+       grid-area: table;
+       display: grid;
+       grid-template-columns: 10fr 40fr 40fr 10fr;
+       grid-template-rows: 0.1fr 12.9fr 74fr 12.9fr 0.1fr;
+       gap: 20px 20px;
+       grid-template-areas: 
+       ". . . ." 
+       "playerArea2 playerArea2 playerArea3 playerArea3" 
+       "cardArea board board . " 
+       "playerArea1 playerArea1 playerArea4 playerArea4"
+       ". . . ." ;
+   }

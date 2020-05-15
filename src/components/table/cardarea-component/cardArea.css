@@ -1,0 +1,18 @@
+  .card-area-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background-color: gray;
+    
+      align-items: center;
+      justify-content: center;
+      grid-area: cardArea;
+  }
+  
+  .card-area {
+      display: flex;
+      background-color: darkgrey;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 0;
+  }

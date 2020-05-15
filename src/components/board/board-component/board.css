@@ -1,0 +1,14 @@
+.board-container {
+    grid-area: board;
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: #3f6eee;
+    /* align-items: center; */
+}
+
+.board {
+    margin: auto;
+    position: relative;
+}
