@@ -5,17 +5,16 @@
   "main": "index.js",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "parcel": "^1.12.4",
-    "pascal": "0.0.0",
     "regenerator-runtime": "^0.13.5"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "parcel": "^1.12.4",
     "@babel/plugin-transform-runtime": "^7.9.0"
   },
   "scripts": {
     "start": "parcel -p  8000 watch src/index.html",
-    "build": "parcel build src/index.html --out-dir docs --public-url /jsboardgamedemo --no-source-maps"
+    "build": "parcel build src/index.html --out-dir docs/dist --public-url /jsboardgamedemo --no-source-maps"
   },
   "author": "",
   "license": "ISC"

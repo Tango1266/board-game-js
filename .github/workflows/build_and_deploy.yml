@@ -7,7 +7,8 @@ jobs:
       matrix:
         node-version: [10.x]
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout ${{github.ref}}
+        uses: actions/checkout@v2
         with:
           ref: ${{github.ref}}
       - name: Use Node.js ${{ matrix.node-version }}
@@ -16,35 +17,70 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Packages
         run: npm install
+      - name: Prepare out directory
+        run: |
+          mkdir -p ./docs/diagrams/out
       - name: Build and Pack App
         run: npm run build
       - name: Upload Distribution
         uses: actions/upload-artifact@v2
         with:
           name: dist
-          path: ./docs
+          path: ./docs/dist
+      - name: Export drawio to SVG
+        uses: Burnett01/actions-drawio@1.0
+        with:
+          src: ./docs/diagrams/src/jsboardgame.drawio
+          dest: ./docs/diagrams/out/jsboardgame.svg
+      - name: Export drawio to PNG
+        uses: Burnett01/actions-drawio@1.0
+        with:
+          src: ./docs/diagrams/src/jsboardgame.drawio
+          dest: ./docs/diagrams/out/jsboardgame.png
+      - name: Upload drawio Diagrams
+        uses: actions/upload-artifact@v2
+        with:
+          name: drawio
+          path: ./docs/diagrams/out/
   deploy:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout ${{github.head_ref}}
+        uses: actions/checkout@v2
         with:
-          repository: ${{secrets.GH_USERNAME}}/jsboardgamedemo
-          token: ${{secrets.GH_ACCESS_TOKEN}}
-          path: docs
-          ref: master
-      - uses: actions/download-artifact@v2
+          ref: ${{github.ref}}
+      - name: Download drawio Diagrams
+        uses: actions/download-artifact@v2
         with:
-          name: dist
-          path: ./docs
-      - name: Deploy to GH Pages
+          name: drawio
+          path: ./docs/diagrams/out/
+      - name: Deploy drawio Diagrams
         run: |
           git config --global user.email ${{secrets.GH_EMAIL}}
           git config --global user.name ${{secrets.GH_USERNAME}}
-          cd ./docs
-          if [ -n "$(git status --porcelain)" ]; then hasCommits=1; else hasCommits=0; fi
-          if ((hasCommits == 0)); then exit 0; else echo "commiting changes..."; fi
           git add .
-          git commit -m "CD: deployed pages"
-          git status
-          git push -f
+          git commit -m "CD-${{github.run_id}}: deployed drawio diagram" | true
+          git push | true
+      - name: jsboardgamedemo - Checkout master
+        uses: actions/checkout@v2
+        with:
+          repository: ${{secrets.GH_USERNAME}}/jsboardgamedemo
+          token: ${{secrets.GH_ACCESS_TOKEN}}
+          path: docs/dist
+          ref: master
+      - name: jsboardgamedemo - Delete Content
+        run: |
+          cd ./docs/dist
+          git pull
+          git rm -r .
+      - uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: ./docs/dist
+      - name: jsboardgamedemo - Deploy 
+        run: |
+          cd ./docs/dist
+          git add .
+          git commit -m "CD-${{github.run_id}}: deployed pages" | true
+          git push -f | true
