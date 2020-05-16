@@ -9,29 +9,43 @@ jobs:
       matrix:
         node-version: [10.x]
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Install Packages
-      run: npm install
-    - name: Checkout Branch
-      run: |
-        cd ./docs
-        ls
-        git init
-        git config --global user.email ${{secrets.GH_EMAIL}}
-        git config --global user.name ${{secrets.GH_USERNAME}}
-        git remote add pages https://${{secrets.GH_ACCESS_TOKEN}}@github.com/${{secrets.GH_USERNAME}}/jsboardgamedemo.git
-        git fetch pages
-        git checkout -f --track pages/master
-        git status
-    - name: Build and Pack
-      run: npm run build
-    - name: Deploy to GH Pages
-      run: |
-        git add .
-        git commit -m "deploy pages"
-        git status
-        git push pages master -f
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Packages
+        run: npm install
+      - name: Build and Pack App
+        run: npm run build
+      - name: Upload Distribution
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: ./docs
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: ${{secrets.GH_USERNAME}}/jsboardgamedemo
+          token: ${{secrets.GH_ACCESS_TOKEN}}
+          path: docs
+          ref: master
+      - uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: ./docs
+      - name: Deploy to GH Pages
+        run: |
+          git config --global user.email ${{secrets.GH_EMAIL}}
+          git config --global user.name ${{secrets.GH_USERNAME}}
+          cd ./docs
+          git status
+          git add .
+          git commit -m "CD: deployed pages"
+          git status
+          git push -f
+
+        
