@@ -1,7 +1,5 @@
 name: BuildAndDeploy
-on:
-  push:
-    branches: [master]
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,6 +8,8 @@ jobs:
         node-version: [10.x]
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{github.ref}}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -47,5 +47,3 @@ jobs:
           git commit -m "CD: deployed pages"
           git status
           git push -f
-
-        
