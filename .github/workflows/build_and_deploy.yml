@@ -84,5 +84,3 @@ jobs:
           git add .
           git commit -m "CD-${{github.run_id}}: deployed pages" | true
           git push -f | true
-
-
