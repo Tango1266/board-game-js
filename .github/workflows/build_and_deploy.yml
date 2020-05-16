@@ -33,14 +33,19 @@ jobs:
           token: ${{secrets.GH_ACCESS_TOKEN}}
           path: docs/dist
           ref: master
+      - name: Delete Repo Content
+        run: |
+          git config --global user.email ${{secrets.GH_EMAIL}}
+          git config --global user.name ${{secrets.GH_USERNAME}}
+          cd ./docs/dist
+          git pull
+          git rm -r .
       - uses: actions/download-artifact@v2
         with:
           name: dist
           path: ./docs/dist
       - name: Deploy to GH Pages
         run: |
-          git config --global user.email ${{secrets.GH_EMAIL}}
-          git config --global user.name ${{secrets.GH_USERNAME}}
           cd ./docs/dist
           if [ -n "$(git status --porcelain)" ]; then hasCommits=1; else hasCommits=0; fi
           if ((hasCommits == 0)); then exit 0; else echo "commiting changes..."; fi
