@@ -2,7 +2,6 @@
      position: relative;
      display: grid;
      z-index: 2;
-     /* background-color: grey; */
      border: 3px solid rgba(253, 253, 253, 0.164);
      grid-template-columns: 100fr;
      grid-template-rows: 20fr 80fr;
@@ -10,9 +9,8 @@
  }
  
  .resource-area {
-   position: relative;
+     position: relative;
      grid-area: resources;
-     /* position: absolute; */
      width: 50%;
      height: 50%;
      align-self: center;
@@ -30,34 +28,30 @@
  }
  
  .resource-area-control {
-    background: transparent;
+     background: transparent;
      border: 0px;
      position: relative;
      width: 80%;
      font-size: 2vw;
-     /* height: 80%;  */
      justify-items: center;
  }
-
-
-  .resource-area-control a{
-    color:white;
-    font-family:Helvetica, sans-serif;
-    font-weight:bold;
-    text-align: center;
-    text-decoration:none;
-    background-color:lightgray;
-    display:block;
-    position:relative;
-    text-shadow: 1px 1px 2px #000;
-    box-shadow:inset 0 1px 0 #FFE5C4, 0 10px 0 rgba(211, 211, 211, 0.472);
-    border-radius: 5px;
-  }
-  
-  .resource-area-control a:active{
-    top:10px;
-    background-color:rgb(73, 68, 62);
-    
-    box-shadow:inset 0 1px 0 rgb(102, 102, 101), inset 0 -3px 0 #272625;
-  }
-  
+ 
+ .resource-area-control a {
+     color: white;
+     font-family: Helvetica, sans-serif;
+     font-weight: bold;
+     text-align: center;
+     text-decoration: none;
+     background-color: lightgray;
+     display: block;
+     position: relative;
+     text-shadow: 1px 1px 2px #000;
+     box-shadow: inset 0 1px 0 #FFE5C4, 0 10px 0 rgba(211, 211, 211, 0.472);
+     border-radius: 5px;
+ }
+ 
+ .resource-area-control a:active {
+     top: 10px;
+     background-color: rgb(73, 68, 62);
+     box-shadow: inset 0 1px 0 rgb(102, 102, 101), inset 0 -3px 0 #272625;
+ }
