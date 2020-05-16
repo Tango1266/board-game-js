@@ -1,12 +1,11 @@
+.resource {
+    z-index: 2;
+    position: absolute;
+    display: block;
+    cursor: pointer;
+}
 
-        .resource {
-            z-index: 2;
-            position: absolute;
-            display: block;
-            cursor: pointer;
-        }
-
-        .played-resource {
-            margin-top: -21%;
-            margin-left: 2%;
-        }
+.played-resource {
+    margin-top: -21%;
+    margin-left: 2%;
+}

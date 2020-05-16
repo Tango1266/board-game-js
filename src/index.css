@@ -1,5 +1,5 @@
-html, 
-body{
+html,
+body {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -18,7 +18,6 @@ body {
 .table-grid-container {
     display: grid;
     background-color: #9e814c;
-    /* overflow: scroll; */
     grid-template-areas: 
     "header header header" 
     "hand2 table hand3" 
@@ -26,7 +25,6 @@ body {
     "hand1 table hand4";
     grid-template-columns: 15fr 70fr 15fr;
     grid-template-rows: 50px 15fr 65fr 15fr;
-    /* gap: 20px 20px; */
 }
 
 img {
@@ -55,10 +53,8 @@ img {
     position: relative;
 }
 
-
-.dragscroll{
+.dragscroll {
     cursor: grab;
     overflow: auto;
     scrollbar-width: none;
 }
-

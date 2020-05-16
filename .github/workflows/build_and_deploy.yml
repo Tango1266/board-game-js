@@ -42,7 +42,8 @@ jobs:
           git config --global user.email ${{secrets.GH_EMAIL}}
           git config --global user.name ${{secrets.GH_USERNAME}}
           cd ./docs
-          git status
+          if [ -n "$(git status --porcelain)" ]; then hasCommits=1; else hasCommits=0; fi
+          if ((hasCommits == 0)); then exit 0; else echo "commiting changes..."; fi
           git add .
           git commit -m "CD: deployed pages"
           git status

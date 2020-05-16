@@ -23,22 +23,23 @@
     transition: transform .73s linear;
 }
 
-.played-resource-card { 
+.played-resource-card {
     position: absolute;
     overflow: visible;
     transform-origin: bottom left;
     padding-top: 57.47%;
 }
 
-.played-resource-card:hover{
+.played-resource-card:hover {
     z-index: 10;
 }
+
 .played-img-resource-card {
-   width: 50%;
+    width: 50%;
     z-index: 10;
 }
 
-
-.played-resource-card:last-child, .played-resource-card:hover {
+.played-resource-card:last-child,
+.played-resource-card:hover {
     overflow: visible;
 }
