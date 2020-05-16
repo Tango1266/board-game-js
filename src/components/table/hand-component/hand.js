@@ -1,8 +1,6 @@
 import MyHtmlElement from "../../htmlElement";
 import getImageByName from "../../../imageManager";
-import Card, { draggingCard } from "../../gameobjects/card-component/card";
-
-let idCounter = 0;
+import { draggingCard } from "../../gameobjects/card-component/card";
 
 export default class Hand extends MyHtmlElement {
 
@@ -24,10 +22,10 @@ export default class Hand extends MyHtmlElement {
         })
         this.div.style.gridArea = "hand" + player.id;
     }
-    
+
     //todo: still work to do
     addCard(card) {
-        
+
         let prevCardDiv = this.holdingCards.div.children[this.holdingCards.div.children.length - 1];
         let rotationValue = -40;
 
@@ -44,12 +42,11 @@ export default class Hand extends MyHtmlElement {
             rotationValue = prevRotationValue + 15;
 
             let offsetLeft = 0.07 + (prevOffsetLeft / this.div.offsetWidth)
-            card.div.style.left =  Math.round(offsetLeft * 100) + "%";
-        }
-        else {
+            card.div.style.left = Math.round(offsetLeft * 100) + "%";
+        } else {
             // card.div.style.bottom =  20 + "%";
         }
-        card.div.style.bottom =  0 + "%";
+        card.div.style.bottom = 0 + "%";
         card.div.style.transform = "rotate(" + rotationValue + "deg)";
 
         this.holdingCards.add(card);

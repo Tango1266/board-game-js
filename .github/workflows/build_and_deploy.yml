@@ -50,6 +50,6 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then hasCommits=1; else hasCommits=0; fi
           if ((hasCommits == 0)); then exit 0; else echo "commiting changes..."; fi
           git add .
-          git commit -m "CD: deployed pages"
+          git commit -m "CD-${{github.run_id}}: deployed pages"
           git status
           git push -f
