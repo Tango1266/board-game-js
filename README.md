@@ -41,5 +41,4 @@ The most recent version can be found at https://tango1266.github.io/jsboardgamed
 |Markdown All in One|vs code|editing diagrams for documentation|
 
 ## Software Architecture
-![image](./docs/diagrams/out/jsboardgame.svg)
-<img src="./docs/diagrams/out/jsboardgame.svg" width="100%" height="100%">
+![image](./docs/diagrams/out/jsboardgame.png)
