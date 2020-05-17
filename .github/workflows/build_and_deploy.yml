@@ -1,5 +1,7 @@
 name: BuildAndDeploy
 on: [push]
+env:
+  TO_DEPLOY_REPO: ${{secrets.GH_USERNAME}}/jsboardgamedemo
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -7,78 +9,65 @@ jobs:
       matrix:
         node-version: [10.x]
     steps:
-      - name: Checkout ${{github.ref}}
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v2.x
+
+      - name: ${{env.GITHUB_REF_SLUG}} - Checkout
         uses: actions/checkout@v2
         with:
           ref: ${{github.ref}}
-      - name: Use Node.js ${{ matrix.node-version }}
+
+      - name: Node - Setup ${{matrix.node-version}}
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install Packages
+          node-version: ${{matrix.node-version}}
+
+      - name: Node - Install Packages
         run: npm install
-      - name: Prepare out directory
-        run: |
-          mkdir -p ./docs/diagrams/out
-      - name: Build and Pack App
+
+      - name: Node - Build and Pack App
         run: npm run build
-      - name: Upload Distribution
+     
+      - name: App - Artifact Upload
         uses: actions/upload-artifact@v2
         with:
-          name: dist
+          name: app
           path: ./docs/dist
-      - name: Export drawio to SVG
-        uses: Burnett01/actions-drawio@1.0
-        with:
-          src: ./docs/diagrams/src/jsboardgame.drawio
-          dest: ./docs/diagrams/out/jsboardgame.svg
-      - name: Export drawio to PNG
-        uses: Burnett01/actions-drawio@1.0
-        with:
-          src: ./docs/diagrams/src/jsboardgame.drawio
-          dest: ./docs/diagrams/out/jsboardgame.png
-      - name: Upload drawio Diagrams
-        uses: actions/upload-artifact@v2
-        with:
-          name: drawio
-          path: ./docs/diagrams/out/
+
   deploy:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout ${{github.head_ref}}
-        uses: actions/checkout@v2
-        with:
-          ref: ${{github.ref}}
-      - name: Download drawio Diagrams
-        uses: actions/download-artifact@v2
-        with:
-          name: drawio
-          path: ./docs/diagrams/out/
-      - name: Deploy drawio Diagrams
+      - name: Git - Global Configuration
         run: |
           git config --global user.email ${{secrets.GH_EMAIL}}
           git config --global user.name ${{secrets.GH_USERNAME}}
-          git add .
-          git commit -m "CD-${{github.run_id}}: deployed drawio diagram" | true
-          git push | true
-      - name: jsboardgamedemo - Checkout master
+
+      - name: ${{env.GITHUB_REF_SLUG}} - Checkout
         uses: actions/checkout@v2
         with:
-          repository: ${{secrets.GH_USERNAME}}/jsboardgamedemo
+          ref: ${{github.ref}}
+
+      - name: ${{env.TO_DEPLOY_REPO}} - Checkout master
+        uses: actions/checkout@v2
+        with:
+          repository: ${{env.TO_DEPLOY_REPO}}
           token: ${{secrets.GH_ACCESS_TOKEN}}
           path: docs/dist
           ref: master
-      - name: jsboardgamedemo - Delete Content
+
+      - name: ${{env.TO_DEPLOY_REPO}} - Delete Content
         run: |
           cd ./docs/dist
-          git pull
           git rm -r .
-      - uses: actions/download-artifact@v2
+
+      - name: "App - Artifact Download"
+        uses: actions/download-artifact@v2
         with:
-          name: dist
+          name: app
           path: ./docs/dist
-      - name: jsboardgamedemo - Deploy 
+
+      - name: ${{env.TO_DEPLOY_REPO}} - Deploy
         run: |
           cd ./docs/dist
           git add .
