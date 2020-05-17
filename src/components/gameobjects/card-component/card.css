@@ -27,7 +27,7 @@
     position: absolute;
     overflow: visible;
     transform-origin: bottom left;
-    padding-top: 57.47%;
+    /* padding-top: 57.47%; */
 }
 
 .played-resource-card:hover {

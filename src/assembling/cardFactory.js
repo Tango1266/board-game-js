@@ -13,19 +13,19 @@ export default class CardFactory {
     }
 
     createWoolCard(amount) {
-        return this.doCreate(amount, cardTypes.ore, "card-wool");
+        return this.doCreate(amount, cardTypes.wool, "card-wool");
     }
 
     createStoneCard(amount) {
-        return this.doCreate(amount, cardTypes.ore, "card-stone");
+        return this.doCreate(amount, cardTypes.stone, "card-stone");
     }
 
     createWoodCard(amount) {
-        return this.doCreate(amount, cardTypes.ore, "card-wood");
+        return this.doCreate(amount, cardTypes.wood, "card-wood");
     }
 
     createCornCard(amount) {
-        return this.doCreate(amount, cardTypes.ore, "card-corn");
+        return this.doCreate(amount, cardTypes.corn, "card-corn");
     }
 
 

@@ -19,7 +19,6 @@ export default class MyHtmlElement {
             let head = document.getElementsByTagName("head")[0];
             let div = document.getElementById(this.div.id);
             if (!div) head.append(this.div)
-
         }
 
         if (!instanceMap.has(id))
@@ -31,7 +30,7 @@ export default class MyHtmlElement {
     }
 
     static getAll() {
-        return  Array.from(instanceMap).reduce((k,v) => {
+        return Array.from(instanceMap).reduce((k, v) => {
             return k.concat(v[1]);
         }, []);
     }
@@ -44,15 +43,46 @@ export default class MyHtmlElement {
         return instanceMap.get(this.div.children[0].id)
     }
 
+    getChildren() {
+        return Array.from(this.div.children).map((e) => { return MyHtmlElement.getElementById(e.id) });
+    }
+
     add(child, callbackChild) {
         if (child === undefined) return;
+        return this.doAdd(child, callbackChild);
+    }
 
-        if (child instanceof MyHtmlElement)
-            this.div.append(child.div);
-        else
-            this.div.append(child)
+    addAfter(relChild, callbackChild) {
+        if (relChild === undefined) return;
+        const relObject = relChild instanceof MyHtmlElement? relChild : MyHtmlElement.getElementById(relChild.id);
+        const relObjectParent = MyHtmlElement.getElementById(relObject.div.parentElement.id)
+        relObjectParent.doAdd(this, callbackChild, "after", relObject);
+        return this;
+    }
+
+    addTo(parent, callbackChild) {
+        if (parent === undefined) return;
+        const parentObject = parent instanceof MyHtmlElement? parent : MyHtmlElement.getElementById(parent.id);
+        parentObject.doAdd(this, callbackChild);
+        return this;
+    }
+    // todo: extract to utils 
+    doAdd(child, callbackChild, order, relChild) {
+        const objectToAdd = child instanceof MyHtmlElement ? child.div : child
+        const relObject = relChild instanceof MyHtmlElement ? relChild.div : relChild
+        switch (order) {
+            case "before":
+                this.div.insertBefore(objectToAdd, relObject);
+                break;
+            case "after":
+                this.div.insertBefore(objectToAdd, relObject.nextElementSibling);
+                break;
+            default:
+                this.div.append(objectToAdd);
+        }
 
         if (callbackChild) callbackChild.call(child);
+
         return this;
     }
 
@@ -95,8 +125,9 @@ export default class MyHtmlElement {
         return this;
     }
 
-    adjustDimensionsToContent() {
-        let maxWidth = 0, maxHeight = 0;
+    adjustDimensionsToContent(relative) {
+        let maxWidth = 0,
+            maxHeight = 0;
         Array.prototype.forEach.call(this.div.children, (child) => {
             maxWidth = Math.max(maxWidth, child.offsetLeft + child.clientWidth);
             maxHeight = Math.max(maxHeight, child.offsetTop + child.clientHeight);
@@ -105,7 +136,7 @@ export default class MyHtmlElement {
         this.div.style.height = maxHeight + "px";
     }
 
-    get isOverflown(){
-        return this.div.scrollWidth > this.div.clientWidth ||  this.div.scrollHeight > this.div.clientHeight;
+    get isOverflown() {
+        return this.div.scrollWidth > this.div.clientWidth || this.div.scrollHeight > this.div.clientHeight;
     }
 }

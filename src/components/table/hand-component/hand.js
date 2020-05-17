@@ -23,34 +23,43 @@ export default class Hand extends MyHtmlElement {
         this.div.style.gridArea = "hand" + player.id;
     }
 
-    //todo: still work to do
     addCard(card) {
+        let prevCardsOfType = this.holdingCards.getChildren().filter(e => { return e.type.isEqual(card.type) })
 
-        let prevCardDiv = this.holdingCards.div.children[this.holdingCards.div.children.length - 1];
+        if (prevCardsOfType.length > 0) {
+            card.addAfter(prevCardsOfType[prevCardsOfType.length -1]);
+        } else
+            card.addTo(this.holdingCards);
+
+        this.adjustCardsPosition()
+        return this;
+    }
+
+    adjustCardsPosition() {
+        let children = this.holdingCards.getChildren();
         let rotationValue = -40;
 
+        for(var idxCurr = 0; idxCurr < children.length; idxCurr++) {
+            const idxPrev = idxCurr > 0? idxCurr - 1: 0;
 
-        if (prevCardDiv) {
-            console.log(card.div)
-            console.log(prevCardDiv)
-            let prevRotationValue = parseInt(prevCardDiv.style.transform.replace(/[^\d\+\-]/g, ""));
-            let prevOffsetLeft = prevCardDiv.offsetLeft;
-            // let prevOffsetButtom = Math.round((1 - ((prevCardDiv.scrollHeight - prevCardDiv.offsetTop) / this.div.scrollHeight)) * 100)
-            const prevOffsetButtom = parseInt(prevCardDiv.style.bottom);
-            let offsetBottom = prevOffsetButtom;
-            console.log(prevOffsetButtom)
-            rotationValue = prevRotationValue + 15;
+            const prevCardDiv = children[idxPrev].div;
+            const card = children[idxCurr];
 
-            let offsetLeft = 0.07 + (prevOffsetLeft / this.div.offsetWidth)
-            card.div.style.left = Math.round(offsetLeft * 100) + "%";
-        } else {
-            // card.div.style.bottom =  20 + "%";
+            if(idxCurr !== idxPrev) {
+                console.log(prevCardDiv)
+                let prevRotationValue = parseInt(prevCardDiv.style.transform.replace(/[^\d\+\-]/g, ""));
+                let prevOffsetLeft = prevCardDiv.offsetLeft;
+                const prevOffsetButtom = parseInt(prevCardDiv.style.bottom);
+                console.log(prevOffsetButtom)
+                rotationValue = prevRotationValue + 15;
+    
+                let offsetLeft = 0.07 + (prevOffsetLeft / this.div.offsetWidth)
+                card.div.style.left = Math.round(offsetLeft * 100) + "%";
+            }
+            card.div.style.bottom = 0 + "%";
+            card.div.style.transform = "rotate(" + rotationValue + "deg)";
+            // card.adjustDimensionsToContent();
         }
-        card.div.style.bottom = 0 + "%";
-        card.div.style.transform = "rotate(" + rotationValue + "deg)";
-
-        this.holdingCards.add(card);
-        return this;
     }
 
     init() {
