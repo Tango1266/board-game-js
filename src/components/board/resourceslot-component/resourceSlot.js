@@ -1,5 +1,4 @@
 import { draggingResource } from "../../gameobjects/resource-component/resource";
-import { addClass, changeClass, removeClass } from "../../../utils/domUtils";
 import MyHtmlElement from "../../htmlElement";
 
 let idCounter = 0;
@@ -23,19 +22,19 @@ export default class ResourceSlot extends MyHtmlElement{
     }
 
     init() {
-        this.setPos(this.position.x, this.position.y)
-        this.board.add(this)
-        this.initEventListener()
+        this.setPos(this.position.x, this.position.y);
+        this.board.add(this);
+        this.initEventListener();
     }
 
     initEventListener() {
-        this.div.ondragover = this.dragOver.bind(this);
-        this.div.ondragenter = this.dragEnter.bind(this);
-        this.div.ondragleave = this.dragLeave.bind(this);
-        this.div.ondrop = this.dragDrop.bind(this);
+        this.event.ondragover.do(this.dragOver);
+        this.event.ondragenter.do(this.dragEnter);
+        this.event.ondragleave.do(this.dragLeave);
+        this.event.ondrop.do(this.dragDrop);
 
-        this.game.div.addEventListener("dragging", this.dragStart.bind(this))
-        this.game.div.addEventListener("draggingend", this.dragEnd.bind(this))
+        this.game.event.on("dragging", this.dragStart, this);
+        this.game.event.on("draggingend", this.dragEnd, this);
     }
 
     dragStart() {
@@ -56,15 +55,12 @@ export default class ResourceSlot extends MyHtmlElement{
     dragEnter(e) {
         if (!this.isEmpty || !draggingResource || !draggingResource.type instanceof ResourceSlot) return;
         e.preventDefault();
-        // this.addClass("hovered");
-        addClass(this, "hovered");
+        this.addClass("hovered");
     }
 
     dragLeave() {
         if (!this.isEmpty || !draggingResource || !draggingResource.type instanceof ResourceSlot) return;
-        // this.changeClass(this.lastClassname);
-        changeClass(this, this.lastClassname)
-
+        this.changeClass(this.lastClassname);
     }
 
     dragDrop(e) {
@@ -72,12 +68,12 @@ export default class ResourceSlot extends MyHtmlElement{
         if (!this.isEmpty || !draggingResource || !draggingResource.type instanceof ResourceSlot) return;
 
         // reset highlighting and add
-        changeClass(this, this.classNameDefault)
+        this.changeClass(this.classNameDefault)
         this.add(draggingResource, () => draggingResource.setPlayed());
     }
 
     dragEnd() {
         if (!draggingResource || !draggingResource.type instanceof ResourceSlot) return;
-        this.div.className = this.classNameDefault;
+        this.changeClass(this.classNameDefault)
     }
 }

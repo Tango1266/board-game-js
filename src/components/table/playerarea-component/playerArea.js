@@ -9,7 +9,7 @@ export default class PlayerArea extends MyHtmlElement {
             parent: owner.game
         })
         this.owner = owner;
-        this.div.style.gridArea = "playerArea" + owner.id;
+        this.style.gridArea = "playerArea" + owner.id;
     }
 
     init() {

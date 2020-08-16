@@ -16,26 +16,26 @@ export default class Building extends MyHtmlElement {
         this.game = game;
         this.type = details.type;
         this.owner = details.owner;
-        this.div.style.filter = details.color;
+        this.color = details.color;
     }
 
     initEventListener() {
-        this.div.ondragstart = this.dragStart.bind(this);
-        this.div.ondragend = this.dragEnd.bind(this);
+        this.event.ondragstart.do(this.dragStart);
+        this.event.ondragend.do(this.dragEnd);
     }
 
     isPlayed() {
-        return this.div.draggable;
+        return this.isDraggable;
     }
 
     setPlayed() {
-        this.div.draggable = false;
+        this.isDraggable = false;
         draggingBuilding = null;
         setTimeout(() => this.addClass("played-" + this.type.name), 50)
     }
 
     setUnplayed() {
-        this.div.draggable = true;
+        this.isDraggable = true;
         setTimeout(() => this.changeClass(this.classNameDefault), 0)
     }
 
@@ -47,14 +47,13 @@ export default class Building extends MyHtmlElement {
     dragStart() {
         this.addClass("hold");
         draggingBuilding = this;
-        let draggingEvent = new Event("dragging");
-        this.game.div.dispatchEvent(draggingEvent)
+        console.log("building dragstart: ", this)
+        this.game.event.emit("dragging")
         setTimeout(() => (this.hide()), 0)
     }
 
     dragEnd() {
-        let draggingEvent = new Event("draggingend");
-        this.game.div.dispatchEvent(draggingEvent)
+        this.game.event.emit("draggingend")
         this.changeClass(this.classNameDefault);
     }
 }

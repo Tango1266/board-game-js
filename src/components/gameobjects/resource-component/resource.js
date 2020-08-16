@@ -16,8 +16,8 @@ export default class Resource extends MyHtmlElement {
         this.game = game;
         this.type = details.type;
 
-        this.div.draggable = true;
-        this.div.src = details.imgSource;
+        this.isDraggable = true;
+        this.imgSrc = details.imgSource;
     }
 
     init() {
@@ -30,36 +30,31 @@ export default class Resource extends MyHtmlElement {
     }
 
     initEventListener() {
-        this.div.ondragstart = this.dragStart.bind(this);
-        this.div.ondragend = this.dragEnd.bind(this);
+        this.event.ondragstart.do(this.dragStart);
+        this.event.ondragend.do(this.dragEnd);
     }
 
     isPlayed() {
-        return !this.div.draggable;
+        return !this.isDraggable;
     }
 
     setPlayed() {
-        this.div.draggable = false;
-        this.div.style.margin = null;
+        this.isDraggable = false;
+        this.style.margin = null;
         setTimeout(() => this.addClass("played-" + this.type.slotType.name), 50)
     }
 
     dragStart() {
-
-        this.div.className += " hold";
+        this.className += " hold";
         draggingResource = this;
-
-        let draggingEvent = new Event("dragging");
-        this.game.div.dispatchEvent(draggingEvent)
-
+        this.game.event.emit("dragging");
         setTimeout(() => (this.hide()), 0)
     }
 
 
     dragEnd() {
-        let draggingEvent = new Event("draggingend");
-        this.game.div.dispatchEvent(draggingEvent)
+        this.game.event.emit("draggingend");
         draggingResource = null;
-        this.div.className = this.classNameDefault;
+        this.changeClass(this.classNameDefault);
     }
 }

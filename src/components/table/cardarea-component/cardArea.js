@@ -11,7 +11,7 @@ export default class CardArea extends MyHtmlElement {
             parent: new MyHtmlElement({ div: document.getElementById("card-area-container") })
         })
         this.cards = [];
-        this.parent.div.style.gridArea = "cardArea"
+        this.parent.style.gridArea = "cardArea"
     }
 
     init() {

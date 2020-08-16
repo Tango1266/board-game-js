@@ -34,13 +34,13 @@ export default class BuildingSlot extends MyHtmlElement {
     }
 
     initEventListener() {
-        this.div.ondragover = this.dragOver.bind(this);
-        this.div.ondragenter = this.dragEnter.bind(this);
-        this.div.ondragleave = this.dragLeave.bind(this);
-        this.div.ondrop = this.dragDrop.bind(this);
+        this.event.ondragover.do(this.dragOver);
+        this.event.ondragenter.do(this.dragEnter);
+        this.event.ondragleave.do(this.dragLeave);
+        this.event.ondrop.do(this.dragDrop);
 
-        this.game.div.addEventListener("dragging", this.dragStart.bind(this))
-        this.game.div.addEventListener("draggingend", this.dragEnd.bind(this))
+        this.game.event.on("dragging").do(this.dragStart, this);
+        this.game.event.on("draggingend").do(this.dragEnd, this);
     }
 
     dragStart() {
@@ -80,7 +80,7 @@ export default class BuildingSlot extends MyHtmlElement {
 
         if (draggingBuilding.type.isEqual(buildingTypes.town)) {
             let lastBuilding = this.getChild();
-            lastBuilding.owner.area.add(lastBuilding.div);
+            lastBuilding.owner.area.add(lastBuilding);
             lastBuilding.setUnplayed();
         }
 

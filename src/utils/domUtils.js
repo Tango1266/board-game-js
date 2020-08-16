@@ -1,4 +1,4 @@
-
+let htmlEvents = {};
 
 export function addCSSRule(sheet, selector, rules, index) {
     //document.stylesheet[0].cssRules[selector][rules]
@@ -15,8 +15,7 @@ export function addCSSRule(sheet, selector, rules, index) {
     }
     if ("insertRule" in sheet) {
         sheet.insertRule(selector + "{" + rules + "}", index);
-    }
-    else if ("addRule" in sheet) {
+    } else if ("addRule" in sheet) {
         sheet.addRule(selector, rules, index);
     }
 }
@@ -26,6 +25,7 @@ export function changeClass(instance, className) {
         return;
     }
     instance.lastClassname = instance.div.className;
+    instance.className = className;
     instance.div.className = className;
 }
 
@@ -60,4 +60,16 @@ export function setPosition(instance, xPos, yPos) {
             instance.div.style.top = yPos;
             break;
     }
+}
+
+export function getHtmlEvents() {
+    if (Object.keys(htmlEvents).length <= 0) {
+        for (let el in HTMLElement.prototype) {
+            if (el.startsWith("on")){
+                htmlEvents[el]= null;
+            } 
+        }
+    }
+    return htmlEvents;
+
 }

@@ -19,5 +19,21 @@ scrolables.forEach((el) => {
     });
 })
 
-let overflownElements = MyHtmlElement.getAll().filter((el) => el.isOverflown);
-console.log("Overflown elements: ", overflownElements);
+//let overflownElements = MyHtmlElement.getAll().filter((el) => el.isOverflown);
+//console.log("Overflown elements: ", overflownElements);
+
+// let div = MyHtmlElement.getElementById('player4-street83');
+// for(var ev in div.div) {
+//     console.log(ev, div.div[ev])
+// }
+
+// let div = MyHtmlElement.getElementById('table');
+
+// let div2 = MyHtmlElement.getElementById('player2-street33');
+// let div3 = MyHtmlElement.getElementById('building_slot82');
+// let div4 = MyHtmlElement.getElementById('street_slot5');
+
+// console.log(div.events.name)
+// console.log(div2.events.name)
+// console.log(div3.events.name)
+// console.log(div4.events.name)

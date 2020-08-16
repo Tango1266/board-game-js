@@ -24,7 +24,7 @@ export default class Card extends MyHtmlElement {
 
         this.imgCard = new MyHtmlElement({
             id: "img-" + details.type.name + "-" + id,
-            className: "img-card img-"+ details.type.slotType.name,
+            className: "img-card img-" + details.type.slotType.name,
             div: document.createElement("img"),
             parent: this,
             src: details.imgSource
@@ -39,60 +39,56 @@ export default class Card extends MyHtmlElement {
     }
 
     initEventListener() {
-        this.div.ondragstart = this.dragStart.bind(this);
-        this.div.ondragend = this.dragEnd.bind(this);
-    }
-
-    isPlayed() {
-        return this.div.classList.contains("played-" + this.type.slotType.name);
+        this.event.ondragstart.do(this.dragStart);
+        this.event.ondragend.do(this.dragEnd);
     }
 
     setPlayed() {
         draggingCard = null;
         this.isPlayed = true;
-        setTimeout(() => this.flipCard()
+        setTimeout(() => this
+            .flipCard()
             .changeClass(this.classNameDefault)
             .addClass(this.type.slotType.name)
-            .addClass("played-" + this.type.slotType.name).imgCard.addClass("played-img-" + this.type.slotType.name), 50)
+            .addClass("played-" + this.type.slotType.name)
+            .imgCard.addClass("played-img-" + this.type.slotType.name), 50)
     }
 
     flipCard() {
-        let backsideImg = this.backside.div.src;
-        this.backside.div.src = this.imgCard.div.src;
-        this.imgCard.div.src = backsideImg;
-
+        let backsideImg = this.backside.imgSrc;
+        this.backside.imgSrc = this.imgCard.imgSrc;
+        this.imgCard.imgSrc = backsideImg;
         return this;
     }
 
     setUnplayed() {
-        this.div.draggable = true;
+        this.isDraggable = true;
+        this.isPlayed = false;
         setTimeout((() => {
-            this.div.width = this.parent.div.clientHeight;
-            this.div.height = this.parent.div.clientWidth;
-            this.changeClass(this.classNameDefault)
+            this.setWidth(this.parent.inspect.clientHeight)
+                .setHeight(this.parent.inspect.clientWidth)
+                .changeClass(this.classNameDefault)
                 .addClass(this.type.slotType.name)
                 .addClass("rotate");
         }), 0);
         return this;
     }
 
-
-
     dragStart(e) {
         draggingCard = this;
 
-        this.hide().addClass("hold")
-            .removeClass("rotate").flipCard();
-        let draggingEvent = new Event("dragging");
-        this.game.div.dispatchEvent(draggingEvent)
+        this.hide()
+            .addClass("hold")
+            .removeClass("rotate")
+            .flipCard();
+        this.game.event.emit("dragging");
     }
 
     dragEnd() {
         if (this.isPlayed) return;
 
         this.flipCard();
-        let draggingEvent = new Event("draggingend");
-        this.game.div.dispatchEvent(draggingEvent);
+        this.game.event.emit("draggingend");
         this.setUnplayed();
     }
 }
