@@ -67,7 +67,7 @@ export default class SlotFactory {
                     boadCol: col
                 };
                 resourceSlots.push(
-                    new ResourceSlot(this.game, this.game.board, position)
+                    new ResourceSlot(this.game, this.game.board, position, new SlotType(slotTypes.resource))
                 )
             }
         }

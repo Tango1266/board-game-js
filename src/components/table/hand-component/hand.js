@@ -1,7 +1,6 @@
 import MyHtmlElement from "../../htmlElement";
 import getImageByName from "../../../imageManager";
 import DraggingObject from "../../draggingObject";
-import { SlotType, slotTypes } from "../../../types";
 
 
 /* todos: 
@@ -11,7 +10,7 @@ import { SlotType, slotTypes } from "../../../types";
 */
 export default class Hand extends MyHtmlElement {
 
-    constructor(player) {
+    constructor(player, type) {
         super({
             id: "hand-" + player.id,
             className: "hand hand-" + player.id,
@@ -20,7 +19,7 @@ export default class Hand extends MyHtmlElement {
         })
 
         this.owner = player;
-        this.type = new SlotType(slotTypes.resourceCard.name);
+        this.type = type;
         this.holdingCards = new MyHtmlElement({
             id: "holding-cards-" + this.owner.id,
             className: "holding-cards holding-cards-" + this.owner.id,

@@ -50,8 +50,9 @@ export class TypeObject {
 }
 
 export class SlotType extends TypeObject {
-    constructor(name, args) {
-        super(name, args)
+    constructor(type, args) {
+        if ("string" === typeof(type)) super(type, args);
+        else if ("object" === typeof(type)) super(type.name, args)
     }
 }
 

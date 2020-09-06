@@ -9,12 +9,17 @@ export default class Player {
         this.game = game;
         this.name = name;
         this.gameObjects = null;
-        this.area = new PlayerArea(this);
-        this.hand = new Hand(this);
+        
+        this.area = null;
+        this.hand = null;
     }
 
     init() {
         this.area.init();
         this.hand.init();
     }
+
+    addHand(hand) {this.hand = hand; return this;}
+    
+    addArea(area) {this.area = area; return this;}
 }

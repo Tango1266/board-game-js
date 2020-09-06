@@ -9,7 +9,9 @@ import ResourceFactory from "./resourceFactory";
 import 'regenerator-runtime/runtime'
 import CardFactory from "./cardFactory";
 import CardArea from "../components/table/cardarea-component/cardArea";
-import MyHtmlElement from "../components/htmlElement";
+import PlayerArea from "../components/table/playerarea-component/playerArea";
+import Hand from "../components/table/hand-component/hand";
+import { slotTypes, SlotType } from "../types";
 
 export function assemble(playerData) {
     let game = new Game({ state: new State() });
@@ -62,7 +64,10 @@ function assemblePlayers(game, playerData) {
     let bf = new BuildingFactory();
     let players = [];
     for (var player in playerData) {
-        let newPlayer = new Player(game, player.name)
+        let newPlayer = new Player(game, player.name);
+        newPlayer.addArea(new PlayerArea(newPlayer))
+        .addHand(new Hand(newPlayer, new SlotType(slotTypes.resourceCard)));
+
         newPlayer.gameObjects = {
             towns: bf.createTowns(newPlayer, 4),
             villages: bf.createVillages(newPlayer, 5),

@@ -1,12 +1,11 @@
 import MyHtmlElement from "../../htmlElement";
 import DraggingObject from "../../draggingObject";
-import { SlotType, slotTypes } from "../../../types";
 
 let idCounter = 0;
 
 export default class ResourceSlot extends MyHtmlElement {
 
-    constructor(game, board, position) {
+    constructor(game, board, position, type) {
         super({
             id: "hexagon_" + idCounter++,
             className: "hexagon"
@@ -14,7 +13,7 @@ export default class ResourceSlot extends MyHtmlElement {
         this.game = game;
         this.board = board;
         this.position = position;
-        this.type = new SlotType(slotTypes.resource.name);
+        this.type = type;
     }
 
     add(child) {
