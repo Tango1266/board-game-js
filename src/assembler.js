@@ -71,19 +71,19 @@ export function assemble(playerData){
     }
 
 
-    let resourceArea = assembleResourceArea(game);
-    // resource area controls
-    var resdivs = document.getElementById("resource-area");
-    let allocateRes = document.getElementById("allocate-resource");
+    // let resourceArea = assembleResourceArea(game);
+    // // resource area controls
+    // var resdivs = document.getElementById("resource-area");
+    // let allocateRes = document.getElementById("allocate-resource");
 
-    allocateRes.onclick = () => {
-        resourceArea.allocateResources(resdivs.children);
-    };
+    // allocateRes.onclick = () => {
+    //     resourceArea.allocateResources(resdivs.children);
+    // };
 
-    let shufle = document.getElementById("shufle-resources");
-    shufle.onclick = () => {
-        resourceArea.shufle(resdivs);
-    };
+    // let shufle = document.getElementById("shufle-resources");
+    // shufle.onclick = () => {
+    //     resourceArea.shufle(resdivs);
+    // };
 
     return {game, resourceArea};
 }

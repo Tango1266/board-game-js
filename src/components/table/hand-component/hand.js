@@ -1,7 +1,14 @@
 import MyHtmlElement from "../../htmlElement";
 import getImageByName from "../../../imageManager";
-import { draggingCard } from "../../gameobjects/card-component/card";
+import DraggingObject from "../../draggingObject";
+import { SlotType, slotTypes } from "../../../types";
 
+
+/* todos: 
+    - make n cards on hand visible to player
+    - make img-wrapper-div same size as img-div
+    - keep originally img ratio when resizing browser
+*/
 export default class Hand extends MyHtmlElement {
 
     constructor(player) {
@@ -13,21 +20,21 @@ export default class Hand extends MyHtmlElement {
         })
 
         this.owner = player;
-
+        this.type = new SlotType(slotTypes.resourceCard.name);
         this.holdingCards = new MyHtmlElement({
             id: "holding-cards-" + this.owner.id,
-            className: "holding-cards holding- cards - " + this.owner.id,
+            className: "holding-cards holding-cards-" + this.owner.id,
             div: document.createElement("div"),
             parent: this
         })
-        this.div.style.gridArea = "hand" + player.id;
+        this.style.gridArea = "hand" + player.id;
     }
 
     addCard(card) {
         let prevCardsOfType = this.holdingCards.getChildren().filter(e => { return e.type.isEqual(card.type) })
 
         if (prevCardsOfType.length > 0) {
-            card.addAfter(prevCardsOfType[prevCardsOfType.length -1]);
+            card.addAfter(prevCardsOfType[prevCardsOfType.length - 1]);
         } else
             card.addTo(this.holdingCards);
 
@@ -39,25 +46,22 @@ export default class Hand extends MyHtmlElement {
         let children = this.holdingCards.getChildren();
         let rotationValue = -40;
 
-        for(var idxCurr = 0; idxCurr < children.length; idxCurr++) {
-            const idxPrev = idxCurr > 0? idxCurr - 1: 0;
+        for (var idxCurr = 0; idxCurr < children.length; idxCurr++) {
+            const idxPrev = idxCurr > 0 ? idxCurr - 1 : 0;
 
-            const prevCardDiv = children[idxPrev].div;
+            const prevCard = children[idxPrev];
             const card = children[idxCurr];
 
-            if(idxCurr !== idxPrev) {
-                console.log(prevCardDiv)
-                let prevRotationValue = parseInt(prevCardDiv.style.transform.replace(/[^\d\+\-]/g, ""));
-                let prevOffsetLeft = prevCardDiv.offsetLeft;
-                const prevOffsetButtom = parseInt(prevCardDiv.style.bottom);
-                console.log(prevOffsetButtom)
+            if (idxCurr !== idxPrev) {
+                let prevRotationValue = parseInt(prevCard.style.transform.replace(/[^\d\+\-]/g, ""));
+                let prevOffsetLeft = prevCard.inspect.offsetLeft;
                 rotationValue = prevRotationValue + 15;
-    
-                let offsetLeft = 0.07 + (prevOffsetLeft / this.div.offsetWidth)
-                card.div.style.left = Math.round(offsetLeft * 100) + "%";
+
+                let offsetLeft = 0.07 + (prevOffsetLeft / this.inspect.offsetWidth)
+                card.style.left = Math.round(offsetLeft * 100) + "%";
             }
-            card.div.style.bottom = 0 + "%";
-            card.div.style.transform = "rotate(" + rotationValue + "deg)";
+            card.style.bottom = 0 + "%";
+            card.style.transform = "rotate(" + rotationValue + "deg)";
             // card.adjustDimensionsToContent();
         }
     }
@@ -89,16 +93,9 @@ export default class Hand extends MyHtmlElement {
     }
 
     initEventListener() {
-        this.div.ondragover = this.dragOver.bind(this);
-        this.div.ondragenter = this.dragEnter.bind(this);
-        this.div.ondrop = this.dragDrop.bind(this);
-
-        this.owner.game.div.addEventListener("dragging", this.dragStart.bind(this))
-        this.owner.game.div.addEventListener("draggingend", this.dragEnd.bind(this))
-    }
-
-    dragStart() {
-        // console.log("start")
+        this.event.ondragover.do(this.dragOver);
+        this.event.ondragenter.do(this.dragEnter);
+        this.event.ondrop.do(this.dragDrop);
     }
 
     dragOver(e) {
@@ -112,16 +109,12 @@ export default class Hand extends MyHtmlElement {
         // console.log("enter")
     }
 
-
     dragDrop(e) {
         e.preventDefault();
+        const draggingCard = DraggingObject.getDraggingObject({slotType: this.type});
         if (!draggingCard) return;
         this.addCard(draggingCard);
         draggingCard.isPlayed = true;
         setTimeout(() => draggingCard.setPlayed(), 0)
-    }
-
-    dragEnd() {
-        // console.log("end")
     }
 }

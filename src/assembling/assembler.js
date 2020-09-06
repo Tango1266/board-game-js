@@ -9,6 +9,7 @@ import ResourceFactory from "./resourceFactory";
 import 'regenerator-runtime/runtime'
 import CardFactory from "./cardFactory";
 import CardArea from "../components/table/cardarea-component/cardArea";
+import MyHtmlElement from "../components/htmlElement";
 
 export function assemble(playerData) {
     let game = new Game({ state: new State() });
@@ -122,44 +123,42 @@ function assembleResourceArea(game) {
         for (var resource of resources[resKey]) {
             resource.parent = resourceArea;
 
-            let previousEl = resourceArea.div.children[resource.idCounter - 1];
+            let previousEl = resourceArea.getChildren()[resource.idCounter - 1];
             if (previousEl) {
 
                 let marginnext = margin.next().value;
                 switch (marginnext) {
                     case "marginLeft":
-                        resource.div.style.marginLeft = previousEl.offsetLeft + 10 + "px";
+                        resource.style.marginLeft = previousEl.inspect.offsetLeft + 10 + "px";
                         break;
                     case "marginTop":
-                        resource.div.style.marginTop = previousEl.offsetTop + 10 + "px";
-                        resource.div.style.marginLeft = previousEl.offsetLeft + "px";
+                        resource.style.marginTop = previousEl.inspect.offsetTop + 10 + "px";
+                        resource.style.marginLeft = previousEl.inspect.offsetLeft + "px";
                         break;
                     case "marginRight":
-                        resource.div.style.marginTop = previousEl.offsetTop + "px";
-                        resource.div.style.marginLeft = previousEl.offsetLeft - 10 + "px";
+                        resource.style.marginTop = previousEl.inspect.offsetTop + "px";
+                        resource.style.marginLeft = previousEl.inspect.offsetLeft - 10 + "px";
                         break;
                     case "marginBottom":
-                        resource.div.style.marginTop = previousEl.offsetTop - 10 + "px";
-                        resource.div.style.marginLeft = previousEl.offsetLeft + "px";
+                        resource.style.marginTop = previousEl.inspect.offsetTop - 10 + "px";
+                        resource.style.marginLeft = previousEl.inspect.offsetLeft + "px";
                         break;
                 }
-                
             }
             resource.init();
         }
     }
 
     // controls
-    var resdivs = document.getElementById("resource-area");
     let allocateRes = document.getElementById("allocate-resource");
 
     allocateRes.onclick = () => {
-        resourceArea.allocateResources(resdivs.children);
+        resourceArea.allocateResources();
     };
 
     let shufle = document.getElementById("shufle-resources");
     shufle.onclick = () => {
-        resourceArea.shufle(resdivs);
+        resourceArea.shufle();
     };
 
     return resourceArea;

@@ -1,8 +1,7 @@
 import MyHtmlElement from "../../htmlElement";
+import DraggingObject from "../../draggingObject";
 
 let idCounter = 0;
-
-export let draggingBuilding;
 
 export default class Building extends MyHtmlElement {
     constructor(game, details) {
@@ -16,45 +15,39 @@ export default class Building extends MyHtmlElement {
         this.game = game;
         this.type = details.type;
         this.owner = details.owner;
-        this.div.style.filter = details.color;
-    }
-
-    initEventListener() {
-        this.div.ondragstart = this.dragStart.bind(this);
-        this.div.ondragend = this.dragEnd.bind(this);
+        this.color = details.color;
     }
 
     isPlayed() {
-        return this.div.draggable;
+        return this.isDraggable;
     }
 
     setPlayed() {
-        this.div.draggable = false;
-        draggingBuilding = null;
+        this.isDraggable = false;
         setTimeout(() => this.addClass("played-" + this.type.name), 50)
     }
 
     setUnplayed() {
-        this.div.draggable = true;
+        this.isDraggable = true;
         setTimeout(() => this.changeClass(this.classNameDefault), 0)
     }
 
     init() {
+        this.draggingObject = new DraggingObject(this)
+        .init();
         this.owner.area.add(this);
-        this.initEventListener();
     }
 
-    dragStart() {
+    onDragStart() {
+        this.draggingObject.startDragging();
+
         this.addClass("hold");
-        draggingBuilding = this;
-        let draggingEvent = new Event("dragging");
-        this.game.div.dispatchEvent(draggingEvent)
         setTimeout(() => (this.hide()), 0)
     }
 
-    dragEnd() {
-        let draggingEvent = new Event("draggingend");
-        this.game.div.dispatchEvent(draggingEvent)
+    onDragEnd() {
+        this.draggingObject.endDragging(); 
+
         this.changeClass(this.classNameDefault);
     }
 }

@@ -1,8 +1,7 @@
 import MyHtmlElement from "../../htmlElement";
+import DraggingObject from "../../draggingObject";
 
 let idCounter = 0;
-
-export let draggingResource;
 
 export default class Resource extends MyHtmlElement {
     constructor(game, details) {
@@ -12,54 +11,45 @@ export default class Resource extends MyHtmlElement {
             className: "resource " + details.type.name,
             div: document.createElement("img")
         })
+        
+        this.draggingObject = null;
+
         this.idCounter = id;
         this.game = game;
         this.type = details.type;
 
-        this.div.draggable = true;
-        this.div.src = details.imgSource;
+        this.isDraggable = true;
+        this.imgSrc = details.imgSource;
     }
 
     init() {
+        this.draggingObject = new DraggingObject(this).init();
         this.parent.add(this);
-        this.initEventListener();
     }
 
     add(child) {
         super.add(child, () => child.setPlayed());
     }
 
-    initEventListener() {
-        this.div.ondragstart = this.dragStart.bind(this);
-        this.div.ondragend = this.dragEnd.bind(this);
-    }
-
     isPlayed() {
-        return !this.div.draggable;
+        return !this.isDraggable;
     }
 
     setPlayed() {
-        this.div.draggable = false;
-        this.div.style.margin = null;
+        this.isDraggable = false;
+        this.style.margin = null;
         setTimeout(() => this.addClass("played-" + this.type.slotType.name), 50)
     }
 
-    dragStart() {
-
-        this.div.className += " hold";
-        draggingResource = this;
-
-        let draggingEvent = new Event("dragging");
-        this.game.div.dispatchEvent(draggingEvent)
-
+    onDragStart() {
+        this.draggingObject.startDragging();
+        this.className += " hold";
         setTimeout(() => (this.hide()), 0)
     }
 
+    onDragEnd() {
+        this.draggingObject.endDragging();
 
-    dragEnd() {
-        let draggingEvent = new Event("draggingend");
-        this.game.div.dispatchEvent(draggingEvent)
-        draggingResource = null;
-        this.div.className = this.classNameDefault;
+        this.changeClass(this.classNameDefault);
     }
 }

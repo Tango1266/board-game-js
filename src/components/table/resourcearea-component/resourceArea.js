@@ -1,20 +1,5 @@
 import MyHtmlElement from "../../htmlElement";
 
-function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-}
-
-function shuffleDivChildren(div) {
-    for (let i = div.children.length - 1; i >= 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        div.insertBefore(div.children[i], div.children[j]);
-    }
-    return div;
-}
 
 export default class ResourceArea extends MyHtmlElement {
     constructor(game, resources) {
@@ -25,7 +10,7 @@ export default class ResourceArea extends MyHtmlElement {
         this.game = game;
         this.resources = resources;
 
-        this.parent.div.style.gridArea = "resourceArea";
+        this.parent.style.gridArea = "resourceArea";
     }
 
     init() {
@@ -39,8 +24,9 @@ export default class ResourceArea extends MyHtmlElement {
     }
 
     initEventListener() {
+        // todo: research proper html event handling
         let observer = new MutationObserver(this.makeDelayCallback(this.onDomNodeRemoved));
-        observer.observe(this.div, { childList: true });
+        observer.observe(this.inspect, { childList: true });
     }
 
     onDomNodeRemoved(e) {
@@ -50,20 +36,22 @@ export default class ResourceArea extends MyHtmlElement {
 
     }
 
-    shufle(div) {
-        let times = Math.floor(Math.random() * 20);
-        while (times-- > 0) {
-            shuffleDivChildren(div);
+    shufle() {
+        let times = Math.floor(Math.random() * 130);
+        while (--times > 0) {
+            for (let i = this.getChildren().length - 1; i >= 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                this.getChildren()[i].addAfter(this.getChildren()[j])
+            }
         }
     }
 
-    allocateResources(resources) {
+    allocateResources() {
         let countSlot = 0;
-        for (let i = resources.length - 1; i >= 0; i--) {
-            let ress = MyHtmlElement.getElementById(resources[i].id)
+        for (let i = this.getChildren().length - 1; i >= 0; i--) {
 
             if (this.game.board.resourceSlots[countSlot].isEmpty)
-                this.game.board.resourceSlots[countSlot].add(ress);
+                this.game.board.resourceSlots[countSlot].add(this.getChildren()[i]);
             else
                 i++;
 

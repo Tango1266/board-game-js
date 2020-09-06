@@ -1,12 +1,5 @@
 /*https://discourse.wicg.io/t/drag-to-scroll-a-simple-way-to-scroll-sideways-on-desktop/3627*/
 
-// app.innerHTML = `
-// <div class="scroll" style="overflow-y: auto; cursor: pointer;">
-// <div style="display: flex;width: 2000px">
-//   Sideways content
-// </div>
-// </div>`;
-
 const slider = document.querySelector(".scroll");
 console.log(slider)
 let isDown = false;
