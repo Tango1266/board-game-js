@@ -1,5 +1,3 @@
-import { slotTypes, SlotType } from "../types";
-
 let draggingObjectCache = null;
 
 export default class DraggingObject  {
