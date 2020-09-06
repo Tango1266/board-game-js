@@ -1,6 +1,6 @@
 import MyHtmlElement from "../../htmlElement";
 import getImageByName from "../../../imageManager";
-import { draggingCard } from "../../gameobjects/card-component/card";
+import DraggingObject from "../../draggingObject";
 
 /* todos: 
     - make n cards on hand visible to player
@@ -94,8 +94,6 @@ export default class Hand extends MyHtmlElement {
         this.event.ondragover.do(this.dragOver);
         this.event.ondragenter.do(this.dragEnter);
         this.event.ondrop.do(this.dragDrop);
-        this.owner.game.event.emit("dragging", this);
-        this.owner.game.event.emit("draggingend", this);
     }
 
     dragStart() {
@@ -116,6 +114,7 @@ export default class Hand extends MyHtmlElement {
 
     dragDrop(e) {
         e.preventDefault();
+        const draggingCard = DraggingObject.getDraggingObject({slotType: this.sl});
         if (!draggingCard) return;
         this.addCard(draggingCard);
         draggingCard.isPlayed = true;

@@ -1,9 +1,8 @@
 import MyHtmlElement from "../../htmlElement";
 import { slotTypes } from "../../../types";
+import DraggingObject from "../../draggingObject";
 
 let idCounter = 0;
-
-export let draggingCard;
 
 export default class Card extends MyHtmlElement {
     constructor(game, details) {
@@ -16,6 +15,8 @@ export default class Card extends MyHtmlElement {
             parent: details.parent,
             // src: details.imgSource
         })
+
+        this.draggingObject = null;
 
         this.game = game;
         this.type = details.type;
@@ -32,19 +33,15 @@ export default class Card extends MyHtmlElement {
     }
 
     init() {
+        this.draggingObject = new DraggingObject(this)
+            .init();
+
         this.parent.add(this);
         this.add(this.imgCard);
         this.setUnplayed();
-        this.initEventListener();
-    }
-
-    initEventListener() {
-        this.event.ondragstart.do(this.dragStart);
-        this.event.ondragend.do(this.dragEnd);
     }
 
     setPlayed() {
-        draggingCard = null;
         this.isPlayed = true;
         setTimeout(() => this
             .flipCard()
@@ -74,21 +71,20 @@ export default class Card extends MyHtmlElement {
         return this;
     }
 
-    dragStart(e) {
-        draggingCard = this;
-
+    onDragStart(e) {
+        this.draggingObject.startDragging();
         this.hide()
             .addClass("hold")
             .removeClass("rotate")
             .flipCard();
-        this.game.event.emit("dragging");
     }
 
-    dragEnd() {
+    onDragEnd() {
+        this.draggingObject.endDragging(); 
         if (this.isPlayed) return;
 
         this.flipCard();
-        this.game.event.emit("draggingend");
+        
         this.setUnplayed();
     }
 }

@@ -61,9 +61,10 @@ export default class MyHtmlElement {
             }
         }
         // emit custome event
-        events["emit"] = function(eventName) {
+        events["emit"] = function(eventName, emittingInstance) {
             let event = new Event(eventName );
-            this.div.dispatchEvent(event);
+            const instance = emittingInstance || this;
+            instance.div.dispatchEvent(event)
         }.bind(this);
         // create custome event and respective handler
         events["on"] = function(newEvent) {
