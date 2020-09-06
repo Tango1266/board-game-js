@@ -1,6 +1,8 @@
 import MyHtmlElement from "../../htmlElement";
 import getImageByName from "../../../imageManager";
 import DraggingObject from "../../draggingObject";
+import { SlotType, slotTypes } from "../../../types";
+
 
 /* todos: 
     - make n cards on hand visible to player
@@ -18,10 +20,10 @@ export default class Hand extends MyHtmlElement {
         })
 
         this.owner = player;
-
+        this.type = new SlotType(slotTypes.resourceCard.name);
         this.holdingCards = new MyHtmlElement({
             id: "holding-cards-" + this.owner.id,
-            className: "holding-cards holding- cards - " + this.owner.id,
+            className: "holding-cards holding-cards-" + this.owner.id,
             div: document.createElement("div"),
             parent: this
         })
@@ -32,7 +34,7 @@ export default class Hand extends MyHtmlElement {
         let prevCardsOfType = this.holdingCards.getChildren().filter(e => { return e.type.isEqual(card.type) })
 
         if (prevCardsOfType.length > 0) {
-            card.addAfter(prevCardsOfType[prevCardsOfType.length -1]);
+            card.addAfter(prevCardsOfType[prevCardsOfType.length - 1]);
         } else
             card.addTo(this.holdingCards);
 
@@ -44,17 +46,17 @@ export default class Hand extends MyHtmlElement {
         let children = this.holdingCards.getChildren();
         let rotationValue = -40;
 
-        for(var idxCurr = 0; idxCurr < children.length; idxCurr++) {
-            const idxPrev = idxCurr > 0? idxCurr - 1: 0;
+        for (var idxCurr = 0; idxCurr < children.length; idxCurr++) {
+            const idxPrev = idxCurr > 0 ? idxCurr - 1 : 0;
 
             const prevCard = children[idxPrev];
             const card = children[idxCurr];
 
-            if(idxCurr !== idxPrev) {
+            if (idxCurr !== idxPrev) {
                 let prevRotationValue = parseInt(prevCard.style.transform.replace(/[^\d\+\-]/g, ""));
                 let prevOffsetLeft = prevCard.inspect.offsetLeft;
                 rotationValue = prevRotationValue + 15;
-    
+
                 let offsetLeft = 0.07 + (prevOffsetLeft / this.inspect.offsetWidth)
                 card.style.left = Math.round(offsetLeft * 100) + "%";
             }
@@ -96,10 +98,6 @@ export default class Hand extends MyHtmlElement {
         this.event.ondrop.do(this.dragDrop);
     }
 
-    dragStart() {
-        // console.log("start")
-    }
-
     dragOver(e) {
         e.preventDefault();
         // console.log("over")
@@ -111,17 +109,12 @@ export default class Hand extends MyHtmlElement {
         // console.log("enter")
     }
 
-
     dragDrop(e) {
         e.preventDefault();
-        const draggingCard = DraggingObject.getDraggingObject({slotType: this.sl});
+        const draggingCard = DraggingObject.getDraggingObject({slotType: this.type});
         if (!draggingCard) return;
         this.addCard(draggingCard);
         draggingCard.isPlayed = true;
         setTimeout(() => draggingCard.setPlayed(), 0)
-    }
-
-    dragEnd() {
-        // console.log("end")
     }
 }

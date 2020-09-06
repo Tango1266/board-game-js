@@ -40,6 +40,15 @@ export default class MyHtmlElement {
         }, []);
     }
 
+    get id() {
+        return this.div.id;
+    }
+
+    set id(id) {
+        this.div.id = id;
+        return this;
+    }
+
     get imgSrc() {
         return this.div.src;
     }
@@ -61,10 +70,13 @@ export default class MyHtmlElement {
             }
         }
         // emit custome event
-        events["emit"] = function(eventName, emittingInstance) {
+        events["emit"] = function(eventName, emittingInstance, payloadJson) {
             let event = new Event(eventName );
+            if (payloadJson) event = new CustomEvent(eventName, {"detail": payloadJson})
+
             const instance = emittingInstance || this;
             instance.div.dispatchEvent(event)
+
         }.bind(this);
         // create custome event and respective handler
         events["on"] = function(newEvent) {
@@ -185,7 +197,8 @@ export default class MyHtmlElement {
     }
 
     makeDelayCallback(func, delay) {
-        return (args) => setTimeout(func.bind(this), 0, args);
+        if(!delay) delay = 0;
+        return (args) => setTimeout(func.bind(this), delay, args);
     }
 
     hide() {

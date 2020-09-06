@@ -39,7 +39,6 @@ export default class ResourceArea extends MyHtmlElement {
     shufle() {
         let times = Math.floor(Math.random() * 130);
         while (--times > 0) {
-            console.log("shuffeling")
             for (let i = this.getChildren().length - 1; i >= 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 this.getChildren()[i].addAfter(this.getChildren()[j])

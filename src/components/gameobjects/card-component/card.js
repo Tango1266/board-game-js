@@ -1,10 +1,10 @@
-import MyHtmlElement from "../../htmlElement";
-import { slotTypes } from "../../../types";
 import DraggingObject from "../../draggingObject";
+import MyHtmlElement from "../../htmlElement";
 
 let idCounter = 0;
 
 export default class Card extends MyHtmlElement {
+
     constructor(game, details) {
         let id = idCounter++;
         super({
@@ -15,10 +15,10 @@ export default class Card extends MyHtmlElement {
             parent: details.parent,
             // src: details.imgSource
         })
-
         this.draggingObject = null;
 
         this.game = game;
+
         this.type = details.type;
         this.backside = details.backside;
         this.isPlayed = false;
@@ -35,7 +35,6 @@ export default class Card extends MyHtmlElement {
     init() {
         this.draggingObject = new DraggingObject(this)
             .init();
-
         this.parent.add(this);
         this.add(this.imgCard);
         this.setUnplayed();
@@ -84,7 +83,6 @@ export default class Card extends MyHtmlElement {
         if (this.isPlayed) return;
 
         this.flipCard();
-        
         this.setUnplayed();
     }
 }

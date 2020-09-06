@@ -1,3 +1,5 @@
+import { slotTypes, SlotType } from "../types";
+
 let draggingObjectCache = null;
 
 export default class DraggingObject  {
@@ -16,37 +18,30 @@ export default class DraggingObject  {
     }
 
     init() {
-        this.initDragEventListener();
-        return this;
+        return this.initDragEventListener();
     }
 
     initDragEventListener() {
         this.draggingObject.event.ondragstart.do(this.dragStartHandler);
         this.draggingObject.event.ondragend.do(this.dragEndHandler);
+        return this;
     }
 
-    static getDraggingObject({} = {}) {
+    static getDraggingObject({slotType = arguments[0]} = {}) {
+       
+     if(!slotType || !draggingObjectCache) return null;
+     if(!slotType.isEqual(draggingObjectCache.type.slotType)) return null;
      return draggingObjectCache;
     }
 
     startDragging() {
         if(draggingObjectCache) return;
-        this.draggingObject.game.event.emit("dragging", this.draggingObject);
         draggingObjectCache = this.draggingObject;
+        this.draggingObject.game.event.emit("dragging");
     }
 
     endDragging() {
-        this.draggingObject.game.event.emit("draggingend", this.draggingObject);
+        this.draggingObject.game.event.emit("draggingend");
         draggingObjectCache = null;
-        console.log(draggingObjectCache)
     }
-
-    notifyDraggingStart(gameObject) {
-        this.game.event.emit("dragging", {[this.type.slotType.name] : gameObject.id});
-    }
-
-    notifyDraggingEnd(gameObject) {
-        this.game.event.emit("draggingend");
-    }
-
 }

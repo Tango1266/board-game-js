@@ -1,7 +1,7 @@
-import { draggingBuilding} from "../../gameobjects/building-component/building";
 import BuildingRules from "../../../ruleEngine";
 import MyHtmlElement from "../../htmlElement";
 import { buildingTypes } from "../../../types";
+import DraggingObject from "../../draggingObject";
 
 let idCounter = 0;
 
@@ -44,33 +44,37 @@ export default class BuildingSlot extends MyHtmlElement {
     }
 
     dragStart() {
-        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
+        const draggingBuilding = DraggingObject.getDraggingObject(this.type)
+        if (!draggingBuilding || !this.isEmpty) return;
         let buildingRules = new BuildingRules(this.game, this, draggingBuilding, false);
-        if (this.isEmpty && draggingBuilding.type.slotType.isEqual(this.type)
-            && buildingRules.allowed()) {
+        if (buildingRules.allowed()) {
             this.addClass("empty");
         }
     }
 
     dragOver(e) {
-        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
+        const draggingBuilding = DraggingObject.getDraggingObject(this.type)
+        if (!draggingBuilding) return;
         e.preventDefault();
     }
 
     dragEnter(e) {
-        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
+        const draggingBuilding = DraggingObject.getDraggingObject(this.type)
+        if (!draggingBuilding) return;
         e.preventDefault();
         // draggingBuilding.addClass("hovered");
     }
 
     dragLeave() {
-        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
+        const draggingBuilding = DraggingObject.getDraggingObject(this.type)
+        if (!draggingBuilding) return;
         // this.changeClass(this.lastClassname)
     }
 
     dragDrop(e) {
         e.preventDefault();
-        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
+        const draggingBuilding = DraggingObject.getDraggingObject(this.type)
+        if (!draggingBuilding) return;
 
         let buildingRules = new BuildingRules(this.game, this, draggingBuilding);
         if (!buildingRules.allowed()) {
@@ -78,6 +82,7 @@ export default class BuildingSlot extends MyHtmlElement {
             return;
         }
 
+        // handle building towns
         if (draggingBuilding.type.isEqual(buildingTypes.town)) {
             let lastBuilding = this.getChild();
             lastBuilding.owner.area.add(lastBuilding);
@@ -98,7 +103,8 @@ export default class BuildingSlot extends MyHtmlElement {
     }
 
     dragEnd() {
-        if (!draggingBuilding || !draggingBuilding.type instanceof BuildingSlot) return;
+        const draggingBuilding = DraggingObject.getDraggingObject(this.type);
+        if (!draggingBuilding) return;
         this.changeClass(this.classNameDefault);
     }
 }
