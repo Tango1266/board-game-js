@@ -3,19 +3,23 @@ import MyHtmlElement from "../../htmlElement";
 
 export default class Board extends MyHtmlElement {
 
-    constructor({ buildingSlots = [], resourceSlots = [] } = {}) {
+    constructor({ game = null, buildingSlots = [], resourceSlots = [] } = {}) {
         super({
-            div: document.getElementById("board")
+            parent: new MyHtmlElement({ div: document.getElementById("board-container") }),
+            id: "board",
+            className: "board",
         })
         this.buildingSlots = buildingSlots;
         this.resourceSlots = resourceSlots;
+        this.game = game;
     }
 
     init() {
+        this.parent.add(this);
         this.resourceSlots.forEach((res) => res.init());
         this.buildingSlots.forEach((bs) => {
-                bs.init();
-            });
+            bs.init();
+        });
 
         this.adjustDimensionsToContent();
     }

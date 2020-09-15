@@ -1,9 +1,7 @@
-
 let buildingState;
 
 export default class State {
-    constructor(){
-    }
+    constructor() {}
 
     get buildingSlots() {
         if (!buildingState)
@@ -11,13 +9,15 @@ export default class State {
         return buildingState;
     }
 
-    addBuilding(building) {
-        this.buildingSlots[building.position.boardRow][building.position.boardCol] = 1;
+    addBuilding(buildingSlot, building) {
+        const boardRow = buildingSlot.position.boardRow;
+        const boardCol = buildingSlot.position.boardCol;
+        this.buildingSlots[boardRow][boardCol] = building.id;
         return this;
     }
 
     removeBuilding(building) {
-        this.buildingSlots[building.position.boardRow][building.position.boardCol] = -1;
+        this.buildingSlots[building.position.boardRow][building.position.boardCol] = null;
         return this;
     }
 

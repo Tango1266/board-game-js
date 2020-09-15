@@ -1,11 +1,11 @@
 let draggingObjectCache = null;
 
-export default class DraggingObject  {
+export default class DraggingObject {
 
     /**
      * @param {*} param0 Instance of dragging object OR json-object for customiziations
      */
-    constructor({draggingObject = null, dragStartHandler = null, dragEndHandler = null, draggingStartHandler = null, draggingEndHandler = null} = {}){
+    constructor({ draggingObject = null, dragStartHandler = null, dragEndHandler = null, draggingStartHandler = null, draggingEndHandler = null } = {}) {
         // if only one arg is passed, it must be the instance of the dragging object
         this.draggingObject = draggingObject || arguments[0];
 
@@ -25,15 +25,14 @@ export default class DraggingObject  {
         return this;
     }
 
-    static getDraggingObject({slotType = arguments[0]} = {}) {
-       
-     if(!slotType || !draggingObjectCache) return null;
-     if(!slotType.isEqual(draggingObjectCache.type.slotType)) return null;
-     return draggingObjectCache;
+    static getDraggingObject({ slotType = arguments[0] } = {}) {
+        if (!slotType || !draggingObjectCache) return null;
+        if (!slotType.isEqual(draggingObjectCache.type.slotType)) return null;
+        return draggingObjectCache;
     }
 
     startDragging() {
-        if(draggingObjectCache) return;
+        if (draggingObjectCache) return;
         draggingObjectCache = this.draggingObject;
         this.draggingObject.game.event.emit("dragging");
     }

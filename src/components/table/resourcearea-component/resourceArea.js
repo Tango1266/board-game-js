@@ -5,7 +5,8 @@ export default class ResourceArea extends MyHtmlElement {
     constructor(game, resources) {
         super({
             parent: new MyHtmlElement({ div: document.getElementById("resource-area-container") }),
-            div: document.getElementById("resource-area")
+            id: "resource-area",
+            className: "resource-area"
         })
         this.game = game;
         this.resources = resources;
@@ -14,9 +15,8 @@ export default class ResourceArea extends MyHtmlElement {
     }
 
     init() {
-        
         this.parent.add(this);
-        this.addClass("dragscroll")
+        this.addClass("dragscroll");
         this.initEventListener();
         setTimeout(() => {
             this.adjustDimensionsToContent();
@@ -32,8 +32,9 @@ export default class ResourceArea extends MyHtmlElement {
     onDomNodeRemoved(e) {
         if (this.isEmpty) {
             this.parent.addClass("invisible");
+            console.log("event emit")
+            this.event.emit("boardinitialised", null, null, true);
         }
-
     }
 
     shufle() {

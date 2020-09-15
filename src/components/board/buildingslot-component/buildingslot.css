@@ -6,8 +6,9 @@
     background: white;
 }
 
-.empty {
-    border: 3px salmon solid;
+.circle.empty {
+    border: thin solid salmon ;
+    transform: scale(2)
 }
 
 .hovered {

@@ -1,4 +1,4 @@
-import { addCSSRule, changeClass, addClass, setPosition, removeClass, getHtmlEvents } from "../utils/domUtils";
+import { addCSSRule, changeClass, addClass, setPosition, removeClass, getHtmlEvents, hasClass } from "../utils/domUtils";
 
 const instanceMap = new Map();
 const eventObservers = new Map();
@@ -26,7 +26,7 @@ export default class MyHtmlElement {
         if (!instanceMap.has(this.div.id))
             instanceMap.set(this.div.id, this);
     }
-    
+
     static getElementById(id) {
         return instanceMap.get(id);
     }
@@ -53,7 +53,7 @@ export default class MyHtmlElement {
         return this.div.src;
     }
 
-    set imgSrc(src){
+    set imgSrc(src) {
         this.div.src = src;
         return this;
     }
@@ -70,13 +70,11 @@ export default class MyHtmlElement {
             }
         }
         // emit custome event
-        events["emit"] = function(eventName, emittingInstance, payloadJson) {
-            let event = new Event(eventName );
-            if (payloadJson) event = new CustomEvent(eventName, {"detail": payloadJson})
-
+        events["emit"] = function(eventName, emittingInstance, payloadJson, bubbles) {
+            let event = new Event(eventName);
+            if (payloadJson || bubbles) event = new CustomEvent(eventName, { "detail": payloadJson, "bubbles": bubbles || false })
             const instance = emittingInstance || this;
             instance.div.dispatchEvent(event)
-
         }.bind(this);
         // create custome event and respective handler
         events["on"] = function(newEvent) {
@@ -131,6 +129,21 @@ export default class MyHtmlElement {
         return this.doAdd(child, callbackChild);
     }
 
+    removeAll() {
+        let children = Array.from(this.div.children);
+        for (var child of children) {
+            this.remove(child);
+        }
+    }
+
+    remove(child) {
+        const hasChild = Array.from(this.div.children).find((e) => e.id === child.id);
+        if (hasChild) {
+            const objectToRemove = child instanceof MyHtmlElement ? child.div : child;
+            this.div.removeChild(objectToRemove);
+        }
+    }
+
     addAfter(relChild, callbackChild) {
         if (relChild === undefined) return;
         const relObject = relChild instanceof MyHtmlElement ? relChild : MyHtmlElement.getElementById(relChild.id);
@@ -140,11 +153,12 @@ export default class MyHtmlElement {
     }
 
     addTo(parent, callbackChild) {
-            if (parent === undefined) return;
-            const parentObject = parent instanceof MyHtmlElement ? parent : MyHtmlElement.getElementById(parent.id);
-            parentObject.doAdd(this, callbackChild);
-            return this;
-        }
+        if (parent === undefined) return;
+        const parentObject = parent instanceof MyHtmlElement ? parent : MyHtmlElement.getElementById(parent.id);
+        parentObject.doAdd(this, callbackChild);
+        return this;
+    }
+    
     doAdd(child, callbackChild, order, relChild) {
         const objectToAdd = child instanceof MyHtmlElement ? child.div : child
         const relObject = relChild instanceof MyHtmlElement ? relChild.div : relChild
@@ -183,6 +197,10 @@ export default class MyHtmlElement {
         return this;
     }
 
+    hasClass(classname) {
+        return hasClass(this, classname);
+    }
+
     get inspect() {
         return this.div;
     }
@@ -190,15 +208,30 @@ export default class MyHtmlElement {
     get style() {
         return this.div.style;
     }
-   
+
     addCSSRule(sheet, selector, rules, index) {
         addCSSRule(sheet, selector, rules, index);
         return this;
     }
 
     makeDelayCallback(func, delay) {
-        if(!delay) delay = 0;
+        if (!delay) delay = 0;
         return (args) => setTimeout(func.bind(this), delay, args);
+    }
+
+    addControls(controls) {
+        const containerName = this.div.classList[0] + "-controls";
+        let controlsContainer = Array.from(this.div.children).find((c) => c.id === containerName);
+        if (controlsContainer == null) {
+            controlsContainer = document.createElement("div");
+            controlsContainer.className = containerName;
+            controlsContainer.id = containerName;
+            this.add(controlsContainer);
+        }
+
+        controls.forEach((control) => {
+            controlsContainer.append(control);
+        })
     }
 
     hide() {

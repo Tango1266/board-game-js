@@ -27,7 +27,7 @@
     position: absolute;
     overflow: visible;
     transform-origin: bottom left;
-    /* padding-top: 57.47%; */
+    width: 50%;
 }
 
 .played-resource-card:hover {
@@ -35,7 +35,6 @@
 }
 
 .played-img-resource-card {
-    width: 50%;
     z-index: 10;
 }
 

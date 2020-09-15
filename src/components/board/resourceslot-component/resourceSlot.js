@@ -5,12 +5,12 @@ let idCounter = 0;
 
 export default class ResourceSlot extends MyHtmlElement {
 
-    constructor(game, board, position, type) {
+    constructor(board, position, type) {
         super({
             id: "hexagon_" + idCounter++,
             className: "hexagon"
         })
-        this.game = game;
+        this.game = board.game;
         this.board = board;
         this.position = position;
         this.type = type;

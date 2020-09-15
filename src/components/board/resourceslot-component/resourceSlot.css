@@ -35,8 +35,8 @@
         border-left: solid 7.0711px #d2ce33;
     }
     
-    .empty {
-        border: 3px salmon solid;
+    .hexagon.empty {
+        border: thin solid yellowgreennp;
     }
     
     .hovered {

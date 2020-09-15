@@ -1,7 +1,7 @@
 import State from "../state";
 import Player from "../player";
 import Board from "../components/board/board-component/board";
-import Game from "../components/table/table-component/table";
+import Table from "../components/table/table-component/table";
 import ResourceArea from "../components/table/resourcearea-component/resourceArea";
 import SlotFactory from "./slotFactory";
 import BuildingFactory from "./buildingFactory";
@@ -11,67 +11,52 @@ import CardFactory from "./cardFactory";
 import CardArea from "../components/table/cardarea-component/cardArea";
 import PlayerArea from "../components/table/playerarea-component/playerArea";
 import Hand from "../components/table/hand-component/hand";
-import { slotTypes, SlotType } from "../types";
+import { slotTypes, SlotType, buildingTypes } from "../types";
+import DiceFactory from "./diceFactory";
+import createButton from "../components/controls/controls";
+import MyHtmlElement from "../components/htmlElement";
+import { DiceControl } from "../components/controls/diceControl-component/diceControl";
 
 export function assemble(playerData) {
-    let game = new Game({ state: new State() });
-    game.players = assemblePlayers(game, playerData);
+    let game = new Table({ state: new State() });
     game.board = assembleBoard(game);
+    game.players = assemblePlayers(game, playerData);
+    game.dices = assembleDices(game);
+    game.diceControl = assambleDiceControl(game);
 
     let resourceArea = assembleResourceArea(game);
     let cardArea = assembleCardArea(game);
 
-    // debug: select
-    let select = document.getElementsByName("change-state")[0];
-    for (let phase in game.GAME_PHASES) {
-        var option = document.createElement("option");
-        option.text = phase;
-        option.id = game.GAME_PHASES[phase];
-        select.add(option);
-    }
-    select.onchange = function (e) {
-        this.currentPhase = this.GAME_PHASES[e.target.value];
-    }.bind(game);
-    select.options[game.currentPhase].selected = true;
-
-    // header - todo: extract
-    window.onscroll = function () {
-        var header = document.getElementById("header");
-        var sticky = header.offsetTop;
-
-        if (window.pageYOffset + 1 > sticky) {
-            header.classList.add("sticky");
-        }
-        else {
-            header.classList.remove("sticky");
-        }
-    }
+    assambleMenuBar(game);
 
     return { game, resourceArea };
 }
 
 function assembleBoard(game) {
-    let sf = new SlotFactory(game);
-    return new Board(
-        {
-            buildingSlots: sf.makeBuildingSlots(),
-            resourceSlots: sf.makeRessourceSlots()
-        }
-    );
+    let board = new Board({ game: game });
+    let sf = new SlotFactory(board);
+    board.buildingSlots = sf.makeBuildingSlots();
+    board.resourceSlots = sf.makeRessourceSlots();
+    return board;
+}
+
+function assembleDices(game) {
+    const diceFactory = new DiceFactory(game);
+    return diceFactory.makeDices(2);
 }
 
 function assemblePlayers(game, playerData) {
     let bf = new BuildingFactory();
     let players = [];
-    for (var player in playerData) {
+    for (var player of playerData) {
         let newPlayer = new Player(game, player.name);
         newPlayer.addArea(new PlayerArea(newPlayer))
-        .addHand(new Hand(newPlayer, new SlotType(slotTypes.resourceCard)));
+            .addHand(new Hand(newPlayer, new SlotType(slotTypes.resourceCard)));
 
         newPlayer.gameObjects = {
-            towns: bf.createTowns(newPlayer, 4),
-            villages: bf.createVillages(newPlayer, 5),
-            streets: bf.createStreets(newPlayer, 15),
+            [buildingTypes.town.name]: bf.createTowns(newPlayer, 4),
+            [buildingTypes.village.name]: bf.createVillages(newPlayer, 5),
+            [buildingTypes.street.name]: bf.createStreets(newPlayer, 15),
         }
 
         players.push(newPlayer)
@@ -79,7 +64,8 @@ function assemblePlayers(game, playerData) {
 
     return players;
 }
-function assembleCardArea(game){
+
+function assembleCardArea(game) {
     let cf = new CardFactory(game);
     let cards = {
         ore: cf.createOreCard(1),
@@ -88,7 +74,7 @@ function assembleCardArea(game){
         wool: cf.createWoolCard(19),
         wood: cf.createWoodCard(19),
     }
-    
+
     for (var cardKey in cards) {
         let cardArea = new CardArea();
 
@@ -98,6 +84,16 @@ function assembleCardArea(game){
         }
         cardArea.init();
     }
+}
+
+function assambleDiceControl(game) {
+    let diceControl = new DiceControl();
+    diceControl.addControls([
+        createButton("Würfeln",
+            "role-dice",
+            "role-dice", { onclick: () => diceControl.rollDices() })
+    ]);
+    return diceControl;
 }
 
 function assembleResourceArea(game) {
@@ -112,6 +108,11 @@ function assembleResourceArea(game) {
         dessert: rf.createDessert(1),
     };
     let resourceArea = new ResourceArea(game, resources);
+
+    resourceArea.parent.addControls([
+        createButton("Mischen", "resource-area-control", "shufle-resources", { onclick: () => { resourceArea.shufle() } }),
+        createButton("Verteilen", "resource-area-control", "allocate-resource", { onclick: () => resourceArea.allocateResources() })
+    ])
 
     // let us stack the resources in a cirle way 
     function* transformPos() {
@@ -154,21 +155,41 @@ function assembleResourceArea(game) {
         }
     }
 
-    // controls
-    let allocateRes = document.getElementById("allocate-resource");
-
-    allocateRes.onclick = () => {
-        resourceArea.allocateResources();
-    };
-
-    let shufle = document.getElementById("shufle-resources");
-    shufle.onclick = () => {
-        resourceArea.shufle();
-    };
-
     return resourceArea;
 }
 
+function assambleMenuBar(game) {
+    let header = new MyHtmlElement({ div: document.getElementById("header") });
 
+    let endTurnHandler = function(e) {
+        game.event.emit("endturn");
+    }
+    header.addControls([createButton("Runde Beenden", "end-turn", "btn-end-turn", { onclick: endTurnHandler })])
+        // debug: select
+    let select = document.getElementsByName("change-state")[0];
+    for (let phase in game.GAME_PHASES) {
+        var option = document.createElement("option");
+        option.text = phase;
+        option.id = game.GAME_PHASES[phase];
+        select.add(option);
+    }
 
+    // customized two-way-binding on game.currentphase :)
+    select.onchange = function(e) {
+        this.currentPhase = this.GAME_PHASES[e.target.value];
+    }.bind(game);
+    select.options[game.currentPhase].selected = true;
+    game.event.on("currentPhaseChanged").do((e) => select.options[game.currentPhase + 1].selected = true)
 
+    // header - todo: extract
+    window.onscroll = function() {
+        const header = document.getElementById("header");
+        const sticky = header.offsetTop;
+
+        if (window.pageYOffset + 1 > sticky) {
+            header.classList.add("sticky");
+        } else {
+            header.classList.remove("sticky");
+        }
+    }
+}

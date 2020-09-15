@@ -7,27 +7,18 @@
     <title>Js Game Demo</title>
 </head>
 
-<body class="table-grid-container">
+<body id="table-container" class="table-grid-container">
     <div id="header" class="header dragscroll">
         <select name="change-state"></select>
-    </div>
-    <div id="resource-area-container" class="resource-area-container">
-        <div id="resource-area-controls" class="resource-area-controls">
-            <button id="shufle-resources" class="resource-area-control">
-                <a href="#" >Mischen</a>
-            </button>
-            <button id="allocate-resource" class="resource-area-control">       
-                <a href="#" >Verteilen</a>
-            </button>
+        <div id="dice-results">
+            <div id="dice-result1" class="dice-result"></div>
+            <div id="dice-result2" class="dice-result"></div>
         </div>
-        <div id="resource-area" class="resource-area"></div>
     </div>
-
-    <div id="table" >
+    <div id="resource-area-container" class="resource-area-container"></div>
+    <div id="table">
         <div id="card-area-container" class="card-area-container"></div>
-        <div id="board-container" class="board-container dragscroll">
-            <div id="board" class="board"></div>
-        </div>
+        <div id="board-container" class="board-container dragscroll"></div>
     </div>
 </body>
 <script src="index.js"></script>

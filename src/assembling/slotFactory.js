@@ -37,8 +37,9 @@ const resourceSlottemplate = [
 ]
 
 export default class SlotFactory {
-    constructor(game) {
-        this.game = game;
+    constructor(board) {
+        this.game = board.game;
+        this.board = board;
     }
 
     makeRessourceSlots() {
@@ -67,7 +68,7 @@ export default class SlotFactory {
                     boadCol: col
                 };
                 resourceSlots.push(
-                    new ResourceSlot(this.game, this.game.board, position, new SlotType(slotTypes.resource))
+                    new ResourceSlot(this.board, position, new SlotType(slotTypes.resource))
                 )
             }
         }
@@ -132,7 +133,7 @@ export default class SlotFactory {
                     isStreetLeftUpper = !isStreetLeftUpper;
                 }
 
-                buildingSlots.push(new BuildingSlot(this.game, this.game.board, position, slotType, { row: row, col: col }))
+                buildingSlots.push(new BuildingSlot(this.board, position, slotType, { row: row, col: col }))
             }
 
             // first street is always left upper until the mid row then always right

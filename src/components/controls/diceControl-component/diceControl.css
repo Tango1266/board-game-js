@@ -1,0 +1,22 @@
+.dice-control {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: inline-block;
+    background-color: rgba(22, 22, 22, 0.5);
+    z-index: 2;
+}
+
+.dice-control .dice {
+    top: 20%;
+    left: 20%;
+    width: 20%;
+}
+
+.dice-control .role-dice {
+    z-index: 2;
+    left: 15%;
+    position: relative;
+    font-size: 2rem;
+    border-radius: 10%;
+}

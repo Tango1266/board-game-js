@@ -46,6 +46,9 @@ export function removeClass(instance, classname) {
     changeClass(instance, newClass);
 }
 
+export function hasClass(instance, classname) {
+    return instance.div.className.includes(classname);
+}
 
 export function setPosition(instance, xPos, yPos) {
     instance.div.style.position = "absolute";
@@ -65,9 +68,9 @@ export function setPosition(instance, xPos, yPos) {
 export function getHtmlEvents() {
     if (Object.keys(htmlEvents).length <= 0) {
         for (let el in HTMLElement.prototype) {
-            if (el.startsWith("on")){
-                htmlEvents[el]= null;
-            } 
+            if (el.startsWith("on")) {
+                htmlEvents[el] = null;
+            }
         }
     }
     return htmlEvents;

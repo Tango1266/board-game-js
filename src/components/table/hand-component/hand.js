@@ -70,15 +70,14 @@ export default class Hand extends MyHtmlElement {
 
         // Hand
         this.add(new MyHtmlElement({
-            id: "img-hand-" + this.owner.id,
-            className: "img-hand img-hand-" + this.owner.id,
-            div: document.createElement("img"),
-            src: getImageByName("hand"),
-            parent: this
-        }))
-
-        // thumb
-        .add(new MyHtmlElement({
+                id: "img-hand-" + this.owner.id,
+                className: "img-hand img-hand-" + this.owner.id,
+                div: document.createElement("img"),
+                src: getImageByName("hand"),
+                parent: this
+            }))
+            // thumb
+            .add(new MyHtmlElement({
                 id: "img-thumb-" + this.owner.id,
                 className: "img-hand img-hand-" + this.owner.id + " img-thumb",
                 div: document.createElement("img"),
@@ -110,7 +109,7 @@ export default class Hand extends MyHtmlElement {
 
     dragDrop(e) {
         e.preventDefault();
-        const draggingCard = DraggingObject.getDraggingObject({slotType: this.type});
+        const draggingCard = DraggingObject.getDraggingObject({ slotType: this.type });
         if (!draggingCard) return;
         this.addCard(draggingCard);
         draggingCard.isPlayed = true;

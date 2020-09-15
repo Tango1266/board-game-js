@@ -7,7 +7,7 @@ let idCounter = 0;
 
 export default class BuildingSlot extends MyHtmlElement {
 
-    constructor(game, board, position, type) {
+    constructor(board, position, type) {
         super({
             id: type.name + "_slot" + idCounter++,
             className: "circle",
@@ -16,16 +16,17 @@ export default class BuildingSlot extends MyHtmlElement {
         })
 
         this.type = type;
-        this.game = game;
+        this.game = board.game;
         this.position = position;
         this.game.state.removeBuilding(this);
     }
 
     add(child) {
         super.add(child,
-            () => this.game.state.addBuilding(this));
+            () => this.game.state.addBuilding(this, child));
+        child.buildingSlot = this;
     }
-    
+
     init() {
         this.setPos(this.position.x, this.position.y)
         this.parent.add(this);
@@ -44,7 +45,7 @@ export default class BuildingSlot extends MyHtmlElement {
     }
 
     dragStart() {
-        const draggingBuilding = DraggingObject.getDraggingObject(this.type)
+        const draggingBuilding = DraggingObject.getDraggingObject(this.type);
         if (!draggingBuilding || !this.isEmpty) return;
         let buildingRules = new BuildingRules(this.game, this, draggingBuilding, false);
         if (buildingRules.allowed()) {

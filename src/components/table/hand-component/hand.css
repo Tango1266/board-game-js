@@ -1,17 +1,15 @@
  .hand {
      position: relative;
      display: flex;
-     width: 100fr;
-     height: 100fr;
      overflow: visible;
  }
-
+ 
  .holding-cards {
-    position: sticky;
-    margin: auto;
-    width: 50%;
-    height: 50%;
-}
+     position: sticky;
+     margin: auto;
+     width: 50%;
+     height: 50%;
+ }
  
  .img-hand,
  .img-thumb {
@@ -32,9 +30,7 @@
      pointer-events: none;
  }
  
- .hand-1 {
-
- }
+ .hand-1 {}
  
  .hand-2 {
      transform: scaleY(-1);
