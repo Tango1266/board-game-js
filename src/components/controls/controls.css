@@ -1,6 +1,7 @@
 .button {
     border: 0px;
-    font-size: 2vw;
+    font-size: 2em;
+    box-sizing: content-box;
     justify-items: center;
     color: white;
     font-family: Helvetica, sans-serif;
