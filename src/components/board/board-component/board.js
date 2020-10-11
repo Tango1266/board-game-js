@@ -9,8 +9,13 @@ export default class Board extends MyHtmlElement {
             id: "board",
             className: "board",
         })
+        
+        this.resourceSlotTemplate = [];
+        
         this.buildingSlots = buildingSlots;
         this.resourceSlots = resourceSlots;
+        
+        this.resources = [];
         this.game = game;
     }
 
@@ -22,5 +27,9 @@ export default class Board extends MyHtmlElement {
         });
 
         this.adjustDimensionsToContent();
+    }
+
+    addResource(res) {
+        this.resources.push(res);
     }
 }

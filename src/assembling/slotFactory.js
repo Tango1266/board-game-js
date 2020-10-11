@@ -1,6 +1,6 @@
 import BuildingSlot from "../components/board/buildingslot-component/buildingSlot";
 import ResourceSlot from "../components/board/resourceslot-component/resourceSlot";
-import { SlotType, slotTypes } from "../types";
+import { SlotType, slotTypes, ResourceSlotType } from "../types";
 
 /**
  * 0: building slot for villages
@@ -47,6 +47,8 @@ export default class SlotFactory {
         let resourceHeigt = 100;
         let resourceSlots = [];
 
+        this.board.resourceSlotTemplate = resourceSlottemplate;
+        
         let midRow = Math.round((resourceSlottemplate.length / 2));
         for (var row = 0; row < resourceSlottemplate.length; row++) {
             for (var col = 0; col < resourceSlottemplate[row]; col++) {
@@ -67,8 +69,17 @@ export default class SlotFactory {
                     boardRow: row,
                     boadCol: col
                 };
+
+                // set corner attribute
+                let isCorner = false;
+                if(row % 2 == 0 && (col == 0 || col == resourceSlottemplate[row] - 1)) 
+                    isCorner = true;
+
+                let args = {
+                    isCorner: isCorner
+                }
                 resourceSlots.push(
-                    new ResourceSlot(this.board, position, new SlotType(slotTypes.resource))
+                    new ResourceSlot(this.board, position, new ResourceSlotType(new SlotType(slotTypes.resource), args))
                 )
             }
         }

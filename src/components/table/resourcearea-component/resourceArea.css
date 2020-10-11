@@ -14,11 +14,14 @@
  
  .resource-area {
      position: relative;
+     display: flex;
      grid-area: resources;
      width: 50%;
      height: 50%;
-     align-self: center;
      justify-self: center;
+     align-self: center;
+     align-content: center;
+     justify-content: center;
  }
  
  .resource-area-container-controls {

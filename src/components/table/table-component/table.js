@@ -286,13 +286,13 @@ export default class Table extends MyHtmlElement {
 
     setPlayerActive(players) {
         if (!players) return;
-        if (players.length > 1) players.forEach(p => p.setActive());
+        if (players.length > 0) players.forEach(p => p.setActive());
         else players.setActive();
     }
 
     setPlayerInactive(players) {
         if (!players) return;
-        if (players.length > 1) players.forEach(p => p.setInactive());
+        if (players.length > 0) players.forEach(p => p.setInactive());
         else players.setInactive();
     }
 }

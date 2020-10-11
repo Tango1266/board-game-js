@@ -27,11 +27,11 @@ export let cardTypes = {
     "stone": { name: "card-stone", slotType: slotTypes.resourceCard },
     "corn": { name: "card-corn", slotType: slotTypes.resourceCard },
     "wood": { name: "card-wood", slotType: slotTypes.resourceCard },
-    "winPoint": { name: "win-point", slotType: slotTypes.evolutionCard },//5
-    "knight": { name: "knight", slotType: slotTypes.evolutionCard },//14
-    "freeResources": { name: "free-resources", slotType: slotTypes.evolutionCard },//2
-    "freeStreets": { name: "free-streets", slotType: slotTypes.evolutionCard },//2
-    "monopoly": { name: "monopoly", slotType: slotTypes.evolutionCard },//2
+    "winPoint": { name: "win-point", slotType: slotTypes.evolutionCard }, //5
+    "knight": { name: "knight", slotType: slotTypes.evolutionCard }, //14
+    "freeResources": { name: "free-resources", slotType: slotTypes.evolutionCard }, //2
+    "freeStreets": { name: "free-streets", slotType: slotTypes.evolutionCard }, //2
+    "monopoly": { name: "monopoly", slotType: slotTypes.evolutionCard }, //2
 }
 
 export class TypeObject {
@@ -53,6 +53,15 @@ export class SlotType extends TypeObject {
     constructor(type, args) {
         if ("string" === typeof(type)) super(type, args);
         else if ("object" === typeof(type)) super(type.name, args)
+    }
+}
+
+export class ResourceSlotType extends SlotType {
+    constructor(type, args) {
+        super(type);
+
+        this.diceNum = args ? args["diceNum"] : null;
+        this.isCorner = args ? args["isCorner"] : false;
     }
 }
 
@@ -80,4 +89,3 @@ export class CardType extends TypeObject {
         this.slotType = new SlotType(type.slotType.name);
     }
 }
-

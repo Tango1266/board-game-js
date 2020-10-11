@@ -1,5 +1,6 @@
 import MyHtmlElement from "../../htmlElement";
 import DraggingObject from "../../draggingObject";
+import { ResourceSlotRules } from "../../../ruleEngine";
 
 let idCounter = 0;
 
@@ -21,6 +22,14 @@ export default class ResourceSlot extends MyHtmlElement {
         super.add(child, () => child.setPlayed());
     }
 
+    isCorner() {
+        return this.type.isCorner;
+    }
+
+    isEmpty() {
+        return this.getChildren().length <= 0;
+    }
+
     init() {
         this.setPos(this.position.x, this.position.y);
         this.board.add(this);
@@ -40,7 +49,9 @@ export default class ResourceSlot extends MyHtmlElement {
     draggingStart() {
         const draggingResource = DraggingObject.getDraggingObject(this.type);
         if (!draggingResource || !this.isEmpty) return;
-        this.addClass("empty");
+        let resourceSlotRules = new ResourceSlotRules(this.game, this, draggingResource);
+        if(resourceSlotRules.allowed())
+            this.addClass("empty");
     }
 
     dragOver(e) {
@@ -67,8 +78,11 @@ export default class ResourceSlot extends MyHtmlElement {
         if (!draggingResource || !this.isEmpty) return;
         e.preventDefault();
 
+        let resourceSlotRules = new ResourceSlotRules(this.game, this, draggingResource);
+        if(!resourceSlotRules.allowed()) return;
         // reset highlighting and add
         this.changeClass(this.classNameDefault)
+        this.game.board.addResource(draggingResource);
         this.add(draggingResource, () => draggingResource.setPlayed());
     }
 

@@ -160,8 +160,13 @@ export default class MyHtmlElement {
     }
     
     doAdd(child, callbackChild, order, relChild) {
-        const objectToAdd = child instanceof MyHtmlElement ? child.div : child
-        const relObject = relChild instanceof MyHtmlElement ? relChild.div : relChild
+        const objectToAdd = child instanceof MyHtmlElement ? child.div : child;
+        const relObject = relChild instanceof MyHtmlElement ? relChild.div : relChild;
+
+        if(child instanceof MyHtmlElement) {
+            child.parent = this;
+        }
+        
         switch (order) {
             case "before":
                 this.div.insertBefore(objectToAdd, relObject);
@@ -245,15 +250,15 @@ export default class MyHtmlElement {
         return this;
     }
 
-    adjustDimensionsToContent(relative) {
+    adjustDimensionsToContent({left=0, top=0}= {}) {
         let maxWidth = 0,
             maxHeight = 0;
         Array.prototype.forEach.call(this.div.children, (child) => {
             maxWidth = Math.max(maxWidth, child.offsetLeft + child.clientWidth);
             maxHeight = Math.max(maxHeight, child.offsetTop + child.clientHeight);
         });
-        this.div.style.width = maxWidth + "px";
-        this.div.style.height = maxHeight + "px";
+        this.div.style.width = (maxWidth + left) + "px";
+        this.div.style.height = (maxHeight + top)+ "px";
     }
 
     get isOverflown() {

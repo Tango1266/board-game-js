@@ -115,39 +115,52 @@ function assembleResourceArea(game) {
     ])
 
     // let us stack the resources in a cirle way 
+    /* bug: only every third resource gets shifted. 
+     * My guess: I've change Resource, so its now a container for images and DiceNumber. 
+     * The Dom now takes longer to initilize and to render. 
+     * Thus the offset updates later... need to rethink  
+     */
     function* transformPos() {
         let i = 0;
         while (true) {
             while (i++ < 3) yield "marginLeft";
-            while (i-- > 0) yield "marginTop";
+            while (i-- > 1) yield "marginTop";
             while (i++ < 3) yield "marginRight";
-            while (i-- > 0) yield "marginBottom";
+            while (i-- > 1) yield "marginBottom";
         }
     }
     let margin = transformPos();
+    
+    function getMarginValue(margin) { 
+        let val = parseInt(margin); 
+        return isNaN(val)? 0: val; 
+    }
+
     for (var resKey in resources) {
         for (var resource of resources[resKey]) {
             resource.parent = resourceArea;
-
             let previousEl = resourceArea.getChildren()[resource.idCounter - 1];
             if (previousEl) {
-
                 let marginnext = margin.next().value;
+                let offset = 10;
+                let prevMarginLeft = getMarginValue(previousEl.style.marginLeft);
+                let prevMarginTop = getMarginValue(previousEl.style.marginTop);
+
                 switch (marginnext) {
                     case "marginLeft":
-                        resource.style.marginLeft = previousEl.inspect.offsetLeft + 10 + "px";
+                        resource.style.marginLeft = prevMarginLeft + offset + "px";
                         break;
                     case "marginTop":
-                        resource.style.marginTop = previousEl.inspect.offsetTop + 10 + "px";
-                        resource.style.marginLeft = previousEl.inspect.offsetLeft + "px";
+                        resource.style.marginTop = prevMarginTop + offset + "px";
+                        resource.style.marginLeft = prevMarginLeft + "px";
                         break;
                     case "marginRight":
-                        resource.style.marginTop = previousEl.inspect.offsetTop + "px";
-                        resource.style.marginLeft = previousEl.inspect.offsetLeft - 10 + "px";
+                        resource.style.marginTop = prevMarginTop + "px";
+                        resource.style.marginLeft = prevMarginLeft - offset + "px";
                         break;
                     case "marginBottom":
-                        resource.style.marginTop = previousEl.inspect.offsetTop - 10 + "px";
-                        resource.style.marginLeft = previousEl.inspect.offsetLeft + "px";
+                        resource.style.marginTop = prevMarginTop - offset + "px";
+                        resource.style.marginLeft = prevMarginLeft + "px";
                         break;
                 }
             }

@@ -16,7 +16,6 @@ export default class ResourceArea extends MyHtmlElement {
 
     init() {
         this.parent.add(this);
-        this.addClass("dragscroll");
         this.initEventListener();
         setTimeout(() => {
             this.adjustDimensionsToContent();

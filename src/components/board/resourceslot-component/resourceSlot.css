@@ -36,10 +36,11 @@
     }
     
     .hexagon.empty {
-        border: thin solid yellowgreennp;
+        background: lightgreen;
     }
     
-    .hovered {
+    
+    .hexagon.hovered {
         background: #f4f4f4;
         border-style: dashed;
     }
