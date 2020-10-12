@@ -1,4 +1,4 @@
-import BuildingRules from "../../../ruleEngine";
+import BuildingRules from "../../../ruleEngine/buildingRules";
 import MyHtmlElement from "../../htmlElement";
 import { buildingTypes } from "../../../types";
 import DraggingObject from "../../draggingObject";

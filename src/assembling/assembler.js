@@ -115,11 +115,6 @@ function assembleResourceArea(game) {
     ])
 
     // let us stack the resources in a cirle way 
-    /* bug: only every third resource gets shifted. 
-     * My guess: I've change Resource, so its now a container for images and DiceNumber. 
-     * The Dom now takes longer to initilize and to render. 
-     * Thus the offset updates later... need to rethink  
-     */
     function* transformPos() {
         let i = 0;
         while (true) {
@@ -136,8 +131,15 @@ function assembleResourceArea(game) {
         return isNaN(val)? 0: val; 
     }
 
-    for (var resKey in resources) {
-        for (var resource of resources[resKey]) {
+    let res = {...resources};
+    let startOrderdResources = [
+        res.wood.pop(), res.wool.pop(), res.ore.pop(), res.corn.pop(),
+        res.corn.pop(), res.wood.pop(), res.stone.pop(), res.corn.pop(),
+        res.wool.pop(), res.wool.pop(), res.ore.pop(), res.stone.pop(),
+        res.wool.pop(), res.stone.pop(), res.wood.pop(),res.ore.pop(),
+        res.corn.pop(), res.wood.pop(), res.dessert.pop()
+    ]
+    for (var resource of startOrderdResources) {
             resource.parent = resourceArea;
             let previousEl = resourceArea.getChildren()[resource.idCounter - 1];
             if (previousEl) {
@@ -165,7 +167,6 @@ function assembleResourceArea(game) {
                 }
             }
             resource.init();
-        }
     }
 
     return resourceArea;
@@ -177,7 +178,8 @@ function assambleMenuBar(game) {
     let endTurnHandler = function(e) {
         game.event.emit("endturn");
     }
-    header.addControls([createButton("Runde Beenden", "end-turn", "btn-end-turn", { onclick: endTurnHandler })])
+    // header.addControls([createButton("Runde Beenden", "end-turn", "btn-end-turn", { onclick: endTurnHandler })])
+    // header.addControls([createButton("Runde Beenden", "end-turn", "btn-end-turn", { onclick: endTurnHandler })])
         // debug: select
     let select = document.getElementsByName("change-state")[0];
     for (let phase in game.GAME_PHASES) {

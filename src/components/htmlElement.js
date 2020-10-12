@@ -117,7 +117,9 @@ export default class MyHtmlElement {
     }
 
     getChild() {
-        return instanceMap.get(this.div.children[0].id)
+        const child = this.div.children[0];
+        if(child) return instanceMap.get(child.id);
+        return null;
     }
 
     getChildren() {

@@ -46,7 +46,7 @@ img {
     z-index: 100;
     background-color: grey;
     flex-direction: row;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-content: center;
 }
 
@@ -96,9 +96,6 @@ img {
 .header-controls {
     display: block;
     position: relative;
-    /* border-style: inset;
-    border-color: transparent;
-    border-width: 10px; */
     height: 20%;
     width: 50%;
 }

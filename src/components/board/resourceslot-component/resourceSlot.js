@@ -1,6 +1,6 @@
 import MyHtmlElement from "../../htmlElement";
 import DraggingObject from "../../draggingObject";
-import { ResourceSlotRules } from "../../../ruleEngine";
+import { ResourceSlotRules } from "../../../ruleEngine/resourceSlotRules";
 
 let idCounter = 0;
 

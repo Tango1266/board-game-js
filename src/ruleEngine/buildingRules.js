@@ -1,7 +1,7 @@
-import { buildingTypes, slotTypes, BuildingType } from "./types";
-import MyHtmlElement from "./components/htmlElement";
+import { buildingTypes, slotTypes, BuildingType } from "../types";
+import MyHtmlElement from "../components/htmlElement";
 
-const directNeighbours = [
+export const directNeighbours = [
     { y: -1, x: 0 },
     { y: 1, x: 0 },
     { y: -1, x: 1 },
@@ -10,7 +10,7 @@ const directNeighbours = [
     { y: 1, x: 1 },
 ]
 
-const streetNeighbours = [
+export const streetNeighbours = [
     { y: -2, x: 1 },
     { y: -2, x: -1 },
     { y: 2, x: 1 },
@@ -81,7 +81,8 @@ export default class BuildingRules {
         if (buildingOrSlot.type instanceof BuildingType) {
             stateY = buildingOrSlot.buildingSlot.position.boardRow;
             stateX = buildingOrSlot.buildingSlot.position.boardCol;
-        } else {
+        }
+        else {
             stateY = buildingOrSlot.position.boardRow;
             stateX = buildingOrSlot.position.boardCol;
         }
@@ -125,7 +126,8 @@ export default class BuildingRules {
             return true;
         }
 
-        if (this.logResult) this.lastResult = "onlyBuildingsAtCornors";
+        if (this.logResult)
+            this.lastResult = "onlyBuildingsAtCornors";
         return false;
     }
 
@@ -136,7 +138,7 @@ export default class BuildingRules {
         const playedBuildings = this.building.owner.gameObjects[this.building.type.name].filter(b => b.isPlayed());
 
         if (playedBuildings.length <= 0)
-            return true
+            return true;
 
         let allBuildingHaveStreets = true;
         for (var building of playedBuildings) {
@@ -161,7 +163,8 @@ export default class BuildingRules {
         if (neighbourVillages.length >= 1 && neighbourStreets.length < 1)
             return true;
 
-        if (this.logResult) this.lastResult = "onlyBuildingsAtCornors";
+        if (this.logResult)
+            this.lastResult = "onlyBuildingsAtCornors";
 
         return false;
     }
@@ -176,7 +179,7 @@ export default class BuildingRules {
             ...directNeighbours,
             // second degree neigbours for streets- are always streets
             ...streetNeighbours
-        ]
+        ];
 
         if (this.hasNeighbours(this.slot, neighbourCoordinates))
             return true;
@@ -197,13 +200,13 @@ export default class BuildingRules {
 
         let buildingNeighbours = [
             // second degree neigbours - are always villages/towns for a village/town
-            { y: -2, x: 0 }, // to-top
-            { y: 2, x: 0 }, // to-bottom
-            { y: 2, x: 2 }, // right-lower 
-            { y: 2, x: -2 }, // left-lower 
-            { y: -2, x: 2 }, // right-upper 
-            { y: -2, x: -2 }, // left-upper 
-        ]
+            { y: -2, x: 0 },
+            { y: 2, x: 0 },
+            { y: 2, x: 2 },
+            { y: 2, x: -2 },
+            { y: -2, x: 2 },
+            { y: -2, x: -2 },
+        ];
 
         hasBuildingNeighbour = this.hasNeighbours(this.slot, buildingNeighbours, true);
         if (ignoreBuildingOnStreet) {
@@ -227,143 +230,9 @@ export default class BuildingRules {
             return true;
         }
 
-        if (this.logResult) this.lastResult = "citiesBuildOnlyOnTowns";
+        if (this.logResult)
+            this.lastResult = "citiesBuildOnlyOnTowns";
 
         return false;
-    }
-}
-
-
-export class ResourceSlotRules {
-    constructor(game, slot, resource, logResult) {
-        this.game = game;
-        this.slot = slot;
-        this.resource = resource;
-
-        this.logResult = logResult || true;
-        this.lastResult = "";
-    }
-
-    allowed() {
-        const currentPhase = this.game.currentPhase;
-        const phase = this.game.GAME_PHASES;
-
-        if (currentPhase != phase.PREPARE) return false;
-
-        return this.onlyEmpty() && this.firstOnlyAtCorners() && this.onlyCounterClockWise()
-
-    }
-
-    onlyEmpty() {
-        return this.slot.isEmpty();
-    }
-
-    firstOnlyAtCorners() {
-        //determin if it is first: 
-        // first, if number of childs of resArea equals number of slots
-        let isFirst = this.game.board.resourceSlots.length == this.resource.parent.getChildren().length;
-
-        if (isFirst) return this.slot.isCorner();
-
-        return true;
-    }
-
-    onlyCounterClockWise() {
-        let countPlayedRes = this.game.board.resources.length;
-
-        if (countPlayedRes < 1) return true;
-
-        let lastPlayedRes = this.game.board.resources[countPlayedRes - 1];
-
-        const template = this.game.board.resourceSlotTemplate;
-        const row = lastPlayedRes.parent.position.boardRow;
-        const col = lastPlayedRes.parent.position.boadCol;
-        // console.log("current", row, col)
-
-        function getSlot(row, col) {
-            // console.log("next", row, col)
-
-            if (col > template[row] - 1 || row > template.length - 1) return null;
-            let rows = template.slice(0, row + 1);
-            let maxSlots = rows.length > 0 ? rows.reduce((acc, cur) => acc + cur) : template[row];
-            let id = maxSlots - (template[row] - col);
-            // console.log("countSlots: ", maxSlots, "maxRow: ", template[row], "row: ", row, "col: ", col, "id: ", id)
-            return MyHtmlElement.getElementById("hexagon_" + id)
-        }
-        const directions = {
-            upRight: { col: 1, row: -1 },
-            up: { col: 0, row: -1 },
-            upLeft: { col: -1, row: -1 },
-            left: { col: -1, row: 0 },
-            downLeft: { col: -1, row: 1 },
-            down: { col: 0, row: 1 },
-            downRight: { col: 1, row: 1 },
-            right: { col: 1, row: 0 },
-        }
-
-        function doFindNextSlot(row, col, directions) {
-            for (var nextDir of directions) {
-                const nextRow = row + nextDir.row;
-                let nextCol = col + nextDir.col;
-                // console.log("nextCol", nextCol)
-                let slot = getSlot(nextRow, nextCol);
-                if (slot != null && slot.isEmpty()) return slot;
-            }
-        }
-
-        function findNextSlot() {
-            // when last col => Go up /right, left
-            const isLastCol = col == template[row] - 1;
-            if (isLastCol) {
-                // console.log("isLastCol:")
-                return doFindNextSlot(row, col, [directions.upRight, directions.up, directions.upLeft, directions.left])
-            }
-
-            const isFirstCol = col == 0;
-            if (isFirstCol) {
-                // console.log("isFirstCol:")
-                return doFindNextSlot(row, col, [directions.down, directions.downRight, directions.right])
-            }
-
-            const isFirstRow = row == 0;
-            if (isFirstRow) {
-                // console.log("isFirstRow:")
-                return doFindNextSlot(row, col, [directions.left, directions.down])
-            }
-
-            const isLastRow = row == template.length - 1;
-            if (isLastRow) {
-                // console.log("isLastRow:")
-                return doFindNextSlot(row, col, [directions.right, directions.upRight, directions.upLeft])
-            }
-
-            let isUpperBoard = row < Math.floor(template.length / 2);
-            let isMidBoard = row == Math.floor(template.length / 2);
-            let isLeftSide = col < Math.floor(template[row] / 2);
-
-            // console.log("isUpperBoard && isLeftSide")
-            if (isUpperBoard && isLeftSide)
-                return doFindNextSlot(row, col, [directions.down, directions.downRight])
-
-            // console.log("isUpperBoard")
-            if (isUpperBoard)
-                return doFindNextSlot(row, col, [directions.left, directions.down])
-
-            // console.log("!isMidBoard")
-            if (!isMidBoard)
-                return doFindNextSlot(row, col, [directions.right, directions.upRight, directions.up, directions.upLeft])
-
-            // console.log("isLeftSide")
-            if (isLeftSide)
-                return doFindNextSlot(row, col, [directions.down, directions.downRight, directions.right])
-
-            // console.log("last")
-            return doFindNextSlot(row, col, [directions.upLeft, directions.left])
-        }
-
-        const next = findNextSlot();
-        if (!next) return false;
-
-        return this.slot.id === next.id;
     }
 }
