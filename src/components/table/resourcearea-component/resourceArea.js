@@ -13,16 +13,23 @@ export default class ResourceArea extends MyHtmlElement {
         })
         this.game = game;
         this.resources = resources;
-
+        this.numberArea = new MyHtmlElement({ id: "resource-namber-area", className: "number-area" });
         this.parent.style.gridArea = "resourceArea";
+        this.firstSlot = null;
     }
 
     init() {
         this.parent.add(this);
+        this.parent.add(this.numberArea);
         this.initEventListener();
         setTimeout(() => {
             this.adjustDimensionsToContent();
         }, 0)
+    }
+
+    addResourceNumbers(resourceNumbers) {
+        let callback = function (c) {this.turnAround()};
+        this.numberArea.addAll(resourceNumbers, callback);
     }
 
     initEventListener() {
@@ -33,8 +40,7 @@ export default class ResourceArea extends MyHtmlElement {
 
     onDomNodeRemoved(e) {
         if (this.isEmpty) {
-            this.parent.addClass("invisible");
-            console.log("event emit")
+            // this.parent.addClass("invisible");
             this.event.emit("boardinitialised", null, null, true);
         }
     }
@@ -57,38 +63,35 @@ export default class ResourceArea extends MyHtmlElement {
         const slotHelper = new ResourceSlotHelper(template);
         const playedRes = this.game.board.resources;
 
-        
-        let nextSlot = this.firstSlot || slotHelper.getSlot(0,2);
-        if(playedRes.length > 0) {
-            let lastPlayed = playedRes[playedRes.length -1];
+
+        let nextSlot = this.firstSlot || slotHelper.getSlot(0, 2);
+        if (playedRes.length > 0) {
+            let lastPlayed = playedRes[playedRes.length - 1];
             nextSlot = slotHelper.findNextSlot(lastPlayed.parent.position.boadCol, lastPlayed.parent.position.boardRow);
         }
-        
-        let char = 'A';
-        let resNums = ResourceNumber.orderedResNums.map((num) => {
-            let resNum = new ResourceNumber(this.game, {value:num, char:char});
-            char = String.fromCharCode(char.charCodeAt(0) + 1);
-            resNum.init();
-            return resNum;
-        });
-        
+
+        let resNums = this.numberArea.getChildren();
         // firstSlot only initalized when player use shuffle
-        if(!this.firstSlot) {
-            let startOrderedNums = ['G', 'B','F','H','M','E','A','C','I','O','K','L','J','P','R','D','N','Q',];
+        if (!this.firstSlot) {
+            let startOrderedNums = ['G', 'B', 'F', 'H', 'M', 'E', 'A', 'C', 'I', 'O', 'K', 'L', 'J', 'P', 'R', 'D', 'N', 'Q', ];
             let startOrderedResNums = [];
             let i = 0;
-            while(i < startOrderedNums.length){
-                startOrderedResNums.push(resNums.find(resNum => resNum.char === startOrderedNums[i]));
+            while (i < startOrderedNums.length) {
+                let resNum = resNums.find(resNum => resNum.char === startOrderedNums[i]);
+                resNum.turnAround();
+                startOrderedResNums.push(resNum);
                 i++;
             }
             resNums = startOrderedResNums;
         }
-       
-        while(nextSlot != null) {
+
+        while (nextSlot != null) {
             const resource = this.getChild();
             nextSlot.add(resource);
-            if(!resource.type.isEqual(resourceTypes.dessert))
-                resource.add(resNums.shift());
+            if (!resource.type.isEqual(resourceTypes.dessert)){
+                let num = resNums.shift().setPlayed();
+                resource.add(num);
+            }
             const col = nextSlot.position.boadCol;
             const row = nextSlot.position.boardRow;
             nextSlot = slotHelper.findNextSlot(col, row);

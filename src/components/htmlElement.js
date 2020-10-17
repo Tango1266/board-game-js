@@ -131,6 +131,12 @@ export default class MyHtmlElement {
         return this.doAdd(child, callbackChild);
     }
 
+    addAll(children, callbackChild){
+        for(var child of children){
+            this.add(child,callbackChild);
+        }
+    }
+
     removeAll() {
         let children = Array.from(this.div.children);
         for (var child of children) {

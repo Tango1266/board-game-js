@@ -79,7 +79,7 @@ export default class SlotFactory {
                     isCorner: isCorner
                 }
                 resourceSlots.push(
-                    new ResourceSlot(this.board, position, new ResourceSlotType(new SlotType(slotTypes.resource), args))
+                    new ResourceSlot(this.board, position, new ResourceSlotType(slotTypes.resource, args))
                 )
             }
         }

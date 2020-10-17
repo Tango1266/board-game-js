@@ -1,6 +1,7 @@
 .resource-number {
     display: inline-flex;
     position: absolute;
+    cursor: grab;
     width: 40%;
     height: 40%;
     font-size: 1.5rem;

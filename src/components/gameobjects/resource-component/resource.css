@@ -1,10 +1,10 @@
 .resource {
-    z-index: 2;
     position: absolute;
     display: inline-block;
-    cursor: pointer;
+    cursor: grab;
     align-self: center;
     justify-self: center;
+    z-index: 2;
 }
 
 .img-resource {
@@ -12,10 +12,11 @@
     height: 100%;
     width: 100%;
     display: block;
-    z-index: 0;
-
+    object-fit: fill;
 }
 .played-resource {
     /* margin-top: -21%; */
     margin-left: 2%;
+    pointer-events: inherit;
+    opacity: .99;
 }

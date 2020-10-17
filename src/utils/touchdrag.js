@@ -1,7 +1,6 @@
 /*https://discourse.wicg.io/t/drag-to-scroll-a-simple-way-to-scroll-sideways-on-desktop/3627*/
 
 const slider = document.querySelector(".scroll");
-console.log(slider)
 let isDown = false;
 let startX;
 let scrollLeft;

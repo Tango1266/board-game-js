@@ -4,8 +4,8 @@
      z-index: 2;
      border: 3px solid rgba(253, 253, 253, 0.164);
      grid-template-columns: 100fr;
-     grid-template-rows: 20fr 80fr;
-     grid-template-areas: "controls" "resources";
+     grid-template-rows: 20fr 40fr 40fr;
+     grid-template-areas: "controls" "resources" "numbers";
  }
  
  .resource-area-container.invisible {
@@ -16,8 +16,8 @@
      position: relative;
      display: flex;
      grid-area: resources;
-     width: 50%;
-     height: 50%;
+     width: 100%;
+     height: 100%;
      justify-self: center;
      align-self: center;
      align-content: center;
@@ -38,4 +38,16 @@
      background: transparent;
      position: relative;
      width: 80%;
+ }
+
+ .number-area {
+    position: relative;
+    display: flex;
+    grid-area: numbers;
+    width: 100px;
+    height: 100px;
+    justify-self: center;
+    align-self: center;
+    align-content: center;
+    justify-content: center;
  }
