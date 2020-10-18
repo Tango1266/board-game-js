@@ -16,6 +16,7 @@ export default class Board extends MyHtmlElement {
         this.resourceSlots = resourceSlots;
         
         this.resources = [];
+        this.resourceNumbers = [];
         this.game = game;
     }
 
@@ -31,5 +32,9 @@ export default class Board extends MyHtmlElement {
 
     addResource(res) {
         this.resources.push(res);
+    }
+
+    addResourceNumber(resNum){
+        this.resourceNumbers.push(resNum);
     }
 }

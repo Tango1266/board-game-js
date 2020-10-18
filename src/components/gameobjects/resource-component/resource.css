@@ -1,9 +1,11 @@
 .resource {
     position: absolute;
-    display: inline-block;
+    display: flex;
     cursor: grab;
     align-self: center;
     justify-self: center;
+    align-items: center;
+    justify-content: center;
     z-index: 2;
 }
 
@@ -15,8 +17,5 @@
     object-fit: fill;
 }
 .played-resource {
-    /* margin-top: -21%; */
-    margin-left: 2%;
-    pointer-events: inherit;
-    opacity: .99;
+    margin-left: 3%;
 }

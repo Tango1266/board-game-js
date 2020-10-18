@@ -23,6 +23,7 @@ export default class ResourceNumber extends MyHtmlElement {
         this.value = details.value || -1;
         this.char = details.char || [];
         this.type = details.type || null;
+        this.position = null;
     }
 
     static get orderedResNums() { return [...RES_NUMS] }
@@ -31,8 +32,11 @@ export default class ResourceNumber extends MyHtmlElement {
         this.draggingObject = new DraggingObject(this).init();
         this.showValue();
     }
-
+    setBoardPosition(pos) {
+        this.position = pos;
+    }
     setPlayed() {
+        this.addClass("played");
         this.isDraggable = false;
         this.showValue();
         return this;

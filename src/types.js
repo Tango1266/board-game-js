@@ -2,7 +2,7 @@ export const slotTypes = {
     "building": { name: "building" },
     "street": { name: "street" },
     "resource": { name: "resource" },
-    "resourceNumber": { name: "resource-number"},
+    "resourceNumber": { name: "resource-number" },
     "resourceCard": { name: "resource-card" },
     "evolutionCard": { name: "evolution-card" },
 }
@@ -45,17 +45,19 @@ export let cardTypes = {
 
 export class TypeObject {
     constructor(type, args) {
-        if ("string" === typeof(type)) 
+        if ("string" === typeof(type))
             this.name = type;
-        else if ("object" === typeof(type)) 
+        else if ("object" === typeof(type))
             this.name = type.name;
-        
+
         if (args) {
             for (var arg in args) {
                 this[arg] = args[arg];
             }
         }
-        if(type.slotType) this.slotType = new SlotType(type.slotType.name);
+        if (type.slotType) {
+            this.slotType = new SlotType(type.slotType.name);
+        }
         this.category = this.constructor.name;
     }
 
@@ -72,10 +74,10 @@ export class SlotType extends TypeObject {
 
 export class ResourceSlotType extends SlotType {
     constructor(type, args) {
-        super(type);
+        super(type, args);
 
         this.diceNum = args ? args["diceNum"] : null;
-        this.isCorner = args ? args["isCorner"] : false;
+        this.isCorner = args && args.isCorner ? args.isCorner : false;
     }
 }
 
