@@ -1,6 +1,7 @@
 import MyHtmlElement from "../../htmlElement";
 import Board from "../../board/board-component/board";
 import 'regenerator-runtime/runtime'
+import Popup from "../../../windows/popup/popup";
 
 const GAME_PHASES = {
     NOTINITALISED: -1,
@@ -46,7 +47,7 @@ export default class Table extends MyHtmlElement {
 
         this.roundResults = new Map();
         this.roundResults.set("turnCount", 0);
-
+        this.popup = new Popup({console:true});
     }
 
     get currentPhase() { return this._currentPhase }
@@ -197,7 +198,7 @@ export default class Table extends MyHtmlElement {
             let highestRoler = this.roundResults.get(highestNum);
 
             if (highestRoler.length > 1) {
-                alert(`Draw between: ${highestRoler.map(hr => hr.name).join(", ")}`);
+                this.popup.alert(`Draw between: ${highestRoler.map(hr => hr.name).join(", ")}`)
                 nextPlayer = nextPlayerGen(highestRoler, highestRoler[0].id, false);
                 this.resetRound(highestRoler.length);
                 return false;
@@ -205,8 +206,8 @@ export default class Table extends MyHtmlElement {
 
             this.firstPlayer = highestRoler[0];
             const winMsg = `${highestRoler[0].name} beginnt das Spiel! Die höchste Zahl wurde mit ${highestNum} gewürfelt.`;
-            console.log(winMsg)
-            alert(winMsg)
+            
+            this.popup.alert(winMsg)
 
 
             this.diceControl.hideControl();
@@ -262,7 +263,7 @@ export default class Table extends MyHtmlElement {
                 })
                 break;
             case GAME_PHASES.START:
-                alert("Das Spiel beginnt! ... bald")
+                this.popup.alert("Das Spiel beginnt! ... bald");
                 break;
         }
 

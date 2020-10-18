@@ -1,14 +1,35 @@
 import createButton from "../../components/controls/controls";
 
 export default class Popup {
-    constructor() {
+    constructor(args) {
         this.divBackground = null;
         this.divContainer = null;
         this.divContent = null;
+        
+        if(args.console) this.useConsole = args.console; 
+
+        this.isVisible = false;
     }
 
     set content(content) {
         this.divContent.innerText = content;
+    }
+
+    alert(content) {
+        if (!this.isVisible) this.show();
+        this.content = content;
+        if(this.useConsole) console.log(content);
+    }
+
+    show(){
+        if (!this.divBackground) this.create();
+        document.body.append(this.divBackground);
+        this.isVisible = true;
+    }
+
+    hide(){
+        this.divBackground.remove();
+        this.isVisible = false;
     }
 
     create() {
@@ -33,15 +54,5 @@ export default class Popup {
         this.divBackground.append(this.divContainer);
         this.divContainer.append(this.divContent);
         this.divContainer.append(this.divControls);
-        document.body.append(this.divBackground);
-    }
-
-    alert(content) {
-        if (!this.divContent) this.create();
-        this.content = content;
-    }
-
-    hide(){
-        this.divBackground.remove();
     }
 }
