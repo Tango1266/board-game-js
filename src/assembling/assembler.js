@@ -11,11 +11,12 @@ import CardFactory from "./cardFactory";
 import CardArea from "../components/table/cardarea-component/cardArea";
 import PlayerArea from "../components/table/playerarea-component/playerArea";
 import Hand from "../components/table/hand-component/hand";
-import { slotTypes, SlotType, buildingTypes } from "../types";
+import { slotTypes, SlotType, buildingTypes, TypeObject, resourceNumberTypes } from "../types";
 import DiceFactory from "./diceFactory";
 import createButton from "../components/controls/controls";
 import MyHtmlElement from "../components/htmlElement";
 import { DiceControl } from "../components/controls/diceControl-component/diceControl";
+import ResourceNumber from "../components/gameobjects/resourceNumber-component/resourceNumber";
 
 export function assemble(playerData) {
     let game = new Table({ state: new State() });
@@ -109,6 +110,31 @@ function assembleResourceArea(game) {
     };
     let resourceArea = new ResourceArea(game, resources);
 
+    let char = 'R';
+    let resNums = ResourceNumber.orderedResNums.map((num) => {
+        let type;
+        switch(num) {
+            case 2: case 12:
+                type = resourceNumberTypes.veryrare; break;
+            case 3: case 11:
+                type = resourceNumberTypes.rare; break;
+            case 4: case 10:
+                type = resourceNumberTypes.occasional; break;
+            case 5: case 9:
+                type = resourceNumberTypes.occasional; break;
+            case 6: case 8:
+                type = resourceNumberTypes.frequent; break;
+            case 7:
+                type = resourceNumberTypes.common; break;
+        }
+        let resNum = new ResourceNumber(game, { value: num, char: char, type: new TypeObject(type)});
+        char = String.fromCharCode(char.charCodeAt(0) - 1);
+        resNum.init();
+        return resNum;
+    });
+
+    resourceArea.addResourceNumbers(resNums);
+
     resourceArea.parent.addControls([
         createButton("Mischen", "resource-area-control", "shufle-resources", { onclick: () => { resourceArea.shufle() } }),
         createButton("Verteilen", "resource-area-control", "allocate-resource", { onclick: () => resourceArea.allocateResources() })
@@ -125,48 +151,48 @@ function assembleResourceArea(game) {
         }
     }
     let margin = transformPos();
-    
-    function getMarginValue(margin) { 
-        let val = parseInt(margin); 
-        return isNaN(val)? 0: val; 
+
+    function getMarginValue(margin) {
+        let val = parseInt(margin);
+        return isNaN(val) ? 0 : val;
     }
 
-    let res = {...resources};
+    let res = {...resources };
     let startOrderdResources = [
         res.wood.pop(), res.wool.pop(), res.ore.pop(), res.corn.pop(),
         res.corn.pop(), res.wood.pop(), res.stone.pop(), res.corn.pop(),
         res.wool.pop(), res.wool.pop(), res.ore.pop(), res.stone.pop(),
-        res.wool.pop(), res.stone.pop(), res.wood.pop(),res.ore.pop(),
+        res.wool.pop(), res.stone.pop(), res.wood.pop(), res.ore.pop(),
         res.corn.pop(), res.wood.pop(), res.dessert.pop()
     ]
     for (var resource of startOrderdResources) {
-            resource.parent = resourceArea;
-            let previousEl = resourceArea.getChildren()[resource.idCounter - 1];
-            if (previousEl) {
-                let marginnext = margin.next().value;
-                let offset = 10;
-                let prevMarginLeft = getMarginValue(previousEl.style.marginLeft);
-                let prevMarginTop = getMarginValue(previousEl.style.marginTop);
+        resource.parent = resourceArea;
+        let previousEl = resourceArea.getChildren()[resource.idCounter - 1];
+        if (previousEl) {
+            let marginnext = margin.next().value;
+            let offset = 10;
+            let prevMarginLeft = getMarginValue(previousEl.style.marginLeft);
+            let prevMarginTop = getMarginValue(previousEl.style.marginTop);
 
-                switch (marginnext) {
-                    case "marginLeft":
-                        resource.style.marginLeft = prevMarginLeft + offset + "px";
-                        break;
-                    case "marginTop":
-                        resource.style.marginTop = prevMarginTop + offset + "px";
-                        resource.style.marginLeft = prevMarginLeft + "px";
-                        break;
-                    case "marginRight":
-                        resource.style.marginTop = prevMarginTop + "px";
-                        resource.style.marginLeft = prevMarginLeft - offset + "px";
-                        break;
-                    case "marginBottom":
-                        resource.style.marginTop = prevMarginTop - offset + "px";
-                        resource.style.marginLeft = prevMarginLeft + "px";
-                        break;
-                }
+            switch (marginnext) {
+                case "marginLeft":
+                    resource.style.marginLeft = prevMarginLeft + offset + "px";
+                    break;
+                case "marginTop":
+                    resource.style.marginTop = prevMarginTop + offset + "px";
+                    resource.style.marginLeft = prevMarginLeft + "px";
+                    break;
+                case "marginRight":
+                    resource.style.marginTop = prevMarginTop + "px";
+                    resource.style.marginLeft = prevMarginLeft - offset + "px";
+                    break;
+                case "marginBottom":
+                    resource.style.marginTop = prevMarginTop - offset + "px";
+                    resource.style.marginLeft = prevMarginLeft + "px";
+                    break;
             }
-            resource.init();
+        }
+        resource.init();
     }
 
     return resourceArea;
@@ -176,10 +202,10 @@ function assambleMenuBar(game) {
     let header = new MyHtmlElement({ div: document.getElementById("header") });
 
     let endTurnHandler = function(e) {
-        game.event.emit("endturn");
-    }
-    // header.addControls([createButton("Runde Beenden", "end-turn", "btn-end-turn", { onclick: endTurnHandler })])
-    // header.addControls([createButton("Runde Beenden", "end-turn", "btn-end-turn", { onclick: endTurnHandler })])
+            game.event.emit("endturn");
+        }
+        // header.addControls([createButton("Runde Beenden", "end-turn", "btn-end-turn", { onclick: endTurnHandler })])
+        // header.addControls([createButton("Runde Beenden", "end-turn", "btn-end-turn", { onclick: endTurnHandler })])
         // debug: select
     let select = document.getElementsByName("change-state")[0];
     for (let phase in game.GAME_PHASES) {

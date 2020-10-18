@@ -1,0 +1,21 @@
+.numberslot {
+    display: flex;
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    align-self: center;
+    justify-self: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.numberslot.empty {
+    scale: 0.7;
+    background-color: white;
+    border: 0.2rem solid red;
+    border-radius: 100%;
+}
+
+.numberslot.hovered {
+    scale: 1.5;
+}

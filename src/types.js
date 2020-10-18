@@ -2,6 +2,7 @@ export const slotTypes = {
     "building": { name: "building" },
     "street": { name: "street" },
     "resource": { name: "resource" },
+    "resourceNumber": { name: "resource-number" },
     "resourceCard": { name: "resource-card" },
     "evolutionCard": { name: "evolution-card" },
 }
@@ -21,6 +22,14 @@ export let resourceTypes = {
     "dessert": { name: "dessert", slotType: slotTypes.resource },
 }
 
+export const resourceNumberTypes = {
+    "veryrare": { name: "veryrare", slotType: slotTypes.resourceNumber },
+    "rare": { name: "virarellage", slotType: slotTypes.resourceNumber },
+    "occasional": { name: "occasional", slotType: slotTypes.resourceNumber },
+    "frequent": { name: "frequent", slotType: slotTypes.resourceNumber },
+    "common": { name: "common", slotType: slotTypes.resourceNumber },
+}
+
 export let cardTypes = {
     "wool": { name: "card-wool", slotType: slotTypes.resourceCard },
     "ore": { name: "card-ore", slotType: slotTypes.resourceCard },
@@ -35,13 +44,21 @@ export let cardTypes = {
 }
 
 export class TypeObject {
-    constructor(name, args) {
-        this.name = name;
+    constructor(type, args) {
+        if ("string" === typeof(type))
+            this.name = type;
+        else if ("object" === typeof(type))
+            this.name = type.name;
+
         if (args) {
             for (var arg in args) {
                 this[arg] = args[arg];
             }
         }
+        if (type.slotType) {
+            this.slotType = new SlotType(type.slotType.name);
+        }
+        this.category = this.constructor.name;
     }
 
     isEqual(object) {
@@ -51,24 +68,22 @@ export class TypeObject {
 
 export class SlotType extends TypeObject {
     constructor(type, args) {
-        if ("string" === typeof(type)) super(type, args);
-        else if ("object" === typeof(type)) super(type.name, args)
+        super(type, args)
     }
 }
 
 export class ResourceSlotType extends SlotType {
     constructor(type, args) {
-        super(type);
+        super(type, args);
 
         this.diceNum = args ? args["diceNum"] : null;
-        this.isCorner = args ? args["isCorner"] : false;
+        this.isCorner = args && args.isCorner ? args.isCorner : false;
     }
 }
 
 export class BuildingType extends TypeObject {
     constructor(type, args) {
-        super(type.name, args);
-        this.slotType = new SlotType(type.slotType.name);
+        super(type, args);
     }
 
     isEqual(object) {
@@ -78,14 +93,12 @@ export class BuildingType extends TypeObject {
 
 export class ResourceType extends TypeObject {
     constructor(type, args) {
-        super(type.name, args);
-        this.slotType = new SlotType(type.slotType.name);
+        super(type, args);
     }
 }
 
 export class CardType extends TypeObject {
     constructor(type, args) {
-        super(type.name, args);
-        this.slotType = new SlotType(type.slotType.name);
+        super(type, args);
     }
 }

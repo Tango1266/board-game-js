@@ -1,6 +1,7 @@
 .resource-number {
     display: inline-flex;
     position: absolute;
+    cursor: grab;
     width: 40%;
     height: 40%;
     font-size: 1.5rem;
@@ -10,11 +11,12 @@
     background-color: white;
     border: 2px solid black;
     border-radius: 50%;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
     margin: auto;
     align-items: center; 
     justify-content: center;
+}
+
+.resource-number.played{
+    width: 100%;
+    height: 100%;
 }

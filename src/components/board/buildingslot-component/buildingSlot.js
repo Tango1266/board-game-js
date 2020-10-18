@@ -57,19 +57,21 @@ export default class BuildingSlot extends MyHtmlElement {
         const draggingBuilding = DraggingObject.getDraggingObject(this.type)
         if (!draggingBuilding) return;
         e.preventDefault();
+        let buildingRules = new BuildingRules(this.game, this, draggingBuilding, false);
+        if (buildingRules.allowed()) 
+            this.addClass("hovered");
     }
 
     dragEnter(e) {
         const draggingBuilding = DraggingObject.getDraggingObject(this.type)
         if (!draggingBuilding) return;
         e.preventDefault();
-        // draggingBuilding.addClass("hovered");
     }
 
     dragLeave() {
         const draggingBuilding = DraggingObject.getDraggingObject(this.type)
         if (!draggingBuilding) return;
-        // this.changeClass(this.lastClassname)
+        this.removeClass("hovered");
     }
 
     dragDrop(e) {

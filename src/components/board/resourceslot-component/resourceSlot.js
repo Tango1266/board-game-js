@@ -18,7 +18,8 @@ export default class ResourceSlot extends MyHtmlElement {
     }
 
     add(child) {
-        this.type = child.type;
+        this.game.board.addResource(child);
+        child.setBoardPosition(this.position);
         super.add(child, () => child.setPlayed());
     }
 
@@ -48,41 +49,38 @@ export default class ResourceSlot extends MyHtmlElement {
 
     draggingStart() {
         const draggingResource = DraggingObject.getDraggingObject(this.type);
-        if (!draggingResource || !this.isEmpty) return;
-        let resourceSlotRules = new ResourceSlotRules(this.game, this, draggingResource);
-        if(resourceSlotRules.allowed())
+        if (!draggingResource || !this.isEmpty()) return;
+        if(this.isEmpty())
             this.addClass("empty");
     }
 
     dragOver(e) {
         const draggingResource = DraggingObject.getDraggingObject(this.type);
-        if (!draggingResource || !this.isEmpty) return;
+        if (!draggingResource || !this.isEmpty()) return;
         e.preventDefault();
     }
 
     dragEnter(e) {
         const draggingResource = DraggingObject.getDraggingObject(this.type);
-        if (!draggingResource || !this.isEmpty) return;
+        if (!draggingResource || !this.isEmpty()) return;
         e.preventDefault();
         this.addClass("hovered");
     }
 
     dragLeave() {
         const draggingResource = DraggingObject.getDraggingObject(this.type);
-        if (!draggingResource || !this.isEmpty) return;
+        if (!draggingResource || !this.isEmpty()) return;
         this.changeClass(this.lastClassname);
     }
 
     dragDrop(e) {
         const draggingResource = DraggingObject.getDraggingObject(this.type);
-        if (!draggingResource || !this.isEmpty) return;
+        if (!draggingResource || !this.isEmpty()) return;
         e.preventDefault();
 
-        let resourceSlotRules = new ResourceSlotRules(this.game, this, draggingResource);
-        if(!resourceSlotRules.allowed()) return;
+        if(!this.isEmpty()) return;
         // reset highlighting and add
         this.changeClass(this.classNameDefault)
-        this.game.board.addResource(draggingResource);
         this.add(draggingResource, () => draggingResource.setPlayed());
     }
 
