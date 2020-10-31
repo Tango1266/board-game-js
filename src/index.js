@@ -22,7 +22,7 @@ scrolables.forEach((el) => {
 
 assembled.game.startGame();
 
-var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
 if(!isFirefox) {
     let popup = new Popup();
     popup.alert("Diese frühe Version ist für 'Mozilla Firefox' optimiert. Dein Browser könnte daher Darstellungsprobleme haben.")    

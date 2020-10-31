@@ -11,8 +11,9 @@
     transform: scale(2)
 }
 
-.hovered {
+.circle.hovered {
     background: #f4f4f4;
     border-style: dashed;
-    scale: 2;
+    transform: scale(3);
+    z-index: 3;
 }

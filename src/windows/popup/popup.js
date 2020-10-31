@@ -6,7 +6,7 @@ export default class Popup {
         this.divContainer = null;
         this.divContent = null;
         
-        if(args.console) this.useConsole = args.console; 
+        if(args && args.console) this.useConsole = args.console;
 
         this.isVisible = false;
     }

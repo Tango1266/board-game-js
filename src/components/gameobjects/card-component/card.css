@@ -1,6 +1,13 @@
 .card {
     position: absolute;
     display: none;
+    width: 50%;
+}
+
+@supports (-moz-appearance:meterbar) {
+    .card {
+        width: auto;
+    }
 }
 
 .img-card {

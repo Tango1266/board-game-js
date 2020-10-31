@@ -10,12 +10,13 @@
 }
 
 .numberslot.empty {
-    scale: 0.7;
+    transform: scale(0.7);
     background-color: white;
     border: 0.2rem solid red;
     border-radius: 100%;
 }
 
 .numberslot.hovered {
-    scale: 1.5;
+    transform: scale(1.5);
+    border-style: dashed;
 }

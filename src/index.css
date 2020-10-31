@@ -69,7 +69,7 @@ img {
 
 .result {
     position: relative;
-    scale: 20%;
+    transform: scale(0.2);
 }
 
 #dice-results {
