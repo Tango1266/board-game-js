@@ -1,4 +1,4 @@
-import { addCSSRule, changeClass, addClass, setPosition, removeClass, getHtmlEvents, hasClass } from "../utils/domUtils";
+import {addClass, addCSSRule, changeClass, getHtmlEvents, hasClass, removeClass, setPosition} from "../utils/domUtils";
 
 const instanceMap = new Map();
 const eventObservers = new Map();

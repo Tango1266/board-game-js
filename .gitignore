@@ -5,4 +5,5 @@ npm-debug.log
 .cache
 src/.test.js
 .vscode/launch.json
-.idea
+package-lock.json
+/.idea/
