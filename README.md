@@ -16,7 +16,7 @@ The pursued goals are as followed:
 5. Continously reflect implementation on software development principals (KISS, DRY, SOLID) and refactor accordingly
 
 # Demo
-The most recent version can be found at https://tango1266.github.io/jsboardgamedemo/
+The most recent version can be found at https://dplantera.github.io/jsboardgamedemo/
 For now only Firefox is supported.
 
 # Development
@@ -28,7 +28,7 @@ For now only Firefox is supported.
     $ npm run start
     ```
 3. Push changes to a new branch.
-4. Review result: https://tango1266.github.io/jsboardgamedemo/
+4. Review result: https://dplantera.github.io/jsboardgamedemo/
 
 ## Project Toolset
 |Tool|Context|Purpose|
