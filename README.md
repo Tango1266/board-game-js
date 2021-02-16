@@ -17,7 +17,6 @@ The pursued goals are as followed:
 
 # Demo
 The most recent version can be found at https://dplantera.github.io/jsboardgamedemo/
-For now only Firefox is supported.
 
 # Development
 ## Getting Started
